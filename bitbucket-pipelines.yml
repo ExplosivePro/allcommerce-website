@@ -3,12 +3,69 @@
 # Only use spaces to indent your .yml configuration.
 # -----
 # You can specify a custom docker image from Docker Hub as your build environment.
-image: php:7.1.29
+image: php:7.4.1-fpm
 
 pipelines:
-  default:
-    - step:
-        caches:
-          - composer
-        script:
-          - apt-get update && apt-get install -y unzip
+  branches:
+    master:
+      - step:
+          name: Perform Unit Testing Production
+          script:
+            - curl -sL https://deb.nodesource.com/setup_10.x | bash -
+            - apt-get update && apt-get install -y libzip-dev zip nodejs
+            - docker-php-ext-install zip
+            - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+            - composer install --no-interaction --prefer-dist  --optimize-autoloader
+            - ln -f -s .env.pipelines .env
+            - npm install && npm run prod
+            - vendor/bin/phpunit
+      - step:
+          name: Execute Production Deployment
+          deployment: production
+          trigger: manual
+          script:
+            - curl -sL https://deb.nodesource.com/setup_10.x | bash -
+            - apt-get update && apt-get install -y libzip-dev zip nodejs
+            - docker-php-ext-install zip
+            - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+            - composer install --no-interaction --prefer-dist  --optimize-autoloader
+            - ln -f -s .env.pipelines .env
+            - vendor/bin/vapor deploy production
+    staging:
+      - step:
+          name: Perform Unit Testing Staging
+          script:
+            - curl -sL https://deb.nodesource.com/setup_10.x | bash -
+            - apt-get update && apt-get install -y libzip-dev zip nodejs
+            - docker-php-ext-install zip
+            - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+            - composer install --no-interaction --prefer-dist  --optimize-autoloader
+            - ln -f -s .env.pipelines .env
+            - npm install && npm run dev
+            - vendor/bin/phpunit
+      - step:
+          name : Execute Staging Deployment
+          deployment: staging
+          trigger: manual
+          script:
+            - curl -sL https://deb.nodesource.com/setup_10.x | bash -
+            - apt-get update && apt-get install -y libzip-dev zip nodejs
+            - docker-php-ext-install zip
+            - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+            - composer install --no-interaction --prefer-dist  --optimize-autoloader
+            - ln -f -s .env.pipelines .env
+            - vendor/bin/vapor deploy staging
+    develop:
+      - step:
+          name: Automated Test & Deploy to Develop
+          deployment: test
+          script:
+            - curl -sL https://deb.nodesource.com/setup_10.x | bash -
+            - apt-get update && apt-get install -y libzip-dev zip nodejs
+            - docker-php-ext-install zip
+            - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+            - composer install --no-interaction --prefer-dist  --optimize-autoloader
+            - ln -f -s .env.pipelines .env
+            - npm install && npm run dev
+            - vendor/bin/phpunit
+            - vendor/bin/vapor deploy develop
