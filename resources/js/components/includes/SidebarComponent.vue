@@ -2,7 +2,7 @@
     <div class="leadbinder-sidebar-container">
         <div class="main-list">
             <ul>
-                <li><a href="leads"><i class="fad fa-file-signature"></i></i><span>Leads</span></a></li>
+                <li><a href="merchandise"><i class="fad fa-inventory"></i><span>Merchandise</span></a></li>
             </ul>
         </div>
         <div class="intentional-empty-space"></div>

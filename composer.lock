@@ -96,12 +96,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/capeandbay-devs/allcommerce-connector.git",
-                "reference": "722b645bf145d7d5b7138f206ed93acc118016cf"
+                "reference": "aff4136b98abfb8e0bc80254de9e1f661afb8533"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/capeandbay-devs/allcommerce-connector/zipball/722b645bf145d7d5b7138f206ed93acc118016cf",
-                "reference": "722b645bf145d7d5b7138f206ed93acc118016cf",
+                "url": "https://api.github.com/repos/capeandbay-devs/allcommerce-connector/zipball/aff4136b98abfb8e0bc80254de9e1f661afb8533",
+                "reference": "aff4136b98abfb8e0bc80254de9e1f661afb8533",
                 "shasum": ""
             },
             "require": {
@@ -141,7 +141,7 @@
                 "source": "https://github.com/capeandbay-devs/allcommerce-connector/tree/master",
                 "issues": "https://github.com/capeandbay-devs/allcommerce-connector/issues"
             },
-            "time": "2020-01-21T06:36:24+00:00"
+            "time": "2020-04-11T20:09:24+00:00"
         },
         {
             "name": "doctrine/inflector",
@@ -1149,6 +1149,7 @@
                 "markdown",
                 "table"
             ],
+            "abandoned": "league/commonmark",
             "time": "2019-09-26T13:28:33+00:00"
         },
         {
@@ -4157,6 +4158,7 @@
                     "email": "jakub.onderka@gmail.com"
                 }
             ],
+            "abandoned": "php-parallel-lint/php-console-color",
             "time": "2018-09-29T17:23:10+00:00"
         },
         {
@@ -4203,6 +4205,7 @@
                 }
             ],
             "description": "Highlight PHP code in terminal",
+            "abandoned": "php-parallel-lint/php-console-highlighter",
             "time": "2018-09-29T18:48:56+00:00"
         },
         {
@@ -6002,5 +6005,6 @@
     "platform": {
         "php": "^7.2"
     },
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "1.1.0"
 }

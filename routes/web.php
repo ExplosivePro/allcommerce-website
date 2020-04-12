@@ -22,6 +22,7 @@ Route::group(['prefix' => 'access'], function () {
 
     Route::group(['middleware' => ['allcommerce']], function () {
         Route::get('/dashboard', 'HomeController@index')->name('dashboard');
+        Route::get('/merchandise', 'MerchMgntController@index')->name('merchandise');
 
 
     });

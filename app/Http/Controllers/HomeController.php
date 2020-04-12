@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use CapeAndBay\AllCommerce\Facades\ServiceDesk;
 
 class HomeController extends Controller
 {
@@ -24,6 +25,22 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $args = [];
+        // @todo - Check the session for needed vars
+        // Call AllCommerce JWT/me to get new infos (it refreshes the token too)
+        $my_ac_acct_profile = ServiceDesk::get('account-profile');
+
+        if(is_null($my_ac_acct_profile->getUserID()))
+        {
+            return redirect('/access/logout');
+        }
+        else
+        {
+            // @todo - Store all the cool shit into the sesh
+            // Curate an args array and pass it to the view.
+            $args['user_name'] = $my_ac_acct_profile->getUserName();
+        }
+
+        return view('home', $args);
     }
 }

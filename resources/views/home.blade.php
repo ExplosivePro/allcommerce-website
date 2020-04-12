@@ -14,7 +14,11 @@
             }
 
             .stuff {
-                margin: 1em;
+                width: 100%;
+            }
+
+            .stuff .col-md-8 {
+                margin: 1em
             }
         }
 
@@ -58,7 +62,7 @@
         <div class="row justify-content-center stuff">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">Dashboard</div>
+                    <div class="card-header">{!! $user_name."'s" !!} Dashboard</div>
 
                     <div class="card-body">
                         @if (session('status'))
