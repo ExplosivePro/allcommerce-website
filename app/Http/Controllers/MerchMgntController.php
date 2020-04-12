@@ -26,6 +26,33 @@ class MerchMgntController extends Controller
      */
     public function index()
     {
+        $args = [
+            'params' => [
+                'name' => 'Merchandise',
+                'button_panel_buttons' => [
+                    [
+                        'name' => 'Add Merch',
+                        'url' => '/access/merch/add'
+                    ]
+                ],
+                'action_panel_buttons' => [
+                    [
+                        'name' => 'Import'
+                    ],
+                    [
+                        'name' => 'Export'
+                    ]
+                ],
+                'grid_filters' => [
+                    [
+                        'name' => 'All',
+                        'id' => 'searchAll'
+                    ]
+                ]
+            ],
 
+        ];
+
+        return view('merch.index', $args);
     }
 }
