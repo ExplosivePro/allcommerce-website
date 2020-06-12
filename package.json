@@ -22,5 +22,10 @@
         "sass-loader": "7.*",
         "vue": "^2.5.17",
         "vue-template-compiler": "^2.6.10"
+    },
+    "dependencies": {
+        "@eastsideco/polaris-vue": "^0.1.19",
+        "@shopify/app-bridge": "^1.24.0",
+        "sweet-modal-vue": "^2.0.0"
     }
 }

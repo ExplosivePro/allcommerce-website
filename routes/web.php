@@ -23,8 +23,16 @@ Route::group(['prefix' => 'access'], function () {
     Route::group(['middleware' => ['allcommerce']], function () {
         Route::get('/dashboard', 'HomeController@index')->name('dashboard');
         Route::get('/merchandise', 'MerchMgntController@index')->name('merchandise');
+    });
+});
 
+/**
+ * Shopify Sales Channel ish
+ */
+Route::group(['prefix' => 'shopify'], function () {
 
+    Route::group(['prefix' => 'sales-channel'], function () {
+        Route::get('/checkout', 'ShopifyCheckoutController@checkout');
     });
 });
 

@@ -1,5 +1,5 @@
 {
-    "name": "laravel/laravel",
+    "name": "capeandbay/allcommerce-web",
     "type": "project",
     "description": "The Laravel Framework.",
     "keywords": [
@@ -10,6 +10,7 @@
     "require": {
         "php": "^7.2",
         "capeandbay/allcommerce-service-desk": "*",
+        "capeandbay/allcommerce-department-store": "*",
         "fideloper/proxy": "^4.0",
         "laravel/framework": "^6.2",
         "laravel/ui": "^1.1",
@@ -27,6 +28,10 @@
         {
             "type": "vcs",
             "url": "https://github.com/capeandbay-devs/allcommerce-connector"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/capeandbay-devs/allcommerce-merchant-api-sdk"
         }
     ],
     "config": {
