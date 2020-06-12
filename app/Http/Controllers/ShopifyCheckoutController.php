@@ -18,6 +18,6 @@ class ShopifyCheckoutController extends Controller
     {
         $data = $this->request->all();
 
-        var_dump($_COOKIE);
+        var_dump($_SERVER);
     }
 }
