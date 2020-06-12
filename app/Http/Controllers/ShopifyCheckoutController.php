@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Ixudra\Curl\Facades\Curl;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 
@@ -14,10 +15,10 @@ class ShopifyCheckoutController extends Controller
         $this->request = $request;
     }
 
-    public function checkout()
+    public function checkout($token)
     {
         $data = $this->request->all();
 
-        var_dump($_SERVER);
+        var_dump($data);
     }
 }
