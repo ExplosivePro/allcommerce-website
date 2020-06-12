@@ -106,7 +106,37 @@
                 width: 100%;
             }
 
+            .outer-content-grid {
+                margin: 1%;
 
+                border: 1px solid #000;
+                border-radius: 0.75em;
+            }
+
+            .inner-content-grid {
+                width: 100%;
+
+                display: flex;
+                flex-flow: column;
+            }
+
+            .inner-content-grid .grid-filter-bar {
+                border-bottom: 1px solid #000;
+            }
+
+            .inner-content-grid .all-the-stuff-segment {
+                width: 100%;
+            }
+
+            .inner-content-grid .all-the-stuff-segment .inner-all-the-stuff {
+                display: flex;
+                flex-flow: column;
+            }
+
+            .inner-content-grid .all-the-stuff-segment .inner-all-the-stuff .stuff-control-panel {
+                border-bottom: 1px solid #000;
+                width: 100%;
+            }
         }
 
         @media screen and (max-width: 1440px) {

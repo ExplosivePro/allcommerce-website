@@ -11,9 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'HomeController@home');
 
 Route::group(['prefix' => 'access'], function () {
     Route::get('/', 'PlatformAccessController@index')->name('login');
@@ -22,6 +20,8 @@ Route::group(['prefix' => 'access'], function () {
 
     Route::group(['middleware' => ['allcommerce']], function () {
         Route::get('/dashboard', 'HomeController@index')->name('dashboard');
+        Route::post('/dashboard', 'HomeController@merchant_selected')->name('merchant_selected');
+        Route::post('/switch', 'HomeController@reset_merchant_selection')->name('merchant_reset');
         Route::get('/merchandise', 'MerchMgntController@index')->name('merchandise');
     });
 });
@@ -30,9 +30,19 @@ Route::group(['prefix' => 'access'], function () {
  * Shopify Sales Channel ish
  */
 Route::group(['prefix' => 'shopify'], function () {
+    Route::group(['prefix' => 'merchant'], function () {
+        Route::get('/account', 'ShopifyAccessController@account');
+        Route::group(['prefix' => 'app'], function () {
+            Route::get('/install', 'ShopifyAccessController@app_install');
+        });
+    });
 
     Route::group(['prefix' => 'sales-channel'], function () {
+        Route::get('/dashboard', 'ShopifyAccessController@dashboard');
         Route::get('/checkout/{token}', 'ShopifyCheckoutController@checkout');
+    });
+    Route::group(['prefix' => 'oauth'], function () {
+
     });
 });
 

@@ -1,7 +1,13 @@
 <template>
     <div class="leadbinder-sidebar-container">
         <div class="main-list">
-            <ul>
+            <ul v-if="isInternalUser">
+                <li><a @click="switchMerchants()"><i class="fad fa-users"></i><span>Merchants</span></a></li>
+                <form method="POST" action="switch" class="merchant-switch">
+                    <input type="hidden" name="_token" :value="csrf">
+                </form>
+            </ul>
+            <ul v-if="!allCommerceIsActive">
                 <li><a href="merchandise"><i class="fad fa-inventory"></i><span>Merchandise</span></a></li>
             </ul>
         </div>
@@ -16,10 +22,49 @@
 <script>
     export default {
         name: "SidebarComponent",
-        props: ['links'],
+        props: ['isInternalUser', 'internalUuid', 'activeUuid'],
+        data() {
+            return {
+                selectedVal: '',
+                csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            }
+        },
+        computed: {
+            isRoleAdmin() {
+                let valid = '';
+
+                switch(this.role) {
+                    case 'dev':
+                    case 'dev-god':
+                    case 'platform-admin':
+                    case 'platform-user':
+                        valid = true;
+                        break;
+
+                    case 'merchant-owner':
+                    case 'merchant-api-user':
+                    default:
+                        valid = false;
+                }
+
+                return valid;
+            },
+            allCommerceIsActive() {
+                let results = false;
+
+                if(this.internalUuid != null) {
+                    results = this.internalUuid === this.activeUuid;
+                }
+
+                return results;
+            }
+        },
         methods: {
             redirectTo($route) {
                 window.location.href = $route;
+            },
+            switchMerchants() {
+                $('.merchant-switch').submit();
             }
         }
     }

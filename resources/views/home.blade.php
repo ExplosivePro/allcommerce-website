@@ -57,7 +57,11 @@
 <div class="container">
     <div class="inner-container">
         <nav class="side-nav-bar">
-            <allcommerce-sidebar></allcommerce-sidebar>
+            <allcommerce-sidebar
+                is-internal-user="{!! $is_internal_user !!}"
+                internal-uuid="{!! $internal_uuid !!}"
+                active-uuid="{!! $merchant_uuid !!}"
+            ></allcommerce-sidebar>
         </nav>
         <div class="row justify-content-center stuff">
             <div class="col-md-8">

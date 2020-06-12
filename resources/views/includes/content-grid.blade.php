@@ -50,20 +50,7 @@
                         </ul>
                     </div>
                 </div>
-                <div class="all-the-stuff-segment">
-                    <div class="inner-all-the-stuff">
-                        <div class="stuff-control-panel">
-                            <h1> Control Stuff Here!</h1>
-                        </div>
-                        <div class="all-off-the-actual-stuff-container">
-                            <div class="inner-actual-stuff">
-                                <div class="actual-stuff">
-                                    <h1> No Stuff Here!</h1>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <inventory-grid></inventory-grid>
             </div>
         </div>
     </div>

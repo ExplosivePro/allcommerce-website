@@ -26,6 +26,22 @@ class MerchMgntController extends Controller
      */
     public function index()
     {
+        $inventory = ServiceDesk::get('inventory');
+
+        if($inventory)
+        {
+            $merch = $inventory->getItemsArray();
+
+            $testload = [
+                'title' => ['=', '24-pk of Crayons']
+            ];
+            $item = $inventory->getItemArray($testload);
+        }
+        else
+        {
+            $merch = [];
+        }
+
         $args = [
             'params' => [
                 'name' => 'Merchandise',
@@ -48,7 +64,8 @@ class MerchMgntController extends Controller
                         'name' => 'All',
                         'id' => 'searchAll'
                     ]
-                ]
+                ],
+                'merch' => $merch
             ],
 
         ];
