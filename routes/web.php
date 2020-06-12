@@ -32,7 +32,7 @@ Route::group(['prefix' => 'access'], function () {
 Route::group(['prefix' => 'shopify'], function () {
 
     Route::group(['prefix' => 'sales-channel'], function () {
-        Route::get('/checkout', 'ShopifyCheckoutController@checkout');
+        Route::get('/checkout/{token}', 'ShopifyCheckoutController@checkout');
     });
 });
 
