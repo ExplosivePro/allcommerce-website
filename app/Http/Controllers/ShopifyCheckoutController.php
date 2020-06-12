@@ -18,7 +18,11 @@ class ShopifyCheckoutController extends Controller
     public function checkout($token)
     {
         $data = $this->request->all();
+        $url = 'https://'.$data['shop'].'/admin/api/2020-04/carts/'.$token.'.json';
+        $response = Curl::to($url)
+            ->withHeader('X-Shopify-Access-Token: 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')
+            ->get();
 
-        var_dump($data);
+        var_dump($response);
     }
 }
