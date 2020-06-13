@@ -10,6 +10,9 @@ pipelines:
     master:
       - step:
           name: Perform Unit Testing Production
+          caches:
+            - composer
+            - node
           script:
             - curl -sL https://deb.nodesource.com/setup_10.x | bash -
             - apt-get update && apt-get install -y libzip-dev zip nodejs
@@ -21,6 +24,9 @@ pipelines:
             - vendor/bin/phpunit
       - step:
           name: Execute Production Deployment
+          caches:
+            - composer
+            - node
           deployment: production
           trigger: manual
           script:
@@ -35,6 +41,9 @@ pipelines:
     staging:
       - step:
           name: Perform Unit Testing Staging
+          caches:
+            - composer
+            - node
           script:
             - curl -sL https://deb.nodesource.com/setup_10.x | bash -
             - apt-get update && apt-get install -y libzip-dev zip nodejs
@@ -46,6 +55,9 @@ pipelines:
             - vendor/bin/phpunit
       - step:
           name : Execute Staging Deployment
+          caches:
+            - composer
+            - node
           deployment: staging
           trigger: manual
           script:
@@ -60,6 +72,9 @@ pipelines:
     develop:
       - step:
           name: Automated Test & Deploy to Develop
+          caches:
+            - composer
+            - node
           deployment: test
           script:
             - curl -sL https://deb.nodesource.com/setup_10.x | bash -

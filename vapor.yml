@@ -1,10 +1,12 @@
 id: 6285
 name: allcommerce
+separate-vendor: true
 environments:
     production:
         domain: allcommerce.capeandbay.com
         memory: 1024
         cli-memory: 512
+        gateway-version: 2
         runtime: php-7.4
         build:
             - 'composer install --no-dev'
@@ -16,6 +18,7 @@ environments:
         domain: allcommerce-demo.capeandbay.com
         memory: 1024
         cli-memory: 512
+        gateway-version: 2
         runtime: php-7.4
         build:
             - 'composer install'
@@ -27,6 +30,7 @@ environments:
       domain: allcommerce-dev.capeandbay.com
       memory: 1024
       cli-memory: 512
+      gateway-version: 2
       runtime: php-7.4
       build:
           - 'composer install'

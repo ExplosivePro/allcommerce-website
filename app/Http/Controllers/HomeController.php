@@ -112,15 +112,11 @@ class HomeController extends Controller
 
         if ($validated->fails())
         {
-            return view('/welcome');
+            return view('/login');
         }
 
         if(array_key_exists('session', $data))
         {
-            /**
-             * Steps -
-             * 1.
-             */
             return view('shopify.embedded.dashboard', $data);
         }
         else
