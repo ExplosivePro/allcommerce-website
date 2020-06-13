@@ -43,6 +43,8 @@ class ShopifyAccessAPIController extends Controller
             // Login the user or fail as invalid login credentials
             $allcommerce = ServiceDesk::login($data['username'], $data['password']);
 
+            //session()->put('allcommerce-jwt-access-token', $allcommerce->getAccessToken());
+
             if(is_string($allcommerce))
             {
                 $results['reason'] = 'Login Error! Invalid Credentials';
@@ -80,13 +82,21 @@ class ShopifyAccessAPIController extends Controller
 
                 if($access_granted)
                 {
-                    /**
-                     * Steps
-                     * 1. Get the Merchant object
-                     * 2. SetAssignedInstall to the passed in shop or fail
-                     * 3. Return true.
-                     */
-                    $results = ['success' => true];
+                    // Get the Merchant object or fail
+                    $merchant = $allcommerce->get('merchant');
+
+                    // Send the shop URL to be assigned.
+                    $assignment_response = $merchant->assignMerchantToShopifyShop($data['shop']);
+
+                    if($assignment_response)
+                    {
+                        $results = $assignment_response;
+                    }
+                    else
+                    {
+                        $results['reason'] = 'There was a problem.';
+                        $results['msg'] = 'We were unable to link your account for an unknown reason. Please try again.';
+                    }
                 }
                 else
                 {

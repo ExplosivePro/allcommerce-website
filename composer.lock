@@ -97,12 +97,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/capeandbay-devs/allcommerce-merchant-api-sdk.git",
-                "reference": "b2b1aac3bf964f9f03ef71e32f6a7b103d36f3ac"
+                "reference": "3618c14f80551387f072d7195f3f6bb53b053a84"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/capeandbay-devs/allcommerce-merchant-api-sdk/zipball/b2b1aac3bf964f9f03ef71e32f6a7b103d36f3ac",
-                "reference": "b2b1aac3bf964f9f03ef71e32f6a7b103d36f3ac",
+                "url": "https://api.github.com/repos/capeandbay-devs/allcommerce-merchant-api-sdk/zipball/3618c14f80551387f072d7195f3f6bb53b053a84",
+                "reference": "3618c14f80551387f072d7195f3f6bb53b053a84",
                 "shasum": ""
             },
             "require": {
@@ -150,7 +150,7 @@
                 "source": "https://github.com/capeandbay-devs/allcommerce-merchant-api-sdk/tree/master",
                 "issues": "https://github.com/capeandbay-devs/allcommerce-merchant-api-sdk/issues"
             },
-            "time": "2020-06-12T08:50:02+00:00"
+            "time": "2020-06-13T08:34:57+00:00"
         },
         {
             "name": "capeandbay/allcommerce-service-desk",
@@ -158,12 +158,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/capeandbay-devs/allcommerce-connector.git",
-                "reference": "9cf730c8bee6fcdd707e363214f511d25f41bcd1"
+                "reference": "bdf55c1ed7c2723d48cd99724dfa0d493ef98733"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/capeandbay-devs/allcommerce-connector/zipball/9cf730c8bee6fcdd707e363214f511d25f41bcd1",
-                "reference": "9cf730c8bee6fcdd707e363214f511d25f41bcd1",
+                "url": "https://api.github.com/repos/capeandbay-devs/allcommerce-connector/zipball/bdf55c1ed7c2723d48cd99724dfa0d493ef98733",
+                "reference": "bdf55c1ed7c2723d48cd99724dfa0d493ef98733",
                 "shasum": ""
             },
             "require": {
@@ -203,7 +203,7 @@
                 "source": "https://github.com/capeandbay-devs/allcommerce-connector/tree/master",
                 "issues": "https://github.com/capeandbay-devs/allcommerce-connector/issues"
             },
-            "time": "2020-04-28T05:33:46+00:00"
+            "time": "2020-06-13T07:57:59+00:00"
         },
         {
             "name": "doctrine/inflector",

@@ -21,7 +21,8 @@
                 loading: false,
                 error: false,
                 ajaxErrorMsg: 'Default Message.',
-                ajaxErrorTitle: 'Ooops.'
+                ajaxErrorTitle: 'Ooops.',
+                errorType: 'error'
             };
         },
         methods: {
@@ -49,21 +50,21 @@
 
                         if (('success' in data) ) {
                             if (data['success']) {
-
+                                window.location.reload();
                             }
                             else {
                                 _this.ajaxErrorTitle = 'Error - '+data.reason+'.';
                                 _this.ajaxErrorMsg = data.msg;
                                 _this.error = true;
+                                _this.loading = false;
                             }
                         }
                         else {
                             _this.ajaxErrorTitle = 'Error - Unknown Response From Server';
                             _this.ajaxErrorMsg = 'Maybe try again..?';
                             _this.error = true;
+                            _this.loading = false;
                         }
-
-                        _this.loading = false;
                     },
                     error(error) {
                         _this.loading = false;
