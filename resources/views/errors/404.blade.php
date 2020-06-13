@@ -40,7 +40,7 @@
 <div class="container">
     <div class="content">
         <div class="title">What are you doing, man?</div>
-        <div class="">Well, that's strange. Looks like we couldn't find the funnel partial. Please contact support@carthook.com if the issue persists</div>
+        <div class="">Well, that's strange. Looks like we couldn't find the funnel partial. Please contact support@capeandbay.com if the issue persists</div>
     </div>
 </div>
 
