@@ -112,7 +112,7 @@ class HomeController extends Controller
 
         if ($validated->fails())
         {
-            return view('errors.404');
+            return view('welcome');
         }
 
         if(array_key_exists('session', $data))
@@ -131,7 +131,7 @@ class HomeController extends Controller
 
             if(!$nonce)
             {
-                return view('welcome');
+                return view('errors.404');
             }
 
             $url = "https://{$shop}/admin/oauth/authorize?client_id={$api_key}&scope={$scopes}&redirect_uri={$redirect_uri}&state={$nonce}";
