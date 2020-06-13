@@ -70,7 +70,7 @@ class ShopifyAccessController extends Controller
 
         if ($validated->fails())
         {
-            return view('/welcome');
+            return view('errors.404');
         }
         else
         {

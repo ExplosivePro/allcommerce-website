@@ -37,6 +37,7 @@
 
 @section('content')
     <shopify-connect
+        ac-icon="{!! asset('img/icon.png') !!}"
         shop="{!! $shop !!}"
     ></shopify-connect>
 @endsection

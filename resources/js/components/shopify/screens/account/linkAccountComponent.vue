@@ -29,7 +29,7 @@
                         <div class="inner-modal-title">
                             <div class="modal-title-logo-bit">
                                 <div class="inner-logo">
-                                    <img src="/img/icon.png">
+                                    <img :src="icon">
                                 </div>
                             </div>
                         </div>
@@ -71,7 +71,7 @@
     export default {
         name: "linkAccountComponent",
         components: { SweetModal },
-        props: ['showModal', 'showLoadingWheel', 'showError', 'errorTitle', 'errorMsg'],
+        props: ['showModal', 'showLoadingWheel', 'showError', 'errorTitle', 'errorMsg', 'icon'],
         data() {
             return {
                 username: '',

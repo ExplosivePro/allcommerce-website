@@ -5,6 +5,7 @@
         :show-error="error"
         :error-title="ajaxErrorTitle"
         :error-msg="ajaxErrorMsg"
+        :icon="acIcon"
         @trigger-submit="triggerSubmit"
         @trigger-connect-modal="triggerConnectModal"
     ></link-account>
@@ -13,7 +14,7 @@
 <script>
     export default {
         name: "connectAccountContainer",
-        props: ['shop'],
+        props: ['shop', 'acIcon'],
         data() {
             return {
                 showModal: false,
