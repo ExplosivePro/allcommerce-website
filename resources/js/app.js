@@ -26,13 +26,14 @@ Vue.component('allcommerce-sidebar', require('./components/includes/SidebarCompo
 Vue.component('inventory-grid', require('./components/content-grid/InventoryGridComponent.vue').default);
 Vue.component('select-post-grid', require('./components/content-grid/SelectToPostGridComponent.vue').default);
 
-Vue.component('shopify-polaris', require('./components/shopify/PolarisContainerComponent.vue').default);
+Vue.component('shopify-account-dashboard', require('./components/shopify/containers/account/accountDashboardContainer.vue').default);
 Vue.component('shopify-connect', require('./components/shopify/containers/account/connectAccountContainer.vue').default);
 Vue.component('shopify-error', require('./components/shopify/containers/whoops/shopifyErrorContainer.vue').default);
 
 Vue.component('account-does-not-exist', require('./components/shopify/screens/whoops/AccountDoesNotExistScreen.vue').default);
 Vue.component('sales-channel-not-installed', require('./components/shopify/screens/whoops/SalesChannelNotInstalled.vue').default);
 Vue.component('link-account', require('./components/shopify/screens/account/linkAccountComponent.vue').default);
+Vue.component('account-dashboard', require('./components/shopify/screens/account/accountDashboardComponent.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

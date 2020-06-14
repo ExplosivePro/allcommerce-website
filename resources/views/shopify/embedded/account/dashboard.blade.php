@@ -8,6 +8,10 @@
             width: 100%;
             margin: 0;
         }
+
+        .py-4 {
+            margin: 0 !important;
+        }
     }
 </style>
 <script type="text/javascript">
@@ -15,13 +19,15 @@
     let Button = actions.Button;
     let Redirect = actions.Redirect;
 
-    let breadcrumb = Button.create(shopifyApp, { label: 'My breadcrumb' });
+    let breadcrumb = Button.create(shopifyApp, { label: '{!! $shop_name !!}' });
+    /*
     breadcrumb.subscribe(Button.Action.CLICK, function() {
         shopifyApp.dispatch(Redirect.toApp({ path: '/breadcrumb-link' }));
     });
+     */
 
     let titleBarOptions = {
-        title: 'My page title',
+        title: 'Account',
         breadcrumbs: breadcrumb
     };
 
@@ -31,11 +37,11 @@
 
 @section('content')
     <div class="content">
-        <shopify-polaris
+        <shopify-account-dashboard
             shop="{!! $shop !!}"
             api-key="{!! env('SHOPIFY_SALES_CHANNEL_API_KEY') !!}"
             redirect-uri="{!! env('APP_URL').'/sales-channel/dashboard' !!}"
-        ></shopify-polaris>
+        ></shopify-account-dashboard>
     </div>
 @endsection
 

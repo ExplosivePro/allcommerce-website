@@ -85,6 +85,7 @@ class ShopifyAccessController extends Controller
                     // Check that the account is linked and send to dashboard
                     if($ac_merchant = $shop->getMerchant())
                     {
+                        $args['shop_name'] = $ac_merchant['name'];
                         $blade = 'shopify.embedded.account.dashboard';
                     }
                     else
