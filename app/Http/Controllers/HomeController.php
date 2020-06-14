@@ -117,7 +117,7 @@ class HomeController extends Controller
 
         if(array_key_exists('session', $data))
         {
-            return view('shopify.embedded.dashboard', $data);
+            return redirect('/shopify/merchant/account');
         }
         else
         {
