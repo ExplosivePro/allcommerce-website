@@ -40,7 +40,7 @@ class ShopifyAccessController extends Controller
             $installer = DepartmentStore::get('installer', $data);
             if($installed = $installer->install($data))
             {
-                $url = 'https://'.$data['shop'].'/admin/apps/allcommerce-sales-channel';
+                $url = 'https://'.$data['shop'].env('SHOPIFY_INSTALL_REDIRECT_URI');
                 return redirect($url);
             }
             else
