@@ -123,7 +123,7 @@ class HomeController extends Controller
         {
             $shop = $data['shop'];
             $api_key = env('SHOPIFY_SALES_CHANNEL_API_KEY');
-            $scopes = 'write_orders,read_customers';
+            $scopes = 'write_orders,read_customers,read_product_listings';
             $redirect_uri = env('APP_URL').'/shopify/merchant/app/install';
 
             $installer = DepartmentStore::get('installer', $data);

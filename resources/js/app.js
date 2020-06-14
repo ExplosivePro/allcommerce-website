@@ -29,11 +29,15 @@ Vue.component('select-post-grid', require('./components/content-grid/SelectToPos
 Vue.component('shopify-account-dashboard', require('./components/shopify/containers/account/accountDashboardContainer.vue').default);
 Vue.component('shopify-connect', require('./components/shopify/containers/account/connectAccountContainer.vue').default);
 Vue.component('shopify-error', require('./components/shopify/containers/whoops/shopifyErrorContainer.vue').default);
+Vue.component('shopify-publish-inventory-widget', require('./components/shopify/containers/polaris-widgets/inventory/publishInventoryContainer.vue').default);
+Vue.component('shopify-first-funnel-widget', require('./components/shopify/containers/polaris-widgets/checkout-funnels/firstFunnelContainer.vue').default);
 
 Vue.component('account-does-not-exist', require('./components/shopify/screens/whoops/AccountDoesNotExistScreen.vue').default);
 Vue.component('sales-channel-not-installed', require('./components/shopify/screens/whoops/SalesChannelNotInstalled.vue').default);
 Vue.component('link-account', require('./components/shopify/screens/account/linkAccountComponent.vue').default);
 Vue.component('account-dashboard', require('./components/shopify/screens/account/accountDashboardComponent.vue').default);
+Vue.component('publish-inventory-widget', require('./components/shopify/screens/polaris-widgets/inventory/publishInventoryWidget.vue').default);
+Vue.component('first-funnel-widget', require('./components/shopify/screens/polaris-widgets/checkout-funnels/firstFunnelWidget.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

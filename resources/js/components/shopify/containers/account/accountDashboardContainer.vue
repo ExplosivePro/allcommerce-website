@@ -1,18 +1,20 @@
 <template>
     <account-dashboard
         :shop="shop"
+        :hmac="hmac"
+        :inventory="inventory"
     ></account-dashboard>
 </template>
 
 <script>
 
     export default {
-        name: "PolarisContainerComponent",
+        name: "accountDashboardContainer",
         components: {  },
-        props: ['shop', 'apiKey', 'redirectUri'],
+        props: ['shop', 'inventory', 'hmac', 'apiKey', 'redirectUri'],
         data() {
             return {
-                ready: false,
+                ready: false
             };
         },
         computed: {
@@ -21,8 +23,8 @@
         methods: {
 
         },
-        async mounted() {
-
+        mounted() {
+            console.log('Shopify Account Dashboard Container Mounted!');
         }
     }
 </script>

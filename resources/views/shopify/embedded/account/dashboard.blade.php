@@ -39,6 +39,8 @@
     <div class="content">
         <shopify-account-dashboard
             shop="{!! $shop !!}"
+            :inventory="{{ json_encode($inventory) }}"
+            :hmac="{{ json_encode($hmac) }}"
             api-key="{!! env('SHOPIFY_SALES_CHANNEL_API_KEY') !!}"
             redirect-uri="{!! env('APP_URL').'/sales-channel/dashboard' !!}"
         ></shopify-account-dashboard>

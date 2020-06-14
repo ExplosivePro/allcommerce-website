@@ -109,4 +109,27 @@ class ShopifyAccessAPIController extends Controller
 
         return response()->json($results);
     }
+
+    public function inventory()
+    {
+        $results = ['success' => false, 'reason' => 'Connection Error', 'msg' => 'Please Try Again in a few moments.'];
+
+        $data = $this->request->all();
+
+        $ac_service_desk = ServiceDesk::sso('shopify', $data);
+
+        if($ac_service_desk)
+        {
+            /**
+             * STEPS
+             * 1. Get that fucking inventory or send a fail response, dayum.
+             */
+            $inventory = $ac_service_desk->get('shopify-inventory');
+            $new_products = $inventory->getAllProductListings($data['shop']);
+
+            $results = ['success' => true, 'new_products' => $new_products];
+        }
+
+        return $results;
+    }
 }

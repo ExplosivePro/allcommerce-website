@@ -86,6 +86,11 @@ class ShopifyAccessController extends Controller
                     if($ac_merchant = $shop->getMerchant())
                     {
                         $args['shop_name'] = $ac_merchant['name'];
+
+                        // @todo - populate this data with the JWT package's Inventory object
+                        $args['inventory'] = [];
+                        $args['hmac'] = $data;
+
                         $blade = 'shopify.embedded.account.dashboard';
                     }
                     else

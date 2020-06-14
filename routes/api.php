@@ -19,4 +19,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::group(['prefix' => 'shopify'], function () {
     Route::post('/login', 'API\ShopifyAccessAPIController@sales_channel_login_connect');
+    Route::post('/inventory', 'API\ShopifyAccessAPIController@inventory');
 });

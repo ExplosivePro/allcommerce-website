@@ -158,12 +158,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/capeandbay-devs/allcommerce-connector.git",
-                "reference": "bdf55c1ed7c2723d48cd99724dfa0d493ef98733"
+                "reference": "61009ad4efafc33a8d5b9ba88984bed962545bd8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/capeandbay-devs/allcommerce-connector/zipball/bdf55c1ed7c2723d48cd99724dfa0d493ef98733",
-                "reference": "bdf55c1ed7c2723d48cd99724dfa0d493ef98733",
+                "url": "https://api.github.com/repos/capeandbay-devs/allcommerce-connector/zipball/61009ad4efafc33a8d5b9ba88984bed962545bd8",
+                "reference": "61009ad4efafc33a8d5b9ba88984bed962545bd8",
                 "shasum": ""
             },
             "require": {
@@ -203,7 +203,7 @@
                 "source": "https://github.com/capeandbay-devs/allcommerce-connector/tree/master",
                 "issues": "https://github.com/capeandbay-devs/allcommerce-connector/issues"
             },
-            "time": "2020-06-13T07:57:59+00:00"
+            "time": "2020-06-14T08:44:33+00:00"
         },
         {
             "name": "doctrine/inflector",
