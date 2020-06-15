@@ -21,6 +21,10 @@
             .stuff .col-md-8 {
                 margin: 1em
             }
+
+            .title {
+                margin-bottom: 8em;
+            }
         }
 
         @media screen and (max-width: 999px) {
@@ -72,7 +76,7 @@
             <div class="title">
                 <h1>Future Home of the AllCommerce Checkout Page!</h1>
             </div>
-            
+
             @foreach($data as $col => $val)
                 <div class="title">
                     <h1>{!! $col !!} --- {!! $val !!}</h1>
