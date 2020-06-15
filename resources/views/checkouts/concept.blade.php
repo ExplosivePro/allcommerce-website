@@ -11,6 +11,7 @@
             .inner-container {
                 margin: 0;
                 display: flex;
+                flex-flow: column;
             }
 
             .stuff {
@@ -24,7 +25,7 @@
 
         @media screen and (max-width: 999px) {
             .inner-container {
-                flex-flow: column;
+
             }
 
             .side-nav-bar {
@@ -42,7 +43,6 @@
             }
 
             .inner-container {
-                flex-flow: row;
                 text-align: center;
             }
 
@@ -72,7 +72,7 @@
             <div class="title">
                 <h1>Future Home of the AllCommerce Checkout Page!</h1>
             </div>
-
+            
             @foreach($data as $col => $val)
                 <div class="title">
                     <h1>{!! $col !!} --- {!! $val !!}</h1>
