@@ -60,9 +60,9 @@
                         if(data['success'] === true) {
                             console.log('Success!');
 
-                            if(data['new_products'].length > 0) {
+                            if(data['new_products']['listings'].length > 0) {
 
-                                let count = data['new_products'].length;
+                                let count = data['new_products']['listings'].length;
                                 let verb = count === 1 ? 'is': 'are';
                                 let product_noun = count === 1 ? 'product' : 'products';
                                 let adverb = count === 1 ? 'it' : 'them';
