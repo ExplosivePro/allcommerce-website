@@ -120,12 +120,8 @@ class ShopifyAccessAPIController extends Controller
 
         if($ac_service_desk)
         {
-            /**
-             * STEPS
-             * 1. Get that fucking inventory or send a fail response, dayum.
-             */
             $inventory = $ac_service_desk->get('shopify-inventory');
-            $new_products = $inventory->getAllProductListings($data['shop']);
+            $new_products = $inventory->getNewProductListings($data['shop']);
 
             $results = ['success' => true, 'new_products' => $new_products];
         }

@@ -26,8 +26,6 @@
                 cardDesc: '',
                 scenario: '',
                 curatedInventory: [],
-
-
             };
         },
         computed: {
@@ -38,6 +36,7 @@
                 console.log('Processing Inventory', this.inventory);
                 if(this.items.length > 0) {
                     this.title = 'Publish Your Inventory!';
+                    this.description = 'Publishing items is the key to success in the AllCommerce ecosystem.';
                 }
                 else {
                     console.log('Actually I\'m not lol, there\'s no inventory! Derp.');
@@ -74,10 +73,18 @@
                                 _this.ready = true;
                             }
                             else {
-                                console.log('Rendering Go to Products Page!');
-                                _this.cardTitle = 'No Products Available';
-                                _this.cardDesc  = 'There are no products available for us to publish! Go create some products or make those you have visible to us!';
-                                _this.scenario = 'empty';
+                                if(_this.items.length > 0) {
+                                    _this.cardTitle = 'Looks like you\'re all set!' ;
+                                    _this.cardDesc  = 'When you create new products, be sure to make them available for AllCommerce!';
+                                }
+                                else
+                                {
+                                    console.log('Rendering Go to Products Page!');
+                                    _this.cardTitle = 'No Products Available';
+                                    _this.cardDesc  = 'There are no products available for us to publish! Go create some products or make those you have visible to us!';
+                                    _this.scenario = 'empty';
+                                }
+
                                 _this.ready = true;
                             }
                         }

@@ -34,8 +34,9 @@
                 ></shopify-publish-inventory-widget>
 
                 <shopify-first-funnel-widget
-                    v-if="inventory.length > 0"
+                    v-if="showBabyFunnel"
                     :shop="shop"
+                    :funnel="funnel"
                     :items="inventory"
                 ></shopify-first-funnel-widget>
             </polaris-layout>
@@ -46,10 +47,11 @@
 <script>
     export default {
         name: "accountDashboardComponent",
-        props: ['shop', 'hmac', 'inventory'],
+        props: ['shop', 'hmac', 'funnel', 'inventory'],
         data() {
             return {
                 showPolarisBanner: false,
+                showBabyFunnel: false,
                 bannerTitle: '',
                 bannerStatus: '',
                 bannerText: '',
@@ -87,7 +89,11 @@
             }
         },
         mounted() {
-
+            if('url' in this.funnel) {
+                if(('name' in this.funnel) && (this.funnel['name'] === `Baby's 1st Checkout Funnel`)) {
+                    this.showBabyFunnel = true;
+                }
+            }
         }
     }
 </script>

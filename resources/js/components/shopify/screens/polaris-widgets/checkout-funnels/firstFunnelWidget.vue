@@ -7,7 +7,8 @@
                 Try it out!
             </polaris-button>
         </template>
-        <polaris-card title="Baby's First Checkout Funnel" sectioned>
+
+        <polaris-card :title="title" sectioned>
             <polaris-description-list
                 :items="items"
             ></polaris-description-list>
@@ -18,7 +19,12 @@
 <script>
     export default {
         name: "firstFunnelWidget",
-        props: ['items']
+        props: [ 'title', 'items'],
+        methods: {
+            goToUrl() {
+                this.$emit('try-it-pressed')
+            }
+        },
     }
 </script>
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use CapeAndBay\AllCommerce\Facades\ServiceDesk;
 use AllCommerce\DepartmentStore\Facades\DepartmentStore;
 
 class ShopifyAccessController extends Controller
@@ -87,8 +88,18 @@ class ShopifyAccessController extends Controller
                     {
                         $args['shop_name'] = $ac_merchant['name'];
 
-                        // @todo - populate this data with the JWT package's Inventory object
-                        $args['inventory'] = [];
+                        // populate this data with the JWT package's Inventory object
+                        $ac_service_desk = ServiceDesk::sso('shopify', $data);
+                        $inventory = $ac_service_desk->get('shopify-inventory');
+
+                        $args['inventory'] = $inventory->getAllProductListings($data['shop']);
+                        $shop_data = $shop->getShopData();
+                        $args['funnel'] = [];
+                        if(array_key_exists('funnel', $shop_data))
+                        {
+                            $args['funnel'] = $shop_data['funnel'];
+                        }
+
                         $args['hmac'] = $data;
 
                         $blade = 'shopify.embedded.account.dashboard';

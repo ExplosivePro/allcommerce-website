@@ -39,7 +39,11 @@ Route::group(['prefix' => 'shopify'], function () {
 
     Route::group(['prefix' => 'sales-channel'], function () {
         Route::get('/dashboard', 'ShopifyAccessController@dashboard');
-        Route::get('/checkout/{token}', 'ShopifyCheckoutController@checkout');
+
+        Route::group(['prefix' => 'sales'], function () {
+            Route::get('/secure/checkout/{token}', 'ShopifyCheckoutController@checkout');
+        });
+
     });
     Route::group(['prefix' => 'oauth'], function () {
 

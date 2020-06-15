@@ -2,6 +2,7 @@
     <account-dashboard
         :shop="shop"
         :hmac="hmac"
+        :funnel="funnel"
         :inventory="inventory"
     ></account-dashboard>
 </template>
@@ -11,7 +12,7 @@
     export default {
         name: "accountDashboardContainer",
         components: {  },
-        props: ['shop', 'inventory', 'hmac', 'apiKey', 'redirectUri'],
+        props: ['shop', 'inventory', 'hmac', 'funnel','apiKey', 'redirectUri'],
         data() {
             return {
                 ready: false
