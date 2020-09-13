@@ -80,6 +80,21 @@
             width: 25%;
             height: 25%;
         }
+
+        footer {
+            width: 100%;
+            height: 5%;
+        }
+
+        .inner-footer {
+            text-align: center;
+        }
+
+        footer small {
+            color: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;
+            font-weight: 700;
+        }
     </style>
 </head>
 <body>
@@ -119,5 +134,13 @@
         </div>
     </div>
 </div>
+
+<footer>
+    <div class="inner-footer">
+        <small><i class="fal fa-copyright"></i>2020. Cape & Bay. All Rights Reserved. </small>
+        <br />
+        <small>v.{!! env('APP_VERSION') !!}| Build {!! env('APP_BUILD') !!}</small>
+    </div>
+</footer>
 </body>
 </html>

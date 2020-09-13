@@ -59,7 +59,7 @@ pipelines:
             - sleep 5
             - php artisan config:clear && vendor/bin/phpunit
       - step:
-          name : Execute Staging Deployment
+          name: Execute Staging Deployment
           caches:
             - composer
             - node

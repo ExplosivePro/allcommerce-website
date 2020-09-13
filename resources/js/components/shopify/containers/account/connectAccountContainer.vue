@@ -12,8 +12,12 @@
 </template>
 
 <script>
+  import LinkAccount from "../../screens/account/linkAccountComponent";
     export default {
         name: "connectAccountContainer",
+        components: {
+            LinkAccount
+        },
         props: ['shop', 'acIcon'],
         data() {
             return {
@@ -50,6 +54,8 @@
 
                         if (('success' in data) ) {
                             if (data['success']) {
+                                let urlParams = new URLSearchParams(window.location.search);
+                                console.log('URL Params ', urlParams);
                                 window.location.reload();
                             }
                             else {

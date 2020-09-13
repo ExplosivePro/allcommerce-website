@@ -10,14 +10,14 @@
     <title>{{ env('APP_NAME', 'Laravel') }}  | Cape & Bay </title>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js').'?v='.date('mis') }}" defer></script>
+    <script src="{{ asset('js/shopify-app.js').'?v='.date('mis') }}" defer></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
     <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/shopify-app.css') }}" rel="stylesheet">
     <style>
         html, body, #app {
             width: 100%;

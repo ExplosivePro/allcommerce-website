@@ -39,7 +39,7 @@ return [
     |
     */
 
-    'debug' => env('APP_DEBUG', false),
+    'debug' => (bool) env('APP_DEBUG', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -169,11 +169,11 @@ return [
         /*
          * Application Service Providers...
          */
-        App\Providers\AppServiceProvider::class,
-        App\Providers\AuthServiceProvider::class,
-        // App\Providers\BroadcastServiceProvider::class,
-        App\Providers\EventServiceProvider::class,
-        App\Providers\RouteServiceProvider::class,
+        AnchorCMS\Providers\AppServiceProvider::class,
+        AnchorCMS\Providers\AuthServiceProvider::class,
+        AnchorCMS\Providers\BroadcastServiceProvider::class,
+        AnchorCMS\Providers\EventServiceProvider::class,
+        AnchorCMS\Providers\RouteServiceProvider::class,
 
     ],
 

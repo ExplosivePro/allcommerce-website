@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace AnchorCMS\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -117,13 +117,14 @@ class HomeController extends Controller
 
         if(array_key_exists('session', $data))
         {
+
             return redirect('shopify/merchant/account?'.http_build_query($data));
         }
         else
         {
             $shop = $data['shop'];
             $api_key = env('SHOPIFY_SALES_CHANNEL_API_KEY');
-            $scopes = 'write_orders,read_customers,read_product_listings';
+            $scopes = 'read_content,write_content,read_themes,write_themes,read_orders,write_orders,read_customers,write_customers,read_products,write_products,read_product_listings,read_inventory,write_inventory,read_reports,write_reports,read_shopify_payments_payouts,read_checkouts,write_checkouts';
             $redirect_uri = env('APP_URL').'/shopify/merchant/app/install';
 
             $installer = DepartmentStore::get('installer', $data);

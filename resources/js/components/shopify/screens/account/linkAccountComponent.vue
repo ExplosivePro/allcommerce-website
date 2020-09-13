@@ -39,7 +39,7 @@
                         <div class="inner-actual-content">
                             <polaris-form-layout>
                                 <polaris-text-field
-                                    label="Account email"
+                                    label="Account Username"
                                     v-model="username"
                                     :error="emailError"
                                     type="email"></polaris-text-field>

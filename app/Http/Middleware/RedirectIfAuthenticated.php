@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Middleware;
+namespace AnchorCMS\Http\Middleware;
 
-use App\Providers\RouteServiceProvider;
+use AnchorCMS\Providers\RouteServiceProvider;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 

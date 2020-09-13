@@ -1,16 +1,75 @@
 // Fonts
 @import url('https://fonts.googleapis.com/css?family=Nunito');
-@import url('https://use.typekit.net/jrs3rip.css');
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css');
 
 // Variables
 @import 'variables';
 
 // Bootstrap
+@import '~bootstrap/scss/bootstrap';
+@import "~@coreui/coreui/scss/coreui";
+@import "~select2";
+@import "style.css";
+@import "c-dark-theme.css";
+@import "coreui-chartjs.css";
+@import "cropper.css";
+
+// Font Awesome!
 @import './font-awesome/scss/fontawesome.scss';
 @import './font-awesome/scss/light.scss';
 @import './font-awesome/scss/solid.scss';
 @import './font-awesome/scss/brands.scss';
 @import './font-awesome/scss/duotone.scss';
 @import './font-awesome/scss/regular.scss';
+@import './glyphicon.css';
+@import './pnotify.custom.min.css';
+@import '~vue-multiselect/dist/vue-multiselect.min.css';
+@import '~font-awesome-animation/dist/font-awesome-animation.css';
 
-@import '~@eastsideco/polaris-vue/lib/polaris-vue.css';
+    .c-header.c-header-fixed{
+        top:0px;
+    }
+
+    .click-file{
+        cursor:pointer;
+    }
+
+    .c-sidebar .logo .logo-mini {
+        display: none;
+    }
+
+    .c-sidebar .logo .logo-lg {
+        display: block;
+    }
+
+    .c-sidebar .logo {
+        -webkit-transition: width .3s ease-in-out;
+        -o-transition: width .3s ease-in-out;
+        transition: width .3s ease-in-out;
+        display: block;
+        float: left;
+        height: 50px;
+        font-size: 20px;
+        line-height: 50px;
+        text-align: center;
+        width: 230px;
+        font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+        padding: 0 15px;
+        font-weight: 300;
+        overflow: hidden;
+    }
+
+    @media (min-width: 768px) {
+        .c-app .c-sidebar.c-sidebar-minimized .logo>.logo-mini {
+            display: block;
+            margin-left: -15px;
+            margin-right: -15px;
+            font-size: 18px;
+            transition: width .3s ease-in-out;
+        }
+
+        .c-app .c-sidebar.c-sidebar-minimized .logo {
+            width: 100%;
+        }
+    }

@@ -11,42 +11,104 @@
 |
 */
 
+use AnchorCMS\Merchants;
+use AnchorCMS\UserActiveClients;
+
 Route::get('/', 'HomeController@home');
 
-Route::group(['prefix' => 'access'], function () {
-    Route::get('/', 'PlatformAccessController@index')->name('login');
-    Route::post('/', 'PlatformAccessController@token')->name('login');
-    Route::get('/logout', 'PlatformAccessController@logout')->name('logout');
-
-    Route::group(['middleware' => ['allcommerce']], function () {
-        Route::get('/dashboard', 'HomeController@index')->name('dashboard');
-        Route::post('/dashboard', 'HomeController@merchant_selected')->name('merchant_selected');
-        Route::post('/switch', 'HomeController@reset_merchant_selection')->name('merchant_reset');
-        Route::get('/merchandise', 'MerchMgntController@index')->name('merchandise');
-    });
+Route::get('/login', function () {
+    return redirect('access/login');
 });
 
+Route::get('/home', function () {
+    return redirect('dashboard');
+});
+
+Route::get('/switch/{client_id}', function ($client_id) {
+    if(backpack_user()->isHostUser()) {
+        if(backpack_user()->client_id == $client_id)
+        {
+            session()->forget('active_client');
+            session()->forget('active_merchant');
+            $sesh = UserActiveClients::whereUserId(backpack_user()->id)->delete();
+        }
+        else
+        {
+            session()->put('active_client', $client_id);
+            session()->forget('active_merchant');
+
+            $sesh = UserActiveClients::whereUserId(backpack_user()->id)->first();
+
+            if(!is_null($sesh))
+            {
+                $sesh->client_id = $client_id;
+                $sesh->save();
+            }
+            else
+            {
+                $sesh = new UserActiveClients();
+                $sesh->user_id = backpack_user()->id;
+                $sesh->client_id = $client_id;
+                $sesh->save();
+            }
+        }
+    }
+    return redirect(url()->previous());
+});
+
+Route::get('/merchant-switch/{merchant_id}', function ($merchant_id) {
+    $merchant = Merchants::find($merchant_id);
+
+    if(!is_null($merchant))
+    {
+        // Validate the active-client to the merchant.
+        $active_client_id = backpack_user()->getActiveClientId();
+        if($active_client_id == $merchant->client_id)
+        {
+            session()->put('active_merchant', $merchant_id);
+        }
+        else
+        {
+            session()->forget('active_merchant');
+            return view('errors.500');
+        }
+
+        return redirect(url()->previous());
+    }
+    else
+    {
+        return view('errors.500');
+    }
+});
+
+Route::get('/registration',  'UserRegistrationController@render_complete_registration');
+Route::post('/registration', 'UserRegistrationController@complete_registration');
+
 /**
- * Shopify Sales Channel ish
+ * Shopify App Goodness
  */
 Route::group(['prefix' => 'shopify'], function () {
     Route::group(['prefix' => 'merchant'], function () {
-        Route::get('/account', 'ShopifyAccessController@account');
+        Route::get('/account', 'Shopify\ShopifyAccessController@account');
+
         Route::group(['prefix' => 'app'], function () {
-            Route::get('/install', 'ShopifyAccessController@app_install');
+            Route::get('/install', 'Shopify\ShopifyAccessController@app_install');
         });
     });
 
     Route::group(['prefix' => 'sales-channel'], function () {
-        Route::get('/dashboard', 'ShopifyAccessController@dashboard');
+        Route::get('/dashboard', 'Shopify\ShopifyAccessController@dashboard');
 
         Route::group(['prefix' => 'sales'], function () {
-            Route::get('/secure/checkout/{token}', 'ShopifyCheckoutController@checkout');
+            Route::get('/secure/checkout/{token}', 'Shopify\ShopifyCheckoutController@checkout');
         });
 
-    });
-    Route::group(['prefix' => 'oauth'], function () {
+        Route::group(['prefix' => 'sales-beta'], function () {
+            Route::get('/secure/checkout/{token}', 'Shopify\ShopifyCheckoutController@checkout');
+        });
 
+        Route::group(['prefix' => 'sales-dev'], function () {
+            Route::get('/secure/checkout/{token}', 'Shopify\ShopifyCheckoutController@checkout');
+        });
     });
 });
-
