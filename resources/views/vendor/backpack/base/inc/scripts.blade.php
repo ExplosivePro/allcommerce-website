@@ -1,5 +1,5 @@
 <!-- JavaScripts -->
-<script src="{{ asset('js/app.js') }}"></script>
+<script src="{{ mix('js/app.js') }}"></script>
 
 <!-- page script -->
 <script type="text/javascript">

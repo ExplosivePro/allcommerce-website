@@ -15,7 +15,7 @@
   {{ isset($title) ? $title.' :: '.config('backpack.base.project_name').' Admin' : config('backpack.base.project_name').' Admin' }}
 </title>
 
-<link rel="stylesheet" href="{!! asset('css/app.css') !!}"/>
+<link rel="stylesheet" href="{!! mix('css/app.css') !!}"/>
 
 @yield('before_styles')
 @stack('before_styles')
