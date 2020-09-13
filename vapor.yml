@@ -2,59 +2,59 @@ id: 6285
 name: allcommerce
 separate-vendor: true
 environments:
-    production:
-      domain: allcommerce.capeandbay.com
-      memory: 2048
-      cli-memory: 1024
-      database: allcommerce
-      database-user: acuser
-      gateway-version: 2
-      queue-timeout: 600
-      timeout: 120
-      runtime: php-7.4
-      queues:
+  production:
+    domain: allcommerce.capeandbay.com
+    memory: 2048
+    cli-memory: 1024
+    database: allcommerce
+    database-user: acuser
+    gateway-version: 2
+    queue-timeout: 600
+    timeout: 120
+    runtime: php-7.4
+    queues:
         - allcommerce-production-emails
-      build:
+    build:
         - 'composer install --no-dev --no-interaction'
         - 'php artisan event:cache'
         - 'curl -sL https://deb.nodesource.com/setup_10.x | bash -'
         - 'apt-get install -y nodejs'
         - 'npm install && npm run prod && rm -rf node_modules'
-      deploy:
+    deploy:
         - 'php artisan migrate --force'
-    staging:
-      domain: allcommerce-demo.capeandbay.com
-      memory: 1024
-      cli-memory: 512
-      database: allcommerce
-      database-user: acuser
-      gateway-version: 2
-      queue-timeout: 600
-      timeout: 120
-      runtime: php-7.4
-      queues:
-        - allcommerce-staging-emails
-        build:
-          - 'composer install --no-dev --no-interaction'
-          - 'php artisan event:cache'
-          - 'curl -sL https://deb.nodesource.com/setup_10.x | bash -'
-          - 'apt-get install -y nodejs'
-          - 'npm install && npm run dev && rm -rf node_modules'
-        deploy:
-          - 'php artisan migrate --force'
-    develop:
-      domain: allcommerce-dev.capeandbay.com
-      memory: 1024
-      cli-memory: 512
-      database: allcommerce
-      database-user: acuser
-      gateway-version: 2
-      runtime: php-7.4
-      build:
-          - 'composer install'
-          - 'php artisan event:cache'
-          - 'curl -sL https://deb.nodesource.com/setup_10.x | bash -'
-          - 'apt-get install -y nodejs'
-          - 'npm install && npm run dev && rm -rf node_modules'
-      deploy:
+  staging:
+    domain: allcommerce-demo.capeandbay.com
+    memory: 1024
+    cli-memory: 512
+    database: allcommerce
+    database-user: acuser
+    gateway-version: 2
+    queue-timeout: 600
+    timeout: 120
+    runtime: php-7.4
+    queues:
+      - allcommerce-staging-emails
+    build:
+        - 'composer install --no-dev --no-interaction'
+        - 'php artisan event:cache'
+        - 'curl -sL https://deb.nodesource.com/setup_10.x | bash -'
+        - 'apt-get install -y nodejs'
+        - 'npm install && npm run dev && rm -rf node_modules'
+    deploy:
+        - 'php artisan migrate --force'
+  develop:
+    domain: allcommerce-dev.capeandbay.com
+    memory: 1024
+    cli-memory: 512
+    database: allcommerce
+    database-user: acuser
+    gateway-version: 2
+    runtime: php-7.4
+    build:
+        - 'composer install'
+        - 'php artisan event:cache'
+        - 'curl -sL https://deb.nodesource.com/setup_10.x | bash -'
+        - 'apt-get install -y nodejs'
+        - 'npm install && npm run dev && rm -rf node_modules'
+    deploy:
         - 'php artisan migrate --force'
