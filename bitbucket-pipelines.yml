@@ -95,4 +95,5 @@ pipelines:
             - php artisan serve &
             - sleep 5
             - php artisan config:clear && vendor/bin/phpunit
+            - vendor/bin/vapor env:pull develop
             - vendor/bin/vapor deploy develop
