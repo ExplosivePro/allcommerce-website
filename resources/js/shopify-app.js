@@ -49,4 +49,13 @@ Vue.use(PolarisVue);
 
 const app = new Vue({
     el: '#app',
+    watch: {},
+    data() {
+        return {};
+    },
+    computed: {},
+    methods: {},
+    mounted() {
+        console.log("This Shopify Checkout Experience powered by AllCommerce");
+    }
 });

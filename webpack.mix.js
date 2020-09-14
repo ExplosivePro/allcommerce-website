@@ -11,11 +11,15 @@ const mix = require('laravel-mix');
  |
  */
 
+// CMS Based Compiles
 mix.js('resources/js/app.js', 'public/js')
    .sass('resources/sass/app.scss', 'public/css');
 
+// Shopify Based Compiles
 mix.js('resources/js/shopify-app.js', 'public/js')
+    .js('resources/js/cx-app.js', 'public/js')
     .sass('resources/sass/shopify-app.scss', 'public/css');
+
 
 mix.webpackConfig({
     resolve: {

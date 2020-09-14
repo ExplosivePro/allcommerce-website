@@ -36,6 +36,7 @@ pipelines:
             - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
             - composer install --no-interaction --prefer-dist  --optimize-autoloader
             - composer require laravel/vapor-cli
+            - npm install && npm run prod
             - ln -f -s .env.pipelines .env
             - php artisan serve &
             - sleep 5
@@ -72,6 +73,7 @@ pipelines:
             - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
             - composer install --no-interaction --prefer-dist  --optimize-autoloader
             - composer require laravel/vapor-cli
+            - npm install && npm run dev
             - ln -f -s .env.pipelines .env
             - vendor/bin/vapor deploy staging
     develop:
@@ -82,15 +84,15 @@ pipelines:
             - node
           deployment: test
           script:
-            - apt-get update && apt-get install -qy libzip-dev zip libpng-dev git npm curl libmcrypt-dev default-mysql-client
-            - docker-php-ext-install pdo_mysql
+            - curl -sL https://deb.nodesource.com/setup_10.x | bash -
+            - apt-get update && apt-get install -y libzip-dev zip nodejs
             - docker-php-ext-install zip
-            - docker-php-ext-install gd
             - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
             - composer install --no-interaction --prefer-dist  --optimize-autoloader
-            - ln -f -s .env.pipelines .env
             - composer require laravel/vapor-cli
             - ln -f -s .env.pipelines .env
-            - vendor/bin/vapor env:pull develop
             - npm install && npm run dev
+            - php artisan serve &
+            - sleep 5
+            - php artisan config:clear && vendor/bin/phpunit
             - vendor/bin/vapor deploy develop

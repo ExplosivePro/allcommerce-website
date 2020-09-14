@@ -39,4 +39,9 @@ class Shops extends Model
     {
         return $this->shop_type();
     }
+
+    public function inventory()
+    {
+        return $this->hasMany('AnchorCMS\MerchantInventory', 'shop_id', 'id');
+    }
 }
