@@ -11,11 +11,32 @@ class Merchants extends Model
 {
     use CrudTrait, SoftDeletes, Uuid;
 
+    protected $primaryKey  = 'id';
+
+    /**
+     * The "type" of the auto-incrementing ID.
+     *
+     * @var string
+     */
+    protected $keyType = 'string';
+
+    /**
+     * Indicates if the IDs are auto-incrementing.
+     *
+     * @var bool
+     */
+    public $incrementing = false;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $guarded = [];
 
     protected $casts = [
         'id' => 'uuid',
-        'client_id' => 'uuid'
+        'client_id' => 'uuid',
     ];
 
     public function shops()

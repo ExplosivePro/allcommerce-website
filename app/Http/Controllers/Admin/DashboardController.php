@@ -3,9 +3,10 @@
 namespace AnchorCMS\Http\Controllers\Admin;
 
 use AnchorCMS\Clients;
-use AnchorCMS\ShopifyInstalls;
+use AnchorCMS\Merchants;
 use AnchorCMS\Shops;
 use Illuminate\Http\Request;
+use AnchorCMS\ShopifyInstalls;
 use AnchorCMS\Http\Controllers\Controller;
 
 class DashboardController extends Controller
@@ -61,16 +62,16 @@ class DashboardController extends Controller
             {
                 $shop = $shops->whereMerchantId(session()->get('active_merchant'))
                     ->whereId($data['shop'])
-                    ->with('merchant')
                     ->with('shop_type')
                     ->first();
 
+                $merchant = $shop->merchant()->first();
                 // Get shop record with merchant record or error 500
                 if(!is_null($shop))
                 {
 
                     // Active merchant matched the shop's assigned merchant or or error 501
-                    if((!is_null($shop->merchant)) && ($shop->merchant->id == session()->get('active_merchant')))
+                    if((!is_null($shop->merchant)) && ($merchant->id == session()->get('active_merchant')))
                     {
                         // Something something, dashboard breadcrumbs something.
                         $client_uuid = session()->has('active_client') ? session()->get('active_client') : backpack_user()->client_id;

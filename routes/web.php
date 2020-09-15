@@ -102,13 +102,5 @@ Route::group(['prefix' => 'shopify'], function () {
         Route::group(['prefix' => 'sales'], function () {
             Route::get('/secure/checkout/{token}', 'Shopify\ShopifyCheckoutController@checkout');
         });
-
-        Route::group(['prefix' => 'sales-beta'], function () {
-            Route::get('/secure/checkout/{token}', 'Shopify\ShopifyCheckoutController@checkout');
-        });
-
-        Route::group(['prefix' => 'sales-dev'], function () {
-            Route::get('/secure/checkout/{token}', 'Shopify\ShopifyCheckoutController@checkout');
-        });
     });
 });
