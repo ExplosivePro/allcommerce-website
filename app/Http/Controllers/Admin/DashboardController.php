@@ -65,11 +65,10 @@ class DashboardController extends Controller
                     ->with('shop_type')
                     ->first();
 
-                $merchant = $shop->merchant()->first();
                 // Get shop record with merchant record or error 500
                 if(!is_null($shop))
                 {
-
+                    $merchant = $shop->merchant()->first();
                     // Active merchant matched the shop's assigned merchant or or error 501
                     if((!is_null($shop->merchant)) && ($merchant->id == session()->get('active_merchant')))
                     {

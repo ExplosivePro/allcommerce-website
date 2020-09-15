@@ -118,7 +118,7 @@ class ShopifyAccessAPIController extends Controller
                 }
                 else
                 {
-                    $results['reason'] = 'Access Denied! Must Be Account owner';
+                    $results['reason'] = 'Access Denied! Must Be Account owner..';
                     $results['msg'] = 'We found you in our system but could not verify you as an account owner.';
                 }
 
