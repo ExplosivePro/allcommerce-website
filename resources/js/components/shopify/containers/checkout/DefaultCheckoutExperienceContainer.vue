@@ -83,7 +83,7 @@
         methods: {
             ...mapActions({
                 setShop: 'setShopUuid',
-                setApiUrl: 'setApiUrl',
+                setApiUrl: 'leadManager/setApiUrl',
                 setLeadUuid: 'setLeadUuid',
                 initCart: 'initCart',
                 configCheckout: 'configCheckout',
