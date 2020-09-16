@@ -21,7 +21,7 @@
         components: {
             CheckoutExperience
         },
-        props: ['items', 'shopId', 'checkoutType', 'checkoutId'],
+        props: ['items', 'shopId', 'checkoutType', 'checkoutId', 'apiUrl'],
         watch: {
             leadLoading(flag) {
                 console.log('LeadLoading set to - '+flag)
@@ -83,6 +83,7 @@
         methods: {
             ...mapActions({
                 setShop: 'setShopUuid',
+                setApiUrl: 'setApiUrl',
                 setLeadUuid: 'setLeadUuid',
                 initCart: 'initCart',
                 configCheckout: 'configCheckout',
@@ -149,6 +150,7 @@
             }
         },
         mounted() {
+            this.setApiUrl(this.apiUrl);
             this.configCheckout({type:this.checkoutType, id:this.checkoutId});
             this.setShop(this.shopId);
             this.initCart(this.items);

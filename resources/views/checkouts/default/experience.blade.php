@@ -112,6 +112,7 @@
                 shop-id="{!! $shop_uuid !!}"
                 checkout-type="{!! $checkout_type !!}"
                 checkout-id="{!! $checkout_id !!}"
+                api-url="{!! env('APP_URL') !!}"
             ></default-checkout-experience>
             <div class="row footer-section">
                 <div class="inner-footer-section">

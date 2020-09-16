@@ -15,7 +15,8 @@ const leadManager = {
             billingValidated: false,
             billingShippingSame: true,
             billingAddressUuid: '',
-            shippingAddressUuid: ''
+            shippingAddressUuid: '',
+            apiUrl: ''
         };
     },
     mutations: {
@@ -38,6 +39,10 @@ const leadManager = {
         loading(state, flag) {
             console.log('Mutating loading to '+ flag);
             state.loading = flag;
+        },
+        apiUrl(state, url) {
+            console.log('Mutating apiUrl to '+ url);
+            state.apiUrl = url;
         },
         shippingAddress(state, {col, val}) {
             console.log(`Committing shippingAddress.${col} to ${val}`);
@@ -188,6 +193,10 @@ const leadManager = {
             console.log('Committing loading to '+flag);
             context.commit('loading', flag);
         },
+        setApiUrl(context, url) {
+            console.log('Committing apiUrl to '+url);
+            context.commit('apiUrl', url);
+        },
         setBillingShippingSame(context, flag) {
             console.log('Committing billingShippingSame to '+flag);
             context.commit('billingShippingSame', flag);
@@ -216,7 +225,7 @@ const leadManager = {
                 context.commit('leadEmail', payload.value);
             }
 
-            let url = `/api/checkout/leads/`;
+            let url = `${context.state.apiUrl}/api/checkout/leads/`;
             console.log(`Pinging ${url}`, payload);
 
             axios.post(url, payload)
