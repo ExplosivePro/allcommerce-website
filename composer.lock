@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ef4f8a5238f557fcc759d267a693d33f",
+    "content-hash": "21463cafb25061ace2ba299c03205d52",
     "packages": [
         {
             "name": "almasaeed2010/adminlte",
@@ -332,12 +332,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/capeandbay-devs/allcommerce-merchant-api-sdk.git",
-                "reference": "57d441f0094fc9caac1564979d34e058d45c708b"
+                "reference": "314a7aae4585da881b6813bec1a0545f588468d8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/capeandbay-devs/allcommerce-merchant-api-sdk/zipball/57d441f0094fc9caac1564979d34e058d45c708b",
-                "reference": "57d441f0094fc9caac1564979d34e058d45c708b",
+                "url": "https://api.github.com/repos/capeandbay-devs/allcommerce-merchant-api-sdk/zipball/314a7aae4585da881b6813bec1a0545f588468d8",
+                "reference": "314a7aae4585da881b6813bec1a0545f588468d8",
                 "shasum": ""
             },
             "require": {
@@ -385,7 +385,7 @@
                 "source": "https://github.com/capeandbay-devs/allcommerce-merchant-api-sdk/tree/master",
                 "issues": "https://github.com/capeandbay-devs/allcommerce-merchant-api-sdk/issues"
             },
-            "time": "2020-09-12T18:33:40+00:00"
+            "time": "2020-09-15T21:55:19+00:00"
         },
         {
             "name": "capeandbay/allcommerce-service-desk",

@@ -1,0 +1,52 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateBillingAddressesTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('billing_addresses', function (Blueprint $table) {
+            $table->bigIncrements('id');
+
+            $table->text('first_name')->nullable();
+            $table->text('last_name')->nullable();
+            $table->text('email')->nullable();
+            $table->text('phone')->nullable();
+            $table->text('address')->nullable();
+            $table->text('address2')->nullable();
+            $table->text('apt')->nullable();
+            $table->text('city')->nullable();
+            $table->text('state')->nullable();
+            $table->text('zip')->nullable();
+            $table->text('county')->nullable();
+
+            $table->uuid('lead_uuid');
+            $table->uuid('order_uuid');
+
+            $table->uuid('shop_uuid');
+            $table->uuid('merchant_uuid');
+            $table->uuid('client_uuid');
+
+            $table->timestamps();
+            $table->softDeletes();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('billing_addresses');
+    }
+}

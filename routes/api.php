@@ -26,6 +26,12 @@ Route::group(['prefix' => 'client'], function() {
     Route::get('{client_uuid}/budgets/club/{club_id}', 'API\Clients\Ads\ClientAdBudgetAPIController@get_budget_data_for_club');
 });
 
+Route::group(['prefix' => 'checkout'], function () {
+    Route::group(['prefix' => 'leads'], function () {
+        Route::post('/', 'API\Checkouts\LeadsAPIController@create_or_update_lead');
+    });
+});
+
 Route::group(['prefix' => 'shopify'], function () {
     Route::post('/login', 'API\Shopify\ShopifyAccessAPIController@sales_channel_login_connect');
     Route::post('/inventory', 'API\Shopify\ShopifyAccessAPIController@inventory');

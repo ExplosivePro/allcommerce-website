@@ -1,7 +1,7 @@
 <template>
     <div class="spinny-loader">
         <div class="center-wrapper">
-            <i class="fad fa-galaxy fa-spin"></i>
+            <i :class="icon" class="fa-spin" :style="{'--icon-size':iconSize}"></i>
             <p>{{ msg }}</p>
         </div>
     </div>
@@ -10,15 +10,29 @@
 <script>
     export default {
         name: "SexyHurricaneLoaderComponent",
-        props: ['loadingMsg'],
+        props: ['loadingMsg', 'overrideIcon', 'overrideIconSize'],
         data() {
             return {
-                msg: 'Loading...'
+                msg: 'Loading...',
+                icon: 'fad fa-galaxy',
+                iconSize: '3em'
             }
         },
         mounted() {
             if((this.loadingMsg !== '') && (this.loadingMsg !== undefined)) {
                 this.msg = this.loadingMsg;
+            }
+
+            if(this.overrideIcon !== undefined) {
+                if(this.overrideIcon !== '') {
+                    this.icon = this.overrideIcon
+                }
+            }
+
+            if(this.overrideIconSize !== undefined) {
+                if(this.overrideIconSize !== '') {
+                    this.iconSize = this.overrideIconSize
+                }
             }
         }
     }
@@ -30,7 +44,7 @@
     }
 
     .spinny-loader i {
-        font-size: 3em;
+        font-size: var(--icon-size);
     }
 
     .spinny-loader p {

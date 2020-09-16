@@ -21,7 +21,7 @@ Route::get('/login', function () {
 });
 
 Route::get('/home', function () {
-    return redirect('dashboard');
+    return redirect('access/dashboard');
 });
 
 Route::get('/switch/{client_id}', function ($client_id) {
@@ -100,6 +100,8 @@ Route::group(['prefix' => 'shopify'], function () {
         Route::get('/dashboard', 'Shopify\ShopifyAccessController@dashboard');
 
         Route::group(['prefix' => 'sales'], function () {
+            // This is that f@#$ing sweetness, dat CHECKOUT PAGE, BIATCH!
+            // @todo - buy shit.
             Route::get('/secure/checkout/{token}', 'Shopify\ShopifyCheckoutController@checkout');
         });
     });

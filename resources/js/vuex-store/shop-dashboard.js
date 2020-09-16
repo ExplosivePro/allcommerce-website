@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 Vue.use(Vuex);
 
-import shopify from "./shopify/shopify";
+import shopify from "../checkout-store/shopify/shopify";
 
 const shopDash = {
     namespaced: true,

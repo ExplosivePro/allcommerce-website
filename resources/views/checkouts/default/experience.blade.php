@@ -109,6 +109,9 @@
             </div>
             <default-checkout-experience
                 :items="{{ json_encode($items) }}"
+                shop-id="{!! $shop_uuid !!}"
+                checkout-type="{!! $checkout_type !!}"
+                checkout-id="{!! $checkout_id !!}"
             ></default-checkout-experience>
             <div class="row footer-section">
                 <div class="inner-footer-section">

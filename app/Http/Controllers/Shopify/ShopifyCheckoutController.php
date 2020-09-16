@@ -18,7 +18,7 @@ class ShopifyCheckoutController extends Controller
         $this->request = $request;
     }
 
-    // @todo - attempt to exploit this endpoint with sqlmap.
+    // @todo - attempt to exploit this endpoint with sqlmap to make sure this endpoint is secure.
     public function checkout($token, CheckoutFunnels $funnels, CheckoutFunnelAttributes $funnel_attrs)
     {
         $args = [];
@@ -58,6 +58,8 @@ class ShopifyCheckoutController extends Controller
 
                 }
 
+                $args['checkout_type'] = 'checkout_funnel';
+                $args['checkout_id'] = $token;
                 $args['items'] = $item_attrs;
 
                 $blade = 'checkouts.default.experience';

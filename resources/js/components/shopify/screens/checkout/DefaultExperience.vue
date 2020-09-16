@@ -1,6 +1,18 @@
 <template>
 <div class="row payment-section">
-    <div class="inner-payment-section">
+    <div class="inner-payment-section loading" v-if="loading">
+        <div class="loading-piece" v-if="loading">
+            <div class="inner-loading-piece">
+                <sexy-hurricane-loading
+                    loading-msg="Loading Your Secure Checkout!"
+                    override-icon="fad fa-spinner-third"
+                    override-icon-size="7.5em"
+                ></sexy-hurricane-loading>
+            </div>
+        </div>
+    </div>
+
+    <div class="inner-payment-section" v-else>
         <div class="order-form-column">
             <div class="inner-order-form">
                 <div class="form-segment timer-segment" v-if="hasTimer"><p> Timer Segment</p></div>
@@ -13,9 +25,10 @@
                                 label="Contact Information"
                                 type="email"
                                 v-model="email"
+                                :disabled="disableFields"
                                 placeholder="Email">
                             </polaris-text-field>
-                            <polaris-checkbox label="Keep me up to date on news and exclusive offers" v-model="joinMailingList">
+                            <polaris-checkbox label="Keep me up to date on news and exclusive offers" v-model="joinMailingList" :disabled="disableFields">
                             </polaris-checkbox>
                         </polaris-form-layout>
                     </div>
@@ -33,25 +46,35 @@
                                 <div class="inner-shipping-method-content">
                                     <polaris-form-layout>
                                         <polaris-form-layout-group>
-                                            <polaris-text-field placeholder="First name"></polaris-text-field>
-                                            <polaris-text-field placeholder="Last name"></polaris-text-field>
-                                            <polaris-text-field placeholder="Company (optional)"></polaris-text-field>
+                                            <polaris-text-field v-model="shippingFirst" placeholder="First name" :disabled="disableFields"></polaris-text-field>
+                                            <polaris-text-field v-model="shippingLast" placeholder="Last name" :disabled="disableFields"></polaris-text-field>
+                                            <polaris-text-field v-model="shippingCompany" placeholder="Company (optional)" :disabled="disableFields"></polaris-text-field>
                                         </polaris-form-layout-group>
 
                                         <polaris-form-layout-group>
-                                            <polaris-text-field placeholder="Address"></polaris-text-field>
-                                            <polaris-text-field placeholder="Apt, suite, etc (optional)"></polaris-text-field>
-                                            <polaris-text-field placeholder="City"></polaris-text-field>
+                                            <polaris-text-field v-model="shippingAddress" placeholder="Address" :disabled="disableFields"></polaris-text-field>
+                                            <polaris-text-field v-model="shippingApt" placeholder="Apt, suite, etc (optional)" :disabled="disableFields"></polaris-text-field>
+                                            <polaris-text-field v-model="shippingCity" placeholder="City" :disabled="disableFields"></polaris-text-field>
                                         </polaris-form-layout-group>
 
                                         <polaris-form-layout-group condensed>
-                                            <polaris-text-field placeholder="Country"></polaris-text-field>
-                                            <polaris-text-field placeholder="State"></polaris-text-field>
-                                            <polaris-text-field placeholder="Postal Code"></polaris-text-field>
+                                            <polaris-select
+                                                v-model="shippingCountry"
+                                                :disabled="disableFields"
+                                                :options="countries"
+                                                placeholder="Select a Country">
+                                            </polaris-select>
+                                            <polaris-select
+                                                v-model="shippingState"
+                                                :disabled="disableFields"
+                                                :options="stateDrops[shippingCountry]"
+                                                :placeholder="(shippingCountry === 'us') ? 'Select a State' : 'Select a Province'">
+                                            </polaris-select>
+                                            <polaris-text-field v-model="shippingZip" placeholder="Postal Code" :disabled="disableFields"></polaris-text-field>
                                         </polaris-form-layout-group>
 
                                         <polaris-form-layout-group>
-                                            <polaris-text-field placeholder="Phone #"></polaris-text-field>
+                                            <polaris-text-field v-model="shippingPhone" placeholder="Phone #" :disabled="disableFields"></polaris-text-field>
                                         </polaris-form-layout-group>
                                     </polaris-form-layout>
                                 </div>
@@ -71,10 +94,10 @@
                             <div class="inner-billing-address-panel">
 
                                 <div class="same-as-shipping-box">
-                                    <input type="radio" name="sameAsShipping" :value="true" v-model="billingShippingSame">
+                                    <input type="radio" name="sameAsShipping" :value="true" v-model="billingShippingSame" :disabled="disableFields">
                                     <label>Same as Shipping Address</label>
                                     <br>
-                                    <input type="radio" name="sameAsShipping" :value="false" v-model="billingShippingSame">
+                                    <input type="radio" name="sameAsShipping" :value="false" v-model="billingShippingSame" :disabled="disableFields">
                                     <label>Use a Different Billing Address</label>
                                 </div>
 
@@ -82,25 +105,35 @@
                                     <div class="inner-billing-address-content">
                                         <polaris-form-layout>
                                             <polaris-form-layout-group>
-                                                <polaris-text-field placeholder="First name"></polaris-text-field>
-                                                <polaris-text-field placeholder="Last name"></polaris-text-field>
-                                                <polaris-text-field placeholder="Company (optional)"></polaris-text-field>
+                                                <polaris-text-field v-model="billingFirst" placeholder="First name" :disabled="disableFields"></polaris-text-field>
+                                                <polaris-text-field v-model="billingLast" placeholder="Last name" :disabled="disableFields"></polaris-text-field>
+                                                <polaris-text-field v-model="billingCompany" placeholder="Company (optional)" :disabled="disableFields"></polaris-text-field>
                                             </polaris-form-layout-group>
 
                                             <polaris-form-layout-group>
-                                                <polaris-text-field placeholder="Address"></polaris-text-field>
-                                                <polaris-text-field placeholder="Apt, suite, etc (optional)"></polaris-text-field>
-                                                <polaris-text-field placeholder="City"></polaris-text-field>
+                                                <polaris-text-field v-model="billingAddress" placeholder="Address" :disabled="disableFields"></polaris-text-field>
+                                                <polaris-text-field v-model="billingApt"placeholder="Apt, suite, etc (optional)" :disabled="disableFields"></polaris-text-field>
+                                                <polaris-text-field v-model="billingCity" placeholder="City" :disabled="disableFields"></polaris-text-field>
                                             </polaris-form-layout-group>
 
                                             <polaris-form-layout-group condensed>
-                                                <polaris-text-field placeholder="Country"></polaris-text-field>
-                                                <polaris-text-field placeholder="State"></polaris-text-field>
-                                                <polaris-text-field placeholder="Postal Code"></polaris-text-field>
+                                                <polaris-select
+                                                    v-model="billingCountry"
+                                                    :disabled="disableFields"
+                                                    :options="countries"
+                                                    placeholder="Select a Country">
+                                                </polaris-select>
+                                                <polaris-select
+                                                    v-model="billingState"
+                                                    :disabled="disableFields"
+                                                    :options="stateDrops[billingCountry]"
+                                                    :placeholder="(billingCountry === 'us') ? 'Select a State' : 'Select a Province'">
+                                                </polaris-select>
+                                                <polaris-text-field v-model="billingZip" placeholder="Postal Code" :disabled="disableFields"></polaris-text-field>
                                             </polaris-form-layout-group>
 
                                             <polaris-form-layout-group>
-                                                <polaris-text-field placeholder="Phone #"></polaris-text-field>
+                                                <polaris-text-field v-model="billingPhone" placeholder="Phone #" :disabled="disableFields"></polaris-text-field>
                                             </polaris-form-layout-group>
                                         </polaris-form-layout>
                                     </div>
@@ -172,13 +205,13 @@
                                 <div class="payment-pad">
                                     <polaris-form-layout>
                                         <polaris-form-layout-group>
-                                            <polaris-text-field placeholder="Card Number"></polaris-text-field>
+                                            <polaris-text-field placeholder="Card Number" :disabled="disableFields"></polaris-text-field>
                                         </polaris-form-layout-group>
 
                                         <polaris-form-layout-group condensed>
-                                            <polaris-text-field placeholder="Name on Card"></polaris-text-field>
-                                            <polaris-text-field placeholder="MM/YY"></polaris-text-field>
-                                            <polaris-text-field placeholder="CVV"></polaris-text-field>
+                                            <polaris-text-field placeholder="Name on Card" :disabled="disableFields"></polaris-text-field>
+                                            <polaris-text-field placeholder="MM/YY" :disabled="disableFields"></polaris-text-field>
+                                            <polaris-text-field placeholder="CVV" :disabled="disableFields"></polaris-text-field>
                                         </polaris-form-layout-group>
                                     </polaris-form-layout>
                                 </div>
@@ -264,7 +297,13 @@
                                                 <div class="Polaris-Connected" >
                                                     <div class="Polaris-Connected__Item Polaris-Connected__Item--primary">
                                                         <div class="Polaris-TextField">
-                                                            <input type="text" class="Polaris-TextField__Input" v-model="giftCardCode" placeholder="Gift Card or Discount Code" :style="(giftCardCode !== '') ? 'top:5px;' : ''">
+                                                            <input type="text"
+                                                                   class="Polaris-TextField__Input"
+                                                                   v-model="giftCardCode"
+                                                                   placeholder="Gift Card or Discount Code"
+                                                                   :style="(giftCardCode !== '') ? 'top:5px;' : ''"
+                                                                   :disabled="disableFields"
+                                                            />
                                                             <div class="Polaris-TextField__Backdrop"></div>
                                                         </div>
                                                     </div>
@@ -315,18 +354,248 @@
 
 <script>
     import FloatLabel from "vue-float-label/components/FloatLabel";
+    import SexyHurricaneLoading from "../../../presenters/widgets/loading/SexyHurricane";
 
     export default {
         name: "DefaultExperience",
         components: {
-            FloatLabel
+            FloatLabel,
+            SexyHurricaneLoading
         },
-        props: ['hasTimer', 'hasExpressCheckout', 'lineItems'],
+        props: [
+            'hasTimer', 'hasExpressCheckout', 'lineItems', 'loading', 'disableFields',
+            'countries', 'stateDrops'
+        ],
         watch: {
+            email(addy) {
+                let payload = {
+                    method: 'email',
+                    value: addy
+                };
+                this.$emit('updated', payload);
+            },
+            joinMailingList(flag) {
+                let payload = {
+                    method: 'emailList',
+                    value: flag
+                };
+                this.$emit('updated', payload);
+            },
             billingShippingSame(flag) {
-                console.log('billingShippingSame - Setting sameAsShipping to - '+ flag)
-                this.sameAsShipping = flag;
-            }
+                console.log('billingShippingSame - Setting sameAsShipping to - '+ flag);
+
+                if (flag) {
+                    this.billingFirst = this.shippingFirst;
+                    this.billingLast = this.shippingLast;
+                    this.billingCompany = this.shippingCompany;
+                    this.billingAddress = this.shippingAddress;
+                    this.billingApt = this.shippingApt
+                    this.billingCity = this.shippingCity;
+                    this.billingCountry = this.shippingCountry;
+                    this.billingState = this.shippingState;
+                    this.billingZip = this.shippingZip;
+                    this.billingPhone = this.shippingPhone;
+                }
+                else {
+                    this.billingFirst = '';
+                    this.billingLast = '';
+                    this.billingCompany = '';
+                    this.billingAddress = '';
+                    this.billingApt = ''
+                    this.billingCity = '';
+                    this.billingCountry = 'us';
+                    this.billingState = '';
+                    this.billingZip = '';
+                    this.billingPhone = '';
+                }
+
+                let payload = {
+                    method: 'billingShippingSame',
+                    value: flag
+                };
+                this.$emit('updated', payload)
+            },
+            shippingFirst(val) {
+                if(this.billingShippingSame) {
+                    this.billingFirst = val;
+                }
+
+                let payload = {
+                    method: 'shippingFirst',
+                    value: val
+                };
+                this.$emit('updated', payload);
+            },
+            shippingLast(val) {
+                if(this.billingShippingSame) {
+                    this.billingLast = val;
+                }
+
+                let payload = {
+                    method: 'shippingLast',
+                    value: val
+                };
+                this.$emit('updated', payload);
+            },
+            shippingCompany(val) {
+                if(this.billingShippingSame) {
+                    this.billingCompany = val;
+                }
+
+                let payload = {
+                    method: 'shippingCompany',
+                    value: val
+                };
+                this.$emit('updated', payload);
+            },
+            shippingAddress(val) {
+                if(this.billingShippingSame) {
+                    this.billingAddress = val;
+                }
+
+                let payload = {
+                    method: 'shippingAddress',
+                    value: val
+                };
+                this.$emit('updated', payload);
+            },
+            shippingApt(val) {
+                if(this.billingShippingSame) {
+                    this.billingApt = val;
+                }
+
+                let payload = {
+                    method: 'shippingApt',
+                    value: val
+                };
+                this.$emit('updated', payload);
+            },
+            shippingCity(val) {
+                if(this.billingShippingSame) {
+                    this.billingCity = val;
+                }
+
+                let payload = {
+                    method: 'shippingCity',
+                    value: val
+                };
+                this.$emit('updated', payload);
+            },
+            shippingCountry(val) {
+                if(this.billingShippingSame) {
+                    this.billingCountry = val;
+                }
+
+                let payload = {
+                    method: 'shippingCountry',
+                    value: val
+                };
+                this.$emit('updated', payload);
+            },
+            shippingState(val) {
+                if(this.billingShippingSame) {
+                    this.billingState = val;
+                }
+
+                let payload = {
+                    method: 'shippingState',
+                    value: val
+                };
+                this.$emit('updated', payload);
+            },
+            shippingZip(val) {
+                if(this.billingShippingSame) {
+                    this.billingZip = val;
+                }
+
+                let payload = {
+                    method: 'shippingZip',
+                    value: val
+                };
+                this.$emit('updated', payload);
+            },
+            shippingPhone(val) {
+                if(this.billingShippingSame) {
+                    this.billingPhone = val;
+                }
+
+                let payload = {
+                    method: 'shippingPhone',
+                    value: val
+                };
+                this.$emit('updated', payload);
+            },
+
+            billingFirst(val) {
+                let payload2 = {
+                    method: 'billingFirst',
+                    value: val
+                };
+                this.$emit('updated', payload2);
+            },
+            billingLast(val) {
+                let payload2 = {
+                    method: 'billingLast',
+                    value: val
+                };
+                this.$emit('updated', payload2);
+            },
+            billingCompany(val) {
+                let payload2 = {
+                    method: 'billingCompany',
+                    value: val
+                };
+                this.$emit('updated', payload2);
+            },
+            billingAddress(val) {
+                let payload2 = {
+                    method: 'billingAddress',
+                    value: val
+                };
+                this.$emit('updated', payload2);
+            },
+            billingApt(val) {
+                let payload2 = {
+                    method: 'billingApt',
+                    value: val
+                };
+                this.$emit('updated', payload2);
+            },
+            billingCity(val) {
+                let payload2 = {
+                    method: 'billingCity',
+                    value: val
+                };
+                this.$emit('updated', payload2);
+            },
+            billingCountry(val) {
+                let payload2 = {
+                    method: 'billingCountry',
+                    value: val
+                };
+                this.$emit('updated', payload2);
+            },
+            billingState(val) {
+                let payload2 = {
+                    method: 'billingState',
+                    value: val
+                };
+                this.$emit('updated', payload2);
+            },
+            billingZip(val) {
+                let payload2 = {
+                    method: 'billingZip',
+                    value: val
+                };
+                this.$emit('updated', payload2);
+            },
+            billingPhone(val) {
+                let payload2 = {
+                    method: 'billingPhone',
+                    value: val
+                };
+                this.$emit('updated', payload2);
+            },
         },
         data() {
             return {
@@ -337,7 +606,29 @@
                 showShippingMethods: false,
                 selectedPaymentMethod: 'credit',
                 subTotal: '1.00',
-                total: '1.00'
+                total: '1.00',
+
+                shippingFirst: '',
+                shippingLast: '',
+                shippingCompany: '',
+                shippingAddress: '',
+                shippingApt: '',
+                shippingCity: '',
+                shippingCountry: 'us',
+                shippingState: '',
+                shippingZip: '',
+                shippingPhone: '',
+
+                billingFirst: '',
+                billingLast: '',
+                billingCompany: '',
+                billingAddress: '',
+                billingApt: '',
+                billingCity: '',
+                billingCountry: 'us',
+                billingState: '',
+                billingZip: '',
+                billingPhone: ''
             };
         },
         methods: {
@@ -368,6 +659,15 @@
         mounted() {
             this.calculateSubTotal();
             this.calculateTotal();
+
+            let payload = {
+                method: 'shippingCountry',
+                value: this.shippingCountry
+            };
+            this.$emit('updated', payload);
+
+            payload.method = 'billingCountry'
+            this.$emit('updated', payload);
         }
     }
 </script>
@@ -570,6 +870,17 @@
             margin-top: 2.5%;
         }
 
+        .inner-payment-section.loading {
+            height: 100%;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .inner-payment-section .loading-piece {
+            height: 100%;
+            margin: 20em 0;
+        }
+
         .order-form-column {
             width: 100%;
             order: 2;
@@ -612,6 +923,17 @@
 
         .inner-payment-section {
             flex-flow: row;
+        }
+
+        .inner-payment-section.loading {
+            height: 100%;
+            align-content: center;
+            justify-content: center;
+        }
+
+        .inner-payment-section .loading-piece {
+            height: 100%;
+            margin: 25% 0;
         }
 
         .order-form-column {
