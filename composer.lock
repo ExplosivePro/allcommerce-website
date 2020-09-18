@@ -332,12 +332,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/capeandbay-devs/allcommerce-merchant-api-sdk.git",
-                "reference": "314a7aae4585da881b6813bec1a0545f588468d8"
+                "reference": "801f831104b10f36d8ee632680c1ae659c01a054"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/capeandbay-devs/allcommerce-merchant-api-sdk/zipball/314a7aae4585da881b6813bec1a0545f588468d8",
-                "reference": "314a7aae4585da881b6813bec1a0545f588468d8",
+                "url": "https://api.github.com/repos/capeandbay-devs/allcommerce-merchant-api-sdk/zipball/801f831104b10f36d8ee632680c1ae659c01a054",
+                "reference": "801f831104b10f36d8ee632680c1ae659c01a054",
                 "shasum": ""
             },
             "require": {
@@ -385,7 +385,7 @@
                 "source": "https://github.com/capeandbay-devs/allcommerce-merchant-api-sdk/tree/master",
                 "issues": "https://github.com/capeandbay-devs/allcommerce-merchant-api-sdk/issues"
             },
-            "time": "2020-09-15T21:55:19+00:00"
+            "time": "2020-09-18T22:12:29+00:00"
         },
         {
             "name": "capeandbay/allcommerce-service-desk",

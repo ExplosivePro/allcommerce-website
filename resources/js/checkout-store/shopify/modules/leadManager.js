@@ -24,6 +24,14 @@ const leadManager = {
             console.log('Committing leadUuid to '+uuid);
             state.leadUuid = uuid;
         },
+        shippingAddressUuid(state, uuid) {
+            console.log('Committing shippingAddressUuid to '+uuid);
+            state.shippingAddressUuid = uuid;
+        },
+        billingAddressUuid(state, uuid) {
+            console.log('Committing billingAddressUuid to '+uuid);
+            state.billingAddressUuid = uuid;
+        },
         leadEmail(state, email) {
             console.log('Committing leadEmail to '+email);
             state.leadEmail = email;
@@ -238,6 +246,14 @@ const leadManager = {
                         if('success' in data) {
                             if(data['success']) {
                                 context.commit('leadUuid', data['lead_uuid']);
+
+                                if('shipping_uuid' in data) {
+                                    context.commit('shippingAddressUuid', data['shipping_uuid']);
+                                }
+
+                                if('billing_uuid' in data) {
+                                    context.commit('billingAddressUuid', data['billing_uuid']);
+                                }
                             }
                         }
                     }

@@ -30,6 +30,8 @@ class LeadsAPIController extends Controller
             'shopUuid' => 'bail|required',
             'emailList' => 'sometimes|required',
             'lead_uuid' => 'sometimes|required|exists:leads,id',
+            'shipping_uuid' => 'sometimes|required|exists:shipping_addresses,id',
+            'billing_uuid' => 'sometimes|required|exists:billing_addresses,id',
         ]);
 
         if($validated->fails())

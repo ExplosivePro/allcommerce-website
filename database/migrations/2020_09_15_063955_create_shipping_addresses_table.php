@@ -14,7 +14,7 @@ class CreateShippingAddressesTable extends Migration
     public function up()
     {
         Schema::create('shipping_addresses', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->uuid('id')->unique()->primary();
 
             $table->text('first_name')->nullable();
             $table->text('last_name')->nullable();
@@ -26,10 +26,10 @@ class CreateShippingAddressesTable extends Migration
             $table->text('city')->nullable();
             $table->text('state')->nullable();
             $table->text('zip')->nullable();
-            $table->text('county')->nullable();
+            $table->text('country')->nullable();
 
-            $table->uuid('lead_uuid');
-            $table->uuid('order_uuid');
+            $table->uuid('lead_uuid')->nullable();
+            $table->uuid('order_uuid')->nullable();
 
             $table->uuid('shop_uuid');
             $table->uuid('merchant_uuid');
