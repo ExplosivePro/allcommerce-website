@@ -44,3 +44,17 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 */
 window.select2 = require ('select2');
 
+/*
+For something cool.
+window.addEventListener("pagehide", function(evt){
+    alert('OMG')
+}, false);
+
+window.addEventListener("unload", function(evt){
+    alert('Oh no, what did you do?')
+}, false);
+
+window.addEventListener("visibilitychange", function(evt){
+    alert('Oh no, man, did you do something?')
+}, false);
+*/
