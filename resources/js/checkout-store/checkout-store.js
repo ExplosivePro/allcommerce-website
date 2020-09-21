@@ -26,8 +26,6 @@ export default new Vuex.Store({
             email: '',
             cart: '',
             leadUuid: '',
-            showShipping: false,
-            shippingReady: false,
         };
     },
     mutations: {
@@ -129,6 +127,7 @@ export default new Vuex.Store({
                     emailList: context.state.emailList
                 };
 
+                context.commit('leadManager/shippingReady', true);
                 context.dispatch('leadManager/createOrUpdateLead', payload);
             }
             else {
@@ -166,5 +165,9 @@ export default new Vuex.Store({
 
             context.dispatch('leadManager/createOrUpdateLead', payload);
         },
+        initShipping(context, shippingInfo) {
+            console.log('Setting up shipping...', shippingInfo);
+            context.dispatch('shipping/updateShippingRates', shippingInfo);
+        }
     }
 });

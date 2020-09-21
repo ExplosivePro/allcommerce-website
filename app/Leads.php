@@ -45,4 +45,10 @@ class Leads extends Model
         'misc' => 'collection',
     ];
 
+    public function shop()
+    {
+        return $this->belongsTo('AnchorCMS\Shops', 'shop_uuid', 'id');
+    }
+
+
 }

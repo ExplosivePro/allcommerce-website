@@ -4,6 +4,7 @@ namespace AnchorCMS\Http\Controllers\API\Checkouts;
 
 use AllCommerce\DepartmentStore\Facades\DepartmentStore;
 use AnchorCMS\Actions\Leads\CreateOrUpdateLead;
+use AnchorCMS\Leads;
 use Illuminate\Http\Request;
 use AnchorCMS\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
@@ -55,15 +56,22 @@ class LeadsAPIController extends Controller
             $lead = DepartmentStore::get('lead', $args);
             $lead = $lead->createOrUpdateLead($args['payload'], $args['lead_uuid']);
 
+            // @todo - refactor this to determine if this is a shopify order before doing this.
             if($draftOrder = $lead->getLeadAttributes('shopifyDraftOrder'))
             {
+                // @todo - update the DepartmentStore pkg to make easy access to shop.
+                $shop = Leads::find($args['lead_uuid'])->shop()->first();
+                $shop = DepartmentStore::get('shop', ['shop' => $shop->shop_url]);
+
+                $rates = $shop->getShopShippingRates();
+
                 $results = [
                     'success' => true,
                     'tax' => [
                         'tax_lines' => $draftOrder['misc']['tax_lines'],
                         'total' => $draftOrder['misc']['total_tax']
                     ],
-                    'shipping' => []
+                    'shipping' => $rates
                 ];
             }
             else

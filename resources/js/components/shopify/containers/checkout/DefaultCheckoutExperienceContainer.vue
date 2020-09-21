@@ -58,7 +58,20 @@
 
                 this.setTotalTax(lines.total);
                 this.updateTotal();
-            }
+            },
+            shippingLine(lines) {
+                console.log('Incoming shipping line(s) - ', lines);
+                this.initShipping(lines);
+            },
+            shippingReady(flag) {
+                console.log('ShippingReady changed to '+flag);
+            },
+            shipping(price) {
+                console.log('Active shipping price set to - $'+price);
+                this.setPriceShip(price);
+                this.setShowShipping(true);
+                this.updateTotal();
+            },
         },
         data() {
             return {
@@ -76,8 +89,6 @@
                 email: 'email',
                 cart: 'cart',
                 globalLoading: 'loading',
-                shippingReady: 'shippingReady',
-                showShipping: 'showShipping'
             }),
             ...mapGetters({
                 shippingAmt: 'shippingAmt',
@@ -89,6 +100,9 @@
                 shippingValidated: 'shippingValidated',
                 billingValidated: 'billingValidated',
                 taxLine: 'taxLine',
+                shippingLine: 'shippingLine',
+                shippingReady: 'shippingReady',
+                showShipping: 'showShipping'
             }),
             ...mapState('geography', {
                 countyDrop: 'countries',
@@ -97,6 +111,9 @@
             ...mapState('priceCalc', {
                 purchaseSubtotal: 'subtotal',
                 total: 'total'
+            }),
+            ...mapState('shipping', {
+                shipping: 'shipping',
             }),
             loading() {
                 let results = false;
@@ -141,26 +158,33 @@
             calculateShipping() {
                 let results = `<small>Shipping Address Required</small>`;
 
-                if(this.shippingReady) {
-                    results = `<small>Select Shipping Option.</small>`;
+                if(this.shippingReady === true) {
+                    //results = `<small>Select Shipping Option.</small>`;
+                    results = `<small>Loading Shipping Rates... <i class="fad fa-spinner-third fa-spin"></i></small>`;
 
                     if(this.showShipping) {
-                        results = this.shippingAmt;
+                        results = this.shipping;
                     }
+                }
+                else if(this.shippingReady === -1) {
+                    let results = `<small>Error</small>`;
                 }
 
                 return results;
-            }
+            },
         },
         methods: {
             ...mapMutations({
-                setTotalTax: 'priceCalc/tax'
+                setTotalTax: 'priceCalc/tax',
+                setPriceShip: 'priceCalc/shipping',
+                setShowShipping: 'leadManager/showShipping'
             }),
             ...mapActions({
                 setShop: 'setShopUuid',
                 setApiUrl: 'leadManager/setApiUrl',
                 setLeadUuid: 'setLeadUuid',
                 initCart: 'initCart',
+                initShipping: 'initShipping',
                 configCheckout: 'configCheckout',
                 updateEmail: 'updateEmail',
                 updateEmailList: 'updateEmailList',

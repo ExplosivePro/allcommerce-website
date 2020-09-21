@@ -18,7 +18,9 @@ const leadManager = {
             shippingAddressUuid: '',
             apiUrl: '',
             shippingLine: '',
-            taxLine: ''
+            taxLine: '',
+            showShipping: false,
+            shippingReady: false,
         };
     },
     mutations: {
@@ -69,8 +71,16 @@ const leadManager = {
             state.billingShippingSame = flag;
         },
         shippingLine(state, val) {
-            console.log('Committing shippingLine to '+val);
+            console.log('Committing shippingLine to ',val);
             state.shippingLine = val;
+        },
+        shippingReady(state, flag) {
+            console.log('Mutating shippingReady to '+ flag);
+            state.shippingReady = flag;
+        },
+        showShipping(state, flag) {
+            console.log('Mutating showShipping to '+ flag);
+            state.showShipping = flag;
         },
         taxLine(state, val) {
             console.log('Committing taxLine to ',val);
@@ -260,6 +270,7 @@ const leadManager = {
                                 if('shipping_uuid' in data) {
                                     context.commit('shippingAddressUuid', data['shipping_uuid']);
                                     console.log('Calling getShippingAndTax -')
+                                    context.commit('shippingReady', true);
                                     context.dispatch('getShippingAndTax', payload);
                                 }
 
@@ -268,6 +279,14 @@ const leadManager = {
                                 }
                             }
                         }
+                        else {
+                            context.commit('shippingReady', false);
+                            context.commit('showShipping', false);
+                        }
+                    }
+                    else {
+                        context.commit('shippingReady', false);
+                        context.commit('showShipping', false);
                     }
 
                     context.commit('loading', false);
@@ -275,6 +294,8 @@ const leadManager = {
                 .catch(err => {
                     console.log(err);
                     context.commit('loading', false);
+                    context.commit('shippingReady', false);
+                    context.commit('showShipping', false);
                 });
         },
         getShippingAndTax(context,payload) {
@@ -301,6 +322,11 @@ const leadManager = {
                                     context.commit('billingAddressUuid', data['billing_uuid']);
                                 }
                             }
+                            context.commit('shippingReady', true);
+                        }
+                        else {
+                            context.commit('shippingReady', -1);
+                            context.commit('showShipping', false);
                         }
                     }
 
@@ -308,6 +334,8 @@ const leadManager = {
                 })
                 .catch(err => {
                     console.log(err);
+                    context.commit('shippingReady', -1);
+                    context.commit('showShipping', false);
                     context.commit('loading', false);
                 });
         }

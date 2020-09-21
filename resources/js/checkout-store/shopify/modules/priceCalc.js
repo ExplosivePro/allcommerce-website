@@ -18,6 +18,10 @@ const priceCalc = {
             console.log('Committing new total -', price);
             state.total = price;
         },
+        shipping(state, price) {
+            console.log('Committing new shipping -', price);
+            state.shipping = price;
+        },
         subTotal(state, price) {
             console.log('Committing new subtotal -', price);
             state.subtotal = price;
