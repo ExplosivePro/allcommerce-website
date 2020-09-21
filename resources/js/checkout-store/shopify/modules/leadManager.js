@@ -16,7 +16,9 @@ const leadManager = {
             billingShippingSame: true,
             billingAddressUuid: '',
             shippingAddressUuid: '',
-            apiUrl: ''
+            apiUrl: '',
+            shippingLine: '',
+            taxLine: ''
         };
     },
     mutations: {
@@ -66,6 +68,14 @@ const leadManager = {
             console.log('Mutating billingShippingSame to '+ flag);
             state.billingShippingSame = flag;
         },
+        shippingLine(state, val) {
+            console.log('Committing shippingLine to '+val);
+            state.shippingLine = val;
+        },
+        taxLine(state, val) {
+            console.log('Committing taxLine to ',val);
+            state.taxLine = val;
+        }
     },
     getters: {},
     actions: {
@@ -249,6 +259,8 @@ const leadManager = {
 
                                 if('shipping_uuid' in data) {
                                     context.commit('shippingAddressUuid', data['shipping_uuid']);
+                                    console.log('Calling getShippingAndTax -')
+                                    context.dispatch('getShippingAndTax', payload);
                                 }
 
                                 if('billing_uuid' in data) {
@@ -265,6 +277,40 @@ const leadManager = {
                     context.commit('loading', false);
                 });
         },
+        getShippingAndTax(context,payload) {
+            let url = `${context.state.apiUrl}/api/checkout/shipping-tax/`;
+            console.log(`Pinging ${url}`, payload);
+
+            axios.post(url, payload)
+                .then(res => {
+                    console.log('getShippingAndTax call response - ', res);
+
+                    if('data' in res) {
+                        let data = res.data;
+
+                        if('success' in data) {
+                            if(data['success']) {
+                                context.commit('taxLine', data['tax']);
+                                context.commit('shippingLine', data['shipping']);
+
+                                if('shipping_uuid' in data) {
+                                    context.commit('shippingAddressUuid', data['shipping_uuid']);
+                                }
+
+                                if('billing_uuid' in data) {
+                                    context.commit('billingAddressUuid', data['billing_uuid']);
+                                }
+                            }
+                        }
+                    }
+
+                    context.commit('loading', false);
+                })
+                .catch(err => {
+                    console.log(err);
+                    context.commit('loading', false);
+                });
+        }
     }
 };
 

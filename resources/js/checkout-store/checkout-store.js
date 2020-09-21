@@ -4,13 +4,17 @@ import Vuex from 'vuex';
 // Module imports go here.
 import leadManager from "./shopify/modules/leadManager";
 import geography from "./geography";
+import shipping from "./shopify/modules/shipping";
+import priceCalc from "./shopify/modules/priceCalc";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
     modules: {
-        leadManager,
-        geography
+        shipping,
+        geography,
+        priceCalc,
+        leadManager
     },
     state() {
         return {
@@ -22,6 +26,8 @@ export default new Vuex.Store({
             email: '',
             cart: '',
             leadUuid: '',
+            showShipping: false,
+            shippingReady: false,
         };
     },
     mutations: {
@@ -59,7 +65,15 @@ export default new Vuex.Store({
         }
     },
     getters: {
-
+        shippingAmt({shipping}) {
+            return shipping.shipping;
+        },
+        getSubTotal({priceCalc}) {
+            return priceCalc.subtotal;
+        },
+        getTotal({priceCalc}) {
+            return priceCalc.total;
+        }
     },
     actions: {
         setLoading(context, flag) {
@@ -79,6 +93,16 @@ export default new Vuex.Store({
         initCart(context, cart) {
             console.log('Committing cart to ',cart);
             context.commit('cart', cart);
+
+            let itemPrices = [];
+            for(let x in cart) {
+                let priceRow = {
+                    qty: cart[x].qty, price: cart[x].variant['price']
+                };
+
+                itemPrices.push(priceRow);
+            }
+            context.dispatch('priceCalc/itemPrices', itemPrices);
         },
         configCheckout(context, data) {
             console.log('Committing checkoutType to '+data.type);
@@ -141,6 +165,6 @@ export default new Vuex.Store({
             };
 
             context.dispatch('leadManager/createOrUpdateLead', payload);
-        }
+        },
     }
 });

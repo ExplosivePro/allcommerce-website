@@ -46,35 +46,35 @@
                                 <div class="inner-shipping-method-content">
                                     <polaris-form-layout>
                                         <polaris-form-layout-group>
-                                            <polaris-text-field v-model="shippingFirst" placeholder="First name" :disabled="disableFields"></polaris-text-field>
-                                            <polaris-text-field v-model="shippingLast" placeholder="Last name" :disabled="disableFields"></polaris-text-field>
-                                            <polaris-text-field v-model="shippingCompany" placeholder="Company (optional)" :disabled="disableFields"></polaris-text-field>
+                                            <polaris-text-field v-model="shippingFirst" placeholder="First name" context.state.billing></polaris-text-field>
+                                            <polaris-text-field v-model="shippingLast" placeholder="Last name" context.state.billing></polaris-text-field>
+                                            <polaris-text-field v-model="shippingCompany" placeholder="Company (optional)" context.state.billing></polaris-text-field>
                                         </polaris-form-layout-group>
 
                                         <polaris-form-layout-group>
-                                            <polaris-text-field v-model="shippingAddress" placeholder="Address" :disabled="disableFields"></polaris-text-field>
-                                            <polaris-text-field v-model="shippingApt" placeholder="Apt, suite, etc (optional)" :disabled="disableFields"></polaris-text-field>
-                                            <polaris-text-field v-model="shippingCity" placeholder="City" :disabled="disableFields"></polaris-text-field>
+                                            <polaris-text-field v-model="shippingAddress" placeholder="Address" context.state.billing></polaris-text-field>
+                                            <polaris-text-field v-model="shippingApt" placeholder="Apt, suite, etc (optional)" context.state.billing></polaris-text-field>
+                                            <polaris-text-field v-model="shippingCity" placeholder="City" context.state.billing></polaris-text-field>
                                         </polaris-form-layout-group>
 
                                         <polaris-form-layout-group condensed>
                                             <polaris-select
                                                 v-model="shippingCountry"
-                                                :disabled="disableFields"
+                                                context.state.billing
                                                 :options="countries"
                                                 placeholder="Select a Country">
                                             </polaris-select>
                                             <polaris-select
                                                 v-model="shippingState"
-                                                :disabled="disableFields"
+                                                context.state.billing
                                                 :options="stateDrops[shippingCountry]"
                                                 :placeholder="(shippingCountry === 'us') ? 'Select a State' : 'Select a Province'">
                                             </polaris-select>
-                                            <polaris-text-field v-model="shippingZip" placeholder="Postal Code" :disabled="disableFields"></polaris-text-field>
+                                            <polaris-text-field v-model="shippingZip" placeholder="Postal Code" context.state.billing></polaris-text-field>
                                         </polaris-form-layout-group>
 
                                         <polaris-form-layout-group>
-                                            <polaris-text-field v-model="shippingPhone" placeholder="Phone #" :disabled="disableFields"></polaris-text-field>
+                                            <polaris-text-field v-model="shippingPhone" placeholder="Phone #" context.state.billing></polaris-text-field>
                                         </polaris-form-layout-group>
                                     </polaris-form-layout>
                                 </div>
@@ -94,10 +94,10 @@
                             <div class="inner-billing-address-panel">
 
                                 <div class="same-as-shipping-box">
-                                    <input type="radio" name="sameAsShipping" :value="true" v-model="billingShippingSame" :disabled="disableFields">
+                                    <input type="radio" name="sameAsShipping" :value="true" v-model="billingShippingSame" context.state.billing>
                                     <label>Same as Shipping Address</label>
                                     <br>
-                                    <input type="radio" name="sameAsShipping" :value="false" v-model="billingShippingSame" :disabled="disableFields">
+                                    <input type="radio" name="sameAsShipping" :value="false" v-model="billingShippingSame" context.state.billing>
                                     <label>Use a Different Billing Address</label>
                                 </div>
 
@@ -105,35 +105,35 @@
                                     <div class="inner-billing-address-content">
                                         <polaris-form-layout>
                                             <polaris-form-layout-group>
-                                                <polaris-text-field v-model="billingFirst" placeholder="First name" :disabled="disableFields"></polaris-text-field>
-                                                <polaris-text-field v-model="billingLast" placeholder="Last name" :disabled="disableFields"></polaris-text-field>
-                                                <polaris-text-field v-model="billingCompany" placeholder="Company (optional)" :disabled="disableFields"></polaris-text-field>
+                                                <polaris-text-field v-model="billingFirst" placeholder="First name" context.state.billing></polaris-text-field>
+                                                <polaris-text-field v-model="billingLast" placeholder="Last name" context.state.billing></polaris-text-field>
+                                                <polaris-text-field v-model="billingCompany" placeholder="Company (optional)" context.state.billing></polaris-text-field>
                                             </polaris-form-layout-group>
 
                                             <polaris-form-layout-group>
-                                                <polaris-text-field v-model="billingAddress" placeholder="Address" :disabled="disableFields"></polaris-text-field>
-                                                <polaris-text-field v-model="billingApt"placeholder="Apt, suite, etc (optional)" :disabled="disableFields"></polaris-text-field>
-                                                <polaris-text-field v-model="billingCity" placeholder="City" :disabled="disableFields"></polaris-text-field>
+                                                <polaris-text-field v-model="billingAddress" placeholder="Address" context.state.billing></polaris-text-field>
+                                                <polaris-text-field v-model="billingApt"placeholder="Apt, suite, etc (optional)" context.state.billing></polaris-text-field>
+                                                <polaris-text-field v-model="billingCity" placeholder="City" context.state.billing></polaris-text-field>
                                             </polaris-form-layout-group>
 
                                             <polaris-form-layout-group condensed>
                                                 <polaris-select
                                                     v-model="billingCountry"
-                                                    :disabled="disableFields"
+                                                    context.state.billing
                                                     :options="countries"
                                                     placeholder="Select a Country">
                                                 </polaris-select>
                                                 <polaris-select
                                                     v-model="billingState"
-                                                    :disabled="disableFields"
+                                                    context.state.billing
                                                     :options="stateDrops[billingCountry]"
                                                     :placeholder="(billingCountry === 'us') ? 'Select a State' : 'Select a Province'">
                                                 </polaris-select>
-                                                <polaris-text-field v-model="billingZip" placeholder="Postal Code" :disabled="disableFields"></polaris-text-field>
+                                                <polaris-text-field v-model="billingZip" placeholder="Postal Code" context.state.billing></polaris-text-field>
                                             </polaris-form-layout-group>
 
                                             <polaris-form-layout-group>
-                                                <polaris-text-field v-model="billingPhone" placeholder="Phone #" :disabled="disableFields"></polaris-text-field>
+                                                <polaris-text-field v-model="billingPhone" placeholder="Phone #" context.state.billing></polaris-text-field>
                                             </polaris-form-layout-group>
                                         </polaris-form-layout>
                                     </div>
@@ -321,13 +321,25 @@
                                         <div class="subtotal-row">
                                             <div class="inner-subtotal-row">
                                                 <p>Subtotal</p>
-                                                <p>${{ subTotal }}</p>
+                                                <p>${{ pricing.subTotal }}</p>
                                             </div>
                                         </div>
                                         <div class="subtotal-row">
                                             <div class="inner-subtotal-row">
                                                 <p>Shipping</p>
-                                                <p><small>Calculated below</small></p>
+                                                <p v-html="shippingLine"></p>
+                                            </div>
+                                        </div>
+                                        <div class="subtotal-row">
+                                            <div class="inner-subtotal-row">
+                                                <p>Tax</p>
+                                                <p v-if="typeOfTax === 'string'" v-html="tax"></p>
+                                            </div>
+                                            <div  v-if="typeOfTax === 'object'">
+                                                <div class="inner-subtotal-row" v-for="(line, idx) in tax['tax_lines']">
+                                                    <small style="padding-left: 1em">{{ line.title }} {{ (line.rate * 100) }}%</small>
+                                                    <p style="padding-left: 1em">${{ line.price }}</p>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -337,7 +349,7 @@
                                         <div class="total-row">
                                             <div class="inner-total-row">
                                                 <p>Total</p>
-                                                <p>${{ subTotal }}</p>
+                                                <p>${{ pricing.total }}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -364,9 +376,19 @@
         },
         props: [
             'hasTimer', 'hasExpressCheckout', 'lineItems', 'loading', 'disableFields',
-            'countries', 'stateDrops'
+            'countries', 'stateDrops', 'shippingLine', 'pricing', 'tax'
         ],
         watch: {
+            shippingLine(val) {
+                if(this.isNumeric(val)) {
+                    this.shippingAmt = val;
+                }
+            },
+            tax(lines) {
+                if(this.isNumeric(lines)) {
+                    this.shippingAmt = lines;
+                }
+            },
             email(addy) {
                 let payload = {
                     method: 'email',
@@ -525,7 +547,6 @@
                 };
                 this.$emit('updated', payload);
             },
-
             billingFirst(val) {
                 let payload2 = {
                     method: 'billingFirst',
@@ -607,6 +628,8 @@
                 selectedPaymentMethod: 'credit',
                 subTotal: '1.00',
                 total: '1.00',
+                shippingAmt: '',
+                taxAmt: '',
 
                 shippingFirst: '',
                 shippingLast: '',
@@ -631,7 +654,20 @@
                 billingPhone: ''
             };
         },
+        computed: {
+            typeOfTax() {
+                if(typeof this.tax === 'string') {
+                    return 'string';
+                }
+                else {
+                    return 'object';
+                }
+            }
+        },
         methods: {
+            isNumeric(n) {
+                return !isNaN(parseFloat(n)) && isFinite(n);
+            },
             enterGiftCode() {
                 alert('Heyo! - '+this.giftCardCode);
             },
@@ -646,6 +682,7 @@
                 return this.subTotal;
             },
             calculateTotal() {
+                /*
                 console.log('Calculating total')
                 let amt = 0;
                 for(let idx in this.lineItems) {
@@ -653,7 +690,8 @@
                 }
 
                 this.total = parseFloat(amt).toFixed(2);
-                return this.total;
+                 */
+                return this.pricing.total;
             },
         },
         mounted() {

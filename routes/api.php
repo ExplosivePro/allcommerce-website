@@ -30,6 +30,7 @@ Route::group(['prefix' => 'checkout'], function () {
     Route::group(['prefix' => 'leads'], function () {
         Route::post('/', 'API\Checkouts\LeadsAPIController@create_or_update_lead');
     });
+    Route::post('/shipping-tax', 'API\Checkouts\LeadsAPIController@get_lead_cart_shipping_and_tax');
 });
 
 Route::group(['prefix' => 'shopify'], function () {

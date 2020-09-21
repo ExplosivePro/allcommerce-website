@@ -7,6 +7,9 @@
         :disable-fields="loading"
         :countries="countyDrop"
         :state-drops="stateDrops"
+        :shipping-line="calculateShipping"
+        :pricing="pricing"
+        :tax="renderTax"
         @updated="updateCheckoutState"
     ></checkout-experience>
 </template>
@@ -14,7 +17,7 @@
 <script>
     import CheckoutExperience from "../../screens/checkout/DefaultExperience";
 
-    import { mapActions, mapState } from 'vuex';
+    import { mapActions, mapState, mapGetters, mapMutations } from 'vuex';
 
     export default {
         name: "DefaultCheckoutExperienceContainer",
@@ -42,28 +45,58 @@
                     this.updateBillingShipping()
                 }
             },
+            purchaseSubtotal(amt) {
+                console.log('subTotal set to - '+amt);
+                this.pricing.subTotal = amt;
+            },
+            total(amt) {
+                console.log('total set to - '+amt);
+                this.pricing.total = amt;
+            },
+            taxLine(lines) {
+                console.log('Incoming tax line(s) - ', lines);
+
+                this.setTotalTax(lines.total);
+                this.updateTotal();
+            }
         },
         data() {
             return {
                 timerSegment: false,
-                expressCheckout: false
+                expressCheckout: false,
+                pricing: {
+                    subTotal: 10.00,
+                    total: 0.00
+                },
+                tax: []
             };
         },
         computed: {
             ...mapState({
                 email: 'email',
                 cart: 'cart',
-                globalLoading: 'loading'
+                globalLoading: 'loading',
+                shippingReady: 'shippingReady',
+                showShipping: 'showShipping'
+            }),
+            ...mapGetters({
+                shippingAmt: 'shippingAmt',
+                getSubTotal: 'getSubTotal'
             }),
             ...mapState('leadManager', {
                 leadLoading: 'loading',
                 leadUuid: 'leadUuid',
                 shippingValidated: 'shippingValidated',
                 billingValidated: 'billingValidated',
+                taxLine: 'taxLine',
             }),
             ...mapState('geography', {
                 countyDrop: 'countries',
                 stateDrops: 'states'
+            }),
+            ...mapState('priceCalc', {
+                purchaseSubtotal: 'subtotal',
+                total: 'total'
             }),
             loading() {
                 let results = false;
@@ -78,9 +111,51 @@
                 }
 
                 return results;
+            },
+            renderTax() {
+                let results = `<small>Shipping Address Required</small>`;
+
+                if(this.taxLine !== '') {
+                    if(this.taxLine['tax_lines'].length == 0) {
+                        results = `$${this.taxLine.total}`
+                    }
+                    else
+                    {
+                        results = this.taxLine
+                    }
+
+                    /*
+                    results = '';
+
+                    for(int x in this.taxLine.tax_lines) {
+                        results = results + `</p></div><div class="inner-subtotal-row">`
+                        val = this.taxLine.tax_lines[x];
+                        results = results + `<p>${val.title}</p>`;
+                        results = results + `<p>${val.price}`;
+                    }
+                     */
+                }
+
+                return results;
+            },
+            calculateShipping() {
+                let results = `<small>Shipping Address Required</small>`;
+
+                if(this.shippingReady) {
+                    results = `<small>Select Shipping Option.</small>`;
+
+                    if(this.showShipping) {
+                        results = this.shippingAmt;
+                    }
+                }
+
+                return results;
             }
         },
         methods: {
+            ...mapMutations({
+                setTotalTax: 'priceCalc/tax'
+            }),
             ...mapActions({
                 setShop: 'setShopUuid',
                 setApiUrl: 'leadManager/setApiUrl',
@@ -90,6 +165,7 @@
                 updateEmail: 'updateEmail',
                 updateEmailList: 'updateEmailList',
                 setGlobalLoading: 'setLoading',
+                updateTotal: 'priceCalc/calculateTotal',
                 updateShippingAddress: 'leadManager/updateShippingAddress',
                 updateBillingAddress: 'leadManager/updateBillingAddress',
                 updateBillingShipping: 'updateBillingShipping',
