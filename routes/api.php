@@ -28,7 +28,19 @@ Route::group(['prefix' => 'client'], function() {
 
 Route::group(['prefix' => 'checkout'], function () {
     Route::group(['prefix' => 'leads'], function () {
-        Route::post('/', 'API\Checkouts\LeadsAPIController@create_or_update_lead');
+        /* DEPRECATED */
+        Route::post('/', 'API\Checkouts\LeadsAPIController@_UNSUPPORTED_create_or_update_lead');
+
+        Route::group(['prefix' => 'create'], function () {
+            Route::post('/email', 'API\Checkouts\LeadsAPIController@create_lead_with_email');
+            Route::post('/shipping', 'API\Checkouts\LeadsAPIController@create_lead_with_shipping');
+        });
+
+        Route::group(['prefix' => 'update'], function () {
+            Route::put('/email', 'API\Checkouts\LeadsAPIController@update_lead_with_email');
+            Route::put('/shipping', 'API\Checkouts\LeadsAPIController@update_lead_with_shipping');
+            Route::put('/billing', 'API\Checkouts\LeadsAPIController@update_lead_with_billing');
+        });
     });
     Route::post('/shipping-tax', 'API\Checkouts\LeadsAPIController@get_lead_cart_shipping_and_tax');
 });

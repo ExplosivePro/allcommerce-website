@@ -40,13 +40,17 @@
         "glyphicons-only-bootstrap": "^1.0.1",
         "install": "^0.13.0",
         "laravel-echo": "^1.8.1",
+        "libphonenumber-js": "^1.8.0",
+        "mobile-detect": "^1.4.4",
         "npm": "^6.14.5",
         "pace-js": "^1.0.2",
+        "postal-codes-js": "^2.5.1",
         "pusher-js": "^7.0.0",
         "select2": "^4.0.13",
         "sweet-modal-vue": "^2.0.0",
         "vue-float-label": "^1.6.1",
         "vue-multiselect": "^2.1.6",
+        "vue2-transitions": "^0.3.0",
         "vuetify": "^2.3.6",
         "vuex": "^3.5.1"
     }

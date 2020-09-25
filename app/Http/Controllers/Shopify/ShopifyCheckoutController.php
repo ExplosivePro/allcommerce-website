@@ -55,7 +55,6 @@ class ShopifyCheckoutController extends Controller
                         $item_attrs[$item_no]['variant'] = $item->variants()->whereId($item_attrs[$item_no]['variant_uuid'])->first();
                         $item_attrs[$item_no]['image'] = $item->images()->wherePlatformId($item->platform_id)->first();
                     }
-
                 }
 
                 $args['checkout_type'] = 'checkout_funnel';

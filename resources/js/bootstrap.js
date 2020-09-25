@@ -43,6 +43,9 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
  });
 */
 window.select2 = require ('select2');
+window.MobileDetect = require('mobile-detect');
+window.libphonenumber = require('libphonenumber-js/min');
+window.postalCodes = require('postal-codes-js');
 
 /*
 For something cool.

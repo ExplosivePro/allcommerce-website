@@ -11,43 +11,53 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     modules: {
-        shipping,
+        leadManager,
         geography,
         priceCalc,
-        leadManager
+        /*
+        shipping,
+         */
     },
     state() {
         return {
-            loading: true,
-            checkoutType: '',
-            checkoutId: '',
-            shopUuid: '',
-            emailList: true,
-            email: '',
+            devMode:         false,
+            oneClickMode:    false,
+
+            emailReady:      false,
+            shippingReady:   false,
+            billingReady:    false,
+            postageReady:    false,
+            customerReady:   false,
+            draftOrderReady: false,
+            paymentReady:    false,
+
+            loading:         true,
+            backendUrl:      '',
+            shopUuid:        '',
+            leadUuid:        '',
+            billUuid:        '',
+            shipUuid:        '',
+            draftOrderUuid:  '',
+            customerEmail:   '',
+            optInMailing:    true,
+            checkoutType:    '',
+            checkoutId:      '',
             cart: '',
-            leadUuid: '',
         };
     },
     mutations: {
-        shopUuid(state, uuid) {
-            console.log('Mutating shopUuid to '+uuid);
-            state.shopUuid = uuid;
+        devMode(state, flag) {
+            console.log('Mutating devMode to '+flag);
+            state.devMode = flag;
         },
-        leadUuid(state, uuid) {
-            console.log('Mutating leadUuid to '+uuid);
-            state.leadUuid = uuid;
+        loading(state, flag) {
+            console.log('Mutating loading to '+ flag);
+            state.loading = flag;
         },
-        cart(state, cart) {
-            console.log('Mutating cart to ',cart);
-            state.cart = cart;
-        },
-        email(state, email) {
-            console.log('Mutating email to '+email);
-            state.email = email;
-        },
-        emailList(state, flag) {
-            console.log('Mutating emailList to '+flag);
-            state.emailList = flag;
+        backendUrl(state, url) {
+            console.log('Mutating backendUrl to '+ url);
+            state.backendUrl = url;
+            state.leadManager.apiUrl = url;
         },
         checkoutType(state, checkoutType) {
             console.log('Mutating checkoutType to '+checkoutType);
@@ -57,12 +67,44 @@ export default new Vuex.Store({
             console.log('Mutating checkoutId to '+checkoutId);
             state.checkoutId = checkoutId;
         },
-        loading(state, flag) {
-            console.log('Mutating loading to '+ flag);
-            state.loading = flag;
-        }
+        shopUuid(state, uuid) {
+            console.log('Mutating shopUuid to '+uuid);
+            state.shopUuid = uuid;
+        },
+        customerEmail(state, email) {
+            console.log('Mutating customerEmail to '+email);
+            state.customerEmail = email;
+
+            state.emailReady = (state.customerEmail !== '');
+            state.leadManager.emailReady = (state.customerEmail !== '');
+        },
+        leadUuid(state, uuid) {
+            console.log('Mutating leadUuid to '+uuid);
+            state.leadUuid = uuid;
+            state.leadManager.leadUuid = uuid;
+        },
+        optInMailing(state, flag) {
+            console.log('Mutating optInMailing to '+ flag);
+            state.optInMailing = flag;
+
+            // @todo - send to whatever other modules need it.
+        },
+        cart(state, cart) {
+            console.log('Mutating cart to ',cart);
+            state.cart = cart;
+        },
     },
     getters: {
+        loading(state) {
+            return state.loading;
+        },
+        customerEmail(state) {
+            return state.customerEmail;
+        },
+        itemPrices(state) {
+            return state.priceCalc.itemPrices;
+        }
+        /*
         shippingAmt({shipping}) {
             return shipping.shipping;
         },
@@ -72,35 +114,12 @@ export default new Vuex.Store({
         getTotal({priceCalc}) {
             return priceCalc.total;
         }
+         */
     },
     actions: {
         setLoading(context, flag) {
             console.log('Committing loading to '+flag);
             context.commit('loading', flag);
-        },
-        setShopUuid(context, uuid) {
-            console.log('Committing shopUuid to '+uuid);
-            context.commit('shopUuid', uuid);
-
-            // @todo - ping out for the payment gateway among other thangs
-        },
-        setLeadUuid(context, uuid) {
-            console.log('Committing leadUuid to '+uuid);
-            context.commit('leadUuid', uuid);
-        },
-        initCart(context, cart) {
-            console.log('Committing cart to ',cart);
-            context.commit('cart', cart);
-
-            let itemPrices = [];
-            for(let x in cart) {
-                let priceRow = {
-                    qty: cart[x].qty, price: cart[x].variant['price']
-                };
-
-                itemPrices.push(priceRow);
-            }
-            context.dispatch('priceCalc/itemPrices', itemPrices);
         },
         configCheckout(context, data) {
             console.log('Committing checkoutType to '+data.type);
@@ -109,65 +128,73 @@ export default new Vuex.Store({
             console.log('Committing checkoutId to '+data.id);
             context.commit('checkoutId', data.id);
         },
-        updateBillingShipping(context) {
-            console.log('is shipping validated? '+context.state.leadManager.shippingValidated);
-            if(context.state.leadManager.shippingValidated && (!context.state.leadManager.loading)) {
-                let billship = {
-                    shipping: context.state.leadManager.shippingAddress,
-                    billing: context.state.leadManager.billingAddress
-                };
-                console.log('updating billing & shipping to '+billship);
+        updateLeadEmail(context) {
+            // Curate the payload
+            let payload = {
+                email: context.state.customerEmail,
+                checkoutType: context.state.checkoutType,
+                checkoutId: context.state.checkoutId,
+                shopUuid: context.state.shopUuid,
+                emailList: context.state.optInMailing
+            };
 
+            // Account for the leadUuid and send to update in leadManager
+            if(context.state.leadUuid !== '')
+            {
+                payload['lead_uuid'] = context.state.leadUuid;
+                context.dispatch('leadManager/updateLeadEmail', payload);
+            }
+            else {
+                // Send to create in leadManager
+                context.dispatch('leadManager/createNewLeadWithEmail', payload);
+            }
+        },
+        setShippingReady(context, flag) {
+            context.dispatch('leadManager/setShippingReady', flag);
+
+            if(flag) {
+                if(context.state.leadUuid === '') {
+                    let payload = {
+                        checkoutType: context.state.checkoutType,
+                        checkoutId: context.state.checkoutId,
+                        shopUuid: context.state.shopUuid,
+                        emailList: context.state.optInMailing
+                    };
+
+                    context.dispatch('leadManager/createNewLeadWithShipping', payload);
+                }
+                else {
+                    let payload = {
+                        'lead_uuid': context.state.leadUuid,
+                        checkoutType: context.state.checkoutType,
+                        checkoutId: context.state.checkoutId,
+                        shopUuid: context.state.shopUuid,
+                        emailList: context.state.optInMailing
+                    };
+
+                    context.dispatch('leadManager/updateLeadShipping', payload);
+                }
+            }
+        },
+        setBillingReady(context, flag) {
+            context.dispatch('leadManager/setBillingReady', flag);
+
+            if(flag) {
                 let payload = {
-                    reference: 'shipping',
-                    value: billship,
+                    'lead_uuid': context.state.leadUuid,
                     checkoutType: context.state.checkoutType,
                     checkoutId: context.state.checkoutId,
                     shopUuid: context.state.shopUuid,
-                    emailList: context.state.emailList
+                    emailList: context.state.optInMailing
                 };
 
-                context.commit('leadManager/shippingReady', true);
-                context.dispatch('leadManager/createOrUpdateLead', payload);
+                context.dispatch('leadManager/updateLeadBilling', payload);
             }
-            else {
-                console.log('not updating billing & shipping');
-            }
-
         },
-        updateEmail(context, email) {
-            console.log('Committing email to '+email);
-            context.commit('email', email);
-
-            let payload = {
-                reference: 'email',
-                value: context.state.email,
-                checkoutType: context.state.checkoutType,
-                checkoutId: context.state.checkoutId,
-                shopUuid: context.state.shopUuid,
-                emailList: context.state.emailList
-            };
-
-            context.dispatch('leadManager/createOrUpdateLead', payload);
+        initCart(context, cart) {
+            console.log('Committing cart to ',cart);
+            context.commit('cart', cart);
+            context.dispatch('priceCalc/initCart', cart);
         },
-        updateEmailList(context, flag) {
-            console.log('Updating emailList via email to '+ flag);
-            context.commit('emailList', flag);
-
-            let payload = {
-                reference: 'email',
-                value: context.state.email,
-                checkoutType: context.state.checkoutType,
-                checkoutId: context.state.checkoutId,
-                shopUuid: context.state.shopUuid,
-                emailList: flag
-            };
-
-            context.dispatch('leadManager/createOrUpdateLead', payload);
-        },
-        initShipping(context, shippingInfo) {
-            console.log('Setting up shipping...', shippingInfo);
-            context.dispatch('shipping/updateShippingRates', shippingInfo);
-        }
     }
 });

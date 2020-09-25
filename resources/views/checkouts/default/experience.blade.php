@@ -113,6 +113,7 @@
                 checkout-type="{!! $checkout_type !!}"
                 checkout-id="{!! $checkout_id !!}"
                 api-url="{!! env('APP_URL') !!}"
+                :dev-mode="devMode"
             ></default-checkout-experience>
             <div class="row footer-section">
                 <div class="inner-footer-section">

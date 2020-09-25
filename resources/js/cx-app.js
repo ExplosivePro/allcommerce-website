@@ -16,6 +16,7 @@ window.Vue = require('vue');
  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
  */
 Vue.component('default-checkout-experience', require('./components/shopify/containers/checkout/DefaultCheckoutExperienceContainer.vue').default);
+Vue.component('shopify-account-summary', require('./components/shopify/containers/checkout/AccountSummaryComponentContainer.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -29,16 +30,42 @@ window.store = VuexStore;
 import PolarisVue from '@eastsideco/polaris-vue';
 Vue.use(PolarisVue);
 
+import Transitions from 'vue2-transitions';
+Vue.use(Transitions);
+
 new Vue({
     el: '#checkoutApp',
     store,
     watch: {},
     data() {
-        return {};
+        return {
+            md: false,
+            urlParams: '',
+            devMode: false
+        };
     },
     computed: {},
-    methods: {},
+    methods: {
+        init() {
+            this.md = new MobileDetect(window.navigator.userAgent);
+            this.urlParams = new URLSearchParams(window.location.search);
+            this.devMode = this.urlParams.get('dev');
+        }
+    },
     mounted() {
-        console.log("This Shopify Checkout Experience Powered by AllCommerce");
+        this.init();
+        if(this.devMode) {
+            console.log('Dev Mode Enabled!');
+        }
+        else {
+            console.log('Cape & Bay');
+        }
+
+        if(this.md.mobile()) {
+            console.log('This Amazing Shopify Checkout Experience on '+this.md.os()+' Powered by AllCommerce');
+        }
+        else {
+            console.log('This Shopify Checkout Experience Powered by AllCommerce', this.urlParams);
+        }
     }
 });

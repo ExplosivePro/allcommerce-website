@@ -1,17 +1,22 @@
 <template>
     <checkout-experience
+        :loading="loading"
+        :countries="countyDrop"
+        :state-drops="stateDrops"
+        @updated="updateCheckoutState"
+    ></checkout-experience>
+
+    <!--
+    <checkout-experience
         :has-timer="timerSegment"
         :has-express-checkout="expressCheckout"
         :line-items="items"
-        :loading="globalLoading"
         :disable-fields="loading"
-        :countries="countyDrop"
-        :state-drops="stateDrops"
         :shipping-line="calculateShipping"
         :pricing="pricing"
         :tax="renderTax"
-        @updated="updateCheckoutState"
     ></checkout-experience>
+    -->
 </template>
 
 <script>
@@ -24,8 +29,20 @@
         components: {
             CheckoutExperience
         },
-        props: ['items', 'shopId', 'checkoutType', 'checkoutId', 'apiUrl'],
+        props: ['items', 'shopId', 'checkoutType', 'checkoutId', 'apiUrl', 'devMode'],
         watch: {
+            devMode(flag) {
+                console.log('Oh boy, devMode = '+flag);
+            },
+            email(addy) {
+                console.log('Email Address was updated to '+addy);
+                this.updateLeadEmail();
+            },
+            lmLeadUuid(uuid) {
+                console.log('leadManager reporting Lead UUID was updated to '+uuid+' updating the store.');
+                this.setLeadUuid(uuid);
+            }
+            /*
             leadLoading(flag) {
                 console.log('LeadLoading set to - '+flag)
             },
@@ -72,9 +89,12 @@
                 this.setShowShipping(true);
                 this.updateTotal();
             },
+            */
         },
         data() {
             return {
+                billShipSame: true
+                /*
                 timerSegment: false,
                 expressCheckout: false,
                 pricing: {
@@ -82,9 +102,20 @@
                     total: 0.00
                 },
                 tax: []
+                */
             };
         },
         computed: {
+            ...mapGetters({
+                loading: 'loading',
+                email: 'customerEmail',
+                lmLeadUuid: 'leadManager/leadUuid',
+                shippingReady: 'leadManager/shippingReady',
+                billingReady: 'leadManager/billingReady',
+                countyDrop: 'geography/getCountries',
+                stateDrops: 'geography/getStates'
+            }),
+            /*
             ...mapState({
                 email: 'email',
                 cart: 'cart',
@@ -103,10 +134,6 @@
                 shippingLine: 'shippingLine',
                 shippingReady: 'shippingReady',
                 showShipping: 'showShipping'
-            }),
-            ...mapState('geography', {
-                countyDrop: 'countries',
-                stateDrops: 'states'
             }),
             ...mapState('priceCalc', {
                 purchaseSubtotal: 'subtotal',
@@ -140,17 +167,6 @@
                     {
                         results = this.taxLine
                     }
-
-                    /*
-                    results = '';
-
-                    for(int x in this.taxLine.tax_lines) {
-                        results = results + `</p></div><div class="inner-subtotal-row">`
-                        val = this.taxLine.tax_lines[x];
-                        results = results + `<p>${val.title}</p>`;
-                        results = results + `<p>${val.price}`;
-                    }
-                     */
                 }
 
                 return results;
@@ -172,28 +188,34 @@
 
                 return results;
             },
+            */
         },
         methods: {
+            ...mapMutations({
+                setLoading: 'loading',
+                setApiUrl: 'backendUrl',
+                setShop: 'shopUuid',
+                setLeadUuid: 'leadUuid',
+                updateEmail: 'customerEmail',
+                updateEmailList: 'optInMailing',
+                setShipping: 'leadManager/shippingAddress',
+                setBilling: 'leadManager/billingAddress'
+            }),
+            ...mapActions({
+                initCart: 'initCart',
+                configCheckout: 'configCheckout',
+                updateLeadEmail: 'updateLeadEmail',
+                setShippingReady: 'setShippingReady',
+                setBillingReady: 'setBillingReady',
+            }),
+            /*
             ...mapMutations({
                 setTotalTax: 'priceCalc/tax',
                 setPriceShip: 'priceCalc/shipping',
                 setShowShipping: 'leadManager/showShipping'
             }),
             ...mapActions({
-                setShop: 'setShopUuid',
-                setApiUrl: 'leadManager/setApiUrl',
-                setLeadUuid: 'setLeadUuid',
-                initCart: 'initCart',
-                initShipping: 'initShipping',
-                configCheckout: 'configCheckout',
-                updateEmail: 'updateEmail',
-                updateEmailList: 'updateEmailList',
-                setGlobalLoading: 'setLoading',
                 updateTotal: 'priceCalc/calculateTotal',
-                updateShippingAddress: 'leadManager/updateShippingAddress',
-                updateBillingAddress: 'leadManager/updateBillingAddress',
-                updateBillingShipping: 'updateBillingShipping',
-                setBillingShippingSame: 'leadManager/setBillingShippingSame',
             }),
             updateCheckoutState(payload) {
                 if('method' in payload) {
@@ -248,6 +270,80 @@
                     console.log('Invalid entry - ', payload)
                 }
             }
+            */
+            updateCheckoutState(payload) {
+                if('method' in payload) {
+                    console.log('Receiving checkout state update - ', payload);
+
+                    switch(payload.method) {
+                        case 'email':
+                            this.updateEmail(payload.value);
+                            break;
+
+                        case 'emailList':
+                            this.updateEmailList(payload.value);
+                            break;
+
+                        case 'shippingFirst':
+                        case 'shippingLast':
+                        case 'shippingCompany':
+                        case 'shippingAddress':
+                        case 'shippingApt':
+                        case 'shippingCity':
+                        case 'shippingZip':
+                        case 'shippingCountry':
+                        case 'shippingState':
+                        case 'shippingPhone':
+                            this.setShipping(payload);
+
+                            if(this.shippingReady) {
+                                this.setShippingReady(true);
+                            }
+                            break;
+
+                        case 'billingFirst':
+                        case 'billingLast':
+                        case 'billingCompany':
+                        case 'billingAddress':
+                        case 'billingApt':
+                        case 'billingZip':
+                        case 'billingCity':
+                        case 'billingCountry':
+                        case 'billingState':
+                        case 'billingPhone':
+                            this.setBilling(payload);
+
+                            if(this.billingReady) {
+                                this.setBillingReady(true);
+                            }
+                            break;
+
+                        case 'billingShippingSame':
+                            this.billShipSame = payload.value;
+
+                            if((!this.billShipSame)) {
+                                this.setBillingReady(false);
+                            }
+                            break;
+
+                        case 'billingValid':
+                            if((!this.billShipSame)) {
+                                this.setBillingReady(payload.value);
+                            }
+                            break;
+
+                        case 'shippingValid':
+                            this.setShippingReady(payload.value);
+                            break;
+
+                        default:
+                            console.log('Invalid Checkout State method - ', payload.method);
+                    }
+                }
+                else {
+                    console.log('Invalid entry - ', payload)
+                }
+            },
         },
         mounted() {
             this.setApiUrl(this.apiUrl);
@@ -255,8 +351,7 @@
             this.setShop(this.shopId);
             this.initCart(this.items);
 
-            setTimeout(() => this.setGlobalLoading(false), 1500);
-
+            setTimeout(() => this.setLoading(false), 1500);
             console.log('DefaultCheckoutExperienceContainer mounted!', this.items);
         }
     }

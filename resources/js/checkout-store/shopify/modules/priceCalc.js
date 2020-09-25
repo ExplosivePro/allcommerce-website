@@ -33,9 +33,23 @@ const priceCalc = {
         itemPrices(state, priceObj) {
             console.log('Committing new itemPrices -', priceObj);
             state.itemPrices = priceObj;
+        },
+        addToItemPrices(state, priceObj) {
+            console.log('Committing insert to itemPrices -', priceObj);
+            state.itemPrices.push(priceObj);
         }
     },
-    getters: {},
+    getters: {
+        getItemPrices(state) {
+            return state.itemPrices;
+        },
+        getSubTotal(state) {
+            return state.subtotal;
+        },
+        getTotal(state) {
+            return state.total;
+        },
+    },
     actions: {
         itemPrices({commit, dispatch}, priceObj) {
             commit('itemPrices', priceObj);
@@ -67,6 +81,24 @@ const priceCalc = {
             context.commit('subTotal', price);
             context.dispatch('calculateTotal');
         },
+        initCart(context, cart) {
+            console.log('priceCal initCart, setting up car!', cart);
+            let curated = [];
+            for(let x in cart) {
+                let priceRow = {
+                    qty: cart[x].qty,
+                    price: cart[x].variant['price'],
+                    variant: cart[x].variant,
+                    image: cart[x].image,
+                    item: cart[x].item
+                };
+
+                context.commit('addToItemPrices', priceRow);
+                curated.push(priceRow);
+            }
+
+            context.dispatch('calculateSubTotal', curated);
+        }
     }
 };
 

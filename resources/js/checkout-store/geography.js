@@ -312,6 +312,17 @@ const geography = {
             },
         };
     },
+    getters: {
+        getCountries(state) {
+            return state.countries;
+        },
+        getStates(state) {
+            return state.states;
+        },
+        getProvinces(state) {
+            return state.states;
+        }
+    },
 };
 
 export default geography;
