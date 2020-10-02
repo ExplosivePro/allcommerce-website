@@ -70,6 +70,8 @@ class ShopifyCheckoutController extends Controller
                     $blade = $blade_attr->funnel_value;
                 }
 
+                // @todo - get the shipping zones and pass them in to the args;
+
                 return view($blade, $args);
             }
             else
