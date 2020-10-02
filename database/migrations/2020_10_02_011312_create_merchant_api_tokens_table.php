@@ -16,7 +16,6 @@ class CreateMerchantApiTokensTable extends Migration
         Schema::create('merchant_api_tokens', function (Blueprint $table) {
             $table->uuid('id')->unique()->primary();
             $table->uuid('token');
-            $table->boolean('active')->default(1);
             $table->uuid('client_id');
             $table->string('token_type')->default('client'); //Theres also merchant and shop
             $table->text('scopes')->nullable();
