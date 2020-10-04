@@ -2,24 +2,27 @@
 
 namespace AnchorCMS\Http\Controllers\Shopify;
 
-use AnchorCMS\CheckoutFunnelAttributes;
-use AnchorCMS\CheckoutFunnels;
+use AnchorCMS\Shops;
 use Illuminate\Http\Request;
 use Ixudra\Curl\Facades\Curl;
+use AnchorCMS\CheckoutFunnels;
 use Illuminate\Support\Facades\Cookie;
+use AnchorCMS\CheckoutFunnelAttributes;
 use AnchorCMS\Http\Controllers\Controller;
+use AllCommerce\DepartmentStore\Library\Shopify\Shop\Storefront;
 
 class ShopifyCheckoutController extends Controller
 {
-    protected $request;
+    protected $request, $shops_model;
 
     public function __construct(Request $request)
     {
         $this->request = $request;
     }
 
-    // @todo - attempt to exploit this endpoint with sqlmap to make sure this endpoint is secure.
-    public function checkout($token, CheckoutFunnels $funnels, CheckoutFunnelAttributes $funnel_attrs)
+    public function checkout($token,
+                             CheckoutFunnels $funnels,
+                             CheckoutFunnelAttributes $funnel_attrs)
     {
         $args = [];
         $data = $this->request->all();
@@ -61,6 +64,7 @@ class ShopifyCheckoutController extends Controller
                 $args['checkout_id'] = $token;
                 $args['items'] = $item_attrs;
 
+
                 $blade = 'checkouts.default.experience';
 
                 $blade_attr = $attrs->where('funnel_attribute', 'blade-template')->first();
@@ -69,8 +73,22 @@ class ShopifyCheckoutController extends Controller
                 {
                     $blade = $blade_attr->funnel_value;
                 }
-
                 // @todo - get the shipping zones and pass them in to the args;
+                $token = $shop->oauth_api_token()->first();
+
+                if(!is_null($token))
+                {
+                    $ac_shop = new Storefront($shop->shop_url);
+                    $ac_shop->setShopUuid($shop->id);
+                    $ac_shop->setAccessToken($token->token);
+                    $shipping_methods = $ac_shop->getShopShippingRates();
+
+                    $args['shipping_methods'] = [];
+                    if($shipping_methods && is_array($shipping_methods) && (count($shipping_methods) > 0))
+                    {
+                        $args['shipping_methods'] = $shipping_methods;
+                    }
+                }
 
                 return view($blade, $args);
             }

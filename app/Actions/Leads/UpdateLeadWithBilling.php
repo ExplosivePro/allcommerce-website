@@ -3,14 +3,16 @@
 namespace AnchorCMS\Actions\Leads;
 
 use AllCommerce\DepartmentStore\Library\Sales\Lead;
+use AnchorCMS\Shops;
 
 class UpdateLeadWithBilling
 {
-    protected $ac_lead;
+    protected $ac_lead, $shops_model;
 
-    public function __construct(Lead $ac_lead)
+    public function __construct(Lead $ac_lead, Shops $shops)
     {
         $this->ac_lead = $ac_lead;
+        $this->shops_model = $shops;
     }
 
     public function execute(array $data)
@@ -24,18 +26,30 @@ class UpdateLeadWithBilling
         $ac_lead->setBillingAddress($data['billing']);
         $ac_lead->setBillingUuid($data['billing_uuid']);
 
-        $ac_lead->setCheckout($data['checkoutType'],$data['checkoutId']);
-        $ac_lead->setShopUuid($data['shopUuid']);
-        $ac_lead->setOptin($data['emailList']);
+        // get the access token from the merchant_api_tokens table
+        $token_record = $this->shops_model->whereId($data['shopUuid'])
+            ->with('oauth_api_token')->first();
 
-        if($lead = $ac_lead->commit('billing'))
+        if(!is_null($token_record->oauth_api_token))
         {
-            $results = [
-                'success' => true,
-                'lead_uuid' => $lead->getLeadId(),
-                'shipping_uuid' => $lead->getShippingId(),
-                'billing_uuid' => $lead->getBillingId(),
-            ];
+            $ac_lead->setAccessToken($token_record->oauth_api_token->token);
+            $ac_lead->setCheckout($data['checkoutType'],$data['checkoutId']);
+            $ac_lead->setShopUuid($data['shopUuid']);
+            $ac_lead->setOptin($data['emailList']);
+
+            if($lead = $ac_lead->commit('billing'))
+            {
+                $results = [
+                    'success' => true,
+                    'lead_uuid' => $lead->getLeadId(),
+                    'shipping_uuid' => $lead->getShippingId(),
+                    'billing_uuid' => $lead->getBillingId(),
+                ];
+            }
+        }
+        else
+        {
+            $results['reason'] = 'Shop Missing Access Token';
         }
 
         return $results;

@@ -6,10 +6,11 @@ use Backpack\CRUD\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
+use Staudenmeir\EloquentJsonRelations\HasJsonRelationships;
 
 class Shops extends Model
 {
-    use CrudTrait, SoftDeletes, Uuid;
+    use CrudTrait, HasJsonRelationships, SoftDeletes, Uuid;
 
     protected $guarded = [];
 
@@ -43,5 +44,10 @@ class Shops extends Model
     public function inventory()
     {
         return $this->hasMany('AnchorCMS\MerchantInventory', 'shop_id', 'id');
+    }
+
+    public function oauth_api_token()
+    {
+        return $this->hasOne('AnchorCMS\MerchantApiTokens', 'scopes->shop_id', 'id');
     }
 }

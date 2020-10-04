@@ -9,82 +9,19 @@ use AnchorCMS\Actions\Leads\CreateOrUpdateLead;
 use AnchorCMS\Actions\Leads\UpdateLeadWithBilling;
 use AnchorCMS\Actions\Leads\UpdateLeadWithShipping;
 use AnchorCMS\Leads;
+use AnchorCMS\Shops;
 use Illuminate\Http\Request;
 use AnchorCMS\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 
 class LeadsAPIController extends Controller
 {
-    protected $request;
+    protected $request, $shops_model;
 
-    public function __construct(Request $request)
+    public function __construct(Request $request, Shops $shops)
     {
         $this->request = $request;
-    }
-
-    public function get_lead_cart_shipping_and_tax()
-    {
-        $results = ['success' => false];
-
-        $data = $this->request->all();
-
-        $validated = Validator::make($data, [
-            'reference' => 'bail|required|in:email,shipping',
-            'value' => 'bail|required',
-            'checkoutType' => 'bail|required',
-            'checkoutId' => 'bail|required',
-            'shopUuid' => 'bail|required',
-            'emailList' => 'sometimes|required',
-            'lead_uuid' => 'sometimes|required|exists:leads,id',
-            'shipping_uuid' => 'sometimes|required|exists:shipping_addresses,id',
-            'billing_uuid' => 'sometimes|required|exists:billing_addresses,id',
-        ]);
-
-        if($validated->fails())
-        {
-            foreach($validated->errors()->toArray() as $col => $msg)
-            {
-                $results['reason'] = $msg[0];
-                break;
-            }
-        }
-        else
-        {
-            $args = [
-                'payload' => $data,
-                'lead_uuid' => null
-            ];
-
-            $args['lead_uuid'] = $data['lead_uuid'];
-
-            $lead = DepartmentStore::get('lead', $args);
-            $lead = $lead->createOrUpdateLead($args['payload'], $args['lead_uuid']);
-
-            // @todo - refactor this to determine if this is a shopify order before doing this.
-            if($draftOrder = $lead->getLeadAttributes('shopifyDraftOrder'))
-            {
-                // @todo - update the DepartmentStore pkg to make easy access to shop.
-                $shop = Leads::find($args['lead_uuid'])->shop()->first();
-                $shop = DepartmentStore::get('shop', ['shop' => $shop->shop_url]);
-
-                $rates = $shop->getShopShippingRates();
-
-                $results = [
-                    'success' => true,
-                    'tax' => [
-                        'tax_lines' => $draftOrder['misc']['tax_lines'],
-                        'total' => $draftOrder['misc']['total_tax']
-                    ],
-                    'shipping' => $rates
-                ];
-            }
-            else
-            {
-                $results['reason'] = 'Problem locating shipping information';
-            }
-        }
-
-        return response()->json($results);
+        $this->shops_model = $shops;
     }
 
     public function create_lead_with_email(Lead $ac_lead)
@@ -112,14 +49,28 @@ class LeadsAPIController extends Controller
         else
         {
             $data = $this->request->all();
-            $ac_lead->setEmail($data['email']);
-            $ac_lead->setCheckout($data['checkoutType'],$data['checkoutId']);
-            $ac_lead->setShopUuid($data['shopUuid']);
-            $ac_lead->setOptin($data['emailList']);
 
-            if($lead = $ac_lead->commit('email'))
+            // get the access token from the merchant_api_tokens table
+            $token_record = $this->shops_model->whereId($data['shopUuid'])
+                ->with('oauth_api_token')->first();
+
+            if(!is_null($token_record->oauth_api_token))
             {
-                $results = ['success' => true, 'lead_uuid' => $lead->getLeadId()];
+                // set it in the Lead object along with other important config.
+                $ac_lead->setAccessToken($token_record->oauth_api_token->token);
+                $ac_lead->setEmail($data['email']);
+                $ac_lead->setCheckout($data['checkoutType'],$data['checkoutId']);
+                $ac_lead->setShopUuid($data['shopUuid']);
+                $ac_lead->setOptin($data['emailList']);
+
+                if($lead = $ac_lead->commit('email'))
+                {
+                    $results = ['success' => true, 'lead_uuid' => $lead->getLeadId()];
+                }
+            }
+            else
+            {
+                $results['reason'] = 'Shop Missing Access Token';
             }
         }
 
@@ -151,15 +102,27 @@ class LeadsAPIController extends Controller
         }
         else
         {
-            $ac_lead->setLeadId($data['lead_uuid']);
-            $ac_lead->setEmail($data['email']);
-            $ac_lead->setCheckout($data['checkoutType'],$data['checkoutId']);
-            $ac_lead->setShopUuid($data['shopUuid']);
-            $ac_lead->setOptin($data['emailList']);
+            // get the access token from the merchant_api_tokens table
+            $token_record = $this->shops_model->whereId($data['shopUuid'])
+                ->with('oauth_api_token')->first();
 
-            if($lead = $ac_lead->commit('email'))
+            if(!is_null($token_record->oauth_api_token))
             {
-                $results = ['success' => true, 'lead_uuid' => $lead->getLeadId()];
+                $ac_lead->setAccessToken($token_record->oauth_api_token->token);
+                $ac_lead->setLeadId($data['lead_uuid']);
+                $ac_lead->setEmail($data['email']);
+                $ac_lead->setCheckout($data['checkoutType'],$data['checkoutId']);
+                $ac_lead->setShopUuid($data['shopUuid']);
+                $ac_lead->setOptin($data['emailList']);
+
+                if($lead = $ac_lead->commit('email'))
+                {
+                    $results = ['success' => true, 'lead_uuid' => $lead->getLeadId()];
+                }
+            }
+            else
+            {
+                $results['reason'] = 'Shop Missing Access Token';
             }
         }
 
@@ -264,6 +227,70 @@ class LeadsAPIController extends Controller
         }
     }
 
+    public function get_lead_cart_shipping_and_tax()
+    {
+        $results = ['success' => false];
+
+        $data = $this->request->all();
+
+        $validated = Validator::make($data, [
+            'reference' => 'bail|required|in:email,shipping',
+            'value' => 'bail|required',
+            'checkoutType' => 'bail|required',
+            'checkoutId' => 'bail|required',
+            'shopUuid' => 'bail|required',
+            'emailList' => 'sometimes|required',
+            'lead_uuid' => 'sometimes|required|exists:leads,id',
+            'shipping_uuid' => 'sometimes|required|exists:shipping_addresses,id',
+            'billing_uuid' => 'sometimes|required|exists:billing_addresses,id',
+        ]);
+
+        if($validated->fails())
+        {
+            foreach($validated->errors()->toArray() as $col => $msg)
+            {
+                $results['reason'] = $msg[0];
+                break;
+            }
+        }
+        else
+        {
+            $args = [
+                'payload' => $data,
+                'lead_uuid' => null
+            ];
+
+            $args['lead_uuid'] = $data['lead_uuid'];
+
+            $lead = DepartmentStore::get('lead', $args);
+            $lead = $lead->createOrUpdateLead($args['payload'], $args['lead_uuid']);
+
+            // @todo - refactor this to determine if this is a shopify order before doing this.
+            if($draftOrder = $lead->getLeadAttributes('shopifyDraftOrder'))
+            {
+                // @todo - update the DepartmentStore pkg to make easy access to shop.
+                $shop = Leads::find($args['lead_uuid'])->shop()->first();
+                $shop = DepartmentStore::get('shop', ['shop' => $shop->shop_url]);
+
+                $rates = $shop->getShopShippingRates();
+
+                $results = [
+                    'success' => true,
+                    'tax' => [
+                        'tax_lines' => $draftOrder['misc']['tax_lines'],
+                        'total' => $draftOrder['misc']['total_tax']
+                    ],
+                    'shipping' => $rates
+                ];
+            }
+            else
+            {
+                $results['reason'] = 'Problem locating shipping information';
+            }
+        }
+
+        return response()->json($results);
+    }
 
     /* DEPRECATED */
     public function _UNSUPPORTED_create_or_update_lead(CreateOrUpdateLead $action)

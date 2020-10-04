@@ -151,7 +151,7 @@ const leadManager = {
                 context.dispatch('updateLeadEmail', payload);
             }
             else {
-                let url = `${context.state.apiUrl}/api/checkout/leads/create/email`;
+                let url = `${context.state.apiUrl}/api/checkout/shopify/leads/create/email`;
                 console.log(`Pinging ${url}`, payload);
 
                 axios.post(url, payload)
@@ -206,7 +206,7 @@ const leadManager = {
                 payload.billing = context.state.billingAddress;
             }
 
-            let url = `${context.state.apiUrl}/api/checkout/leads/create/shipping`;
+            let url = `${context.state.apiUrl}/api/checkout/shopify/leads/create/shipping`;
             console.log(`Pinging ${url}`, payload);
 
             axios.post(url, payload)
@@ -257,7 +257,7 @@ const leadManager = {
                 if(('lead_uuid' in payload)) {
                     console.log('Dispatching update EMAIL in lead.');
 
-                    let url = `${context.state.apiUrl}/api/checkout/leads/update/email`;
+                    let url = `${context.state.apiUrl}/api/checkout/shopify/leads/update/email`;
                     console.log(`Pinging ${url}`, payload);
 
                     axios.put(url, payload, {headers: {Accept: 'application/json'}})
@@ -325,7 +325,7 @@ const leadManager = {
                 }
             }
 
-            let url = `${context.state.apiUrl}/api/checkout/leads/update/shipping`;
+            let url = `${context.state.apiUrl}/api/checkout/shopify/leads/update/shipping`;
             console.log(`Pinging ${url}`, payload);
 
             axios.put(url, payload)
@@ -386,7 +386,7 @@ const leadManager = {
                 payload.billing = context.state.billingAddress;
                 payload['billing_uuid'] = context.state.billingAddressUuid;
 
-                let url = `${context.state.apiUrl}/api/checkout/leads/update/billing`;
+                let url = `${context.state.apiUrl}/api/checkout/shopify/leads/update/billing`;
                 console.log(`Pinging ${url}`, payload);
 
                 axios.put(url, payload)
