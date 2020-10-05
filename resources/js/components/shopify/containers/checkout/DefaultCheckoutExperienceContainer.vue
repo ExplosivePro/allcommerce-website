@@ -29,7 +29,7 @@
         components: {
             CheckoutExperience
         },
-        props: ['items', 'shopId', 'checkoutType', 'checkoutId', 'apiUrl', 'devMode'],
+        props: ['items', 'shippingMethods', 'shopId', 'checkoutType', 'checkoutId', 'apiUrl', 'devMode'],
         watch: {
             devMode(flag) {
                 console.log('Oh boy, devMode = '+flag);
@@ -41,7 +41,17 @@
             lmLeadUuid(uuid) {
                 console.log('leadManager reporting Lead UUID was updated to '+uuid+' updating the store.');
                 this.setLeadUuid(uuid);
-            }
+            },
+            shippingReady(flag) {
+                console.log('ShippingReady changed to '+flag);
+                let ready = (this.emailReady && this.shippingReady);
+                this.setPostageReady(ready);
+            },
+            emailReady(flag) {
+                console.log('EmailReady changed to '+flag);
+                let ready = (this.emailReady && this.shippingReady);
+                this.setPostageReady(ready);
+            },
             /*
             leadLoading(flag) {
                 console.log('LeadLoading set to - '+flag)
@@ -80,9 +90,7 @@
                 console.log('Incoming shipping line(s) - ', lines);
                 this.initShipping(lines);
             },
-            shippingReady(flag) {
-                console.log('ShippingReady changed to '+flag);
-            },
+
             shipping(price) {
                 console.log('Active shipping price set to - $'+price);
                 this.setPriceShip(price);
@@ -110,8 +118,10 @@
                 loading: 'loading',
                 email: 'customerEmail',
                 lmLeadUuid: 'leadManager/leadUuid',
+                emailReady: 'leadManager/emailReady',
                 shippingReady: 'leadManager/shippingReady',
                 billingReady: 'leadManager/billingReady',
+                postageReady: 'postageReady',
                 countyDrop: 'geography/getCountries',
                 stateDrops: 'geography/getStates'
             }),
@@ -199,7 +209,8 @@
                 updateEmail: 'customerEmail',
                 updateEmailList: 'optInMailing',
                 setShipping: 'leadManager/shippingAddress',
-                setBilling: 'leadManager/billingAddress'
+                setBilling: 'leadManager/billingAddress',
+                setShippingMethods: 'shipping/availableMethods'
             }),
             ...mapActions({
                 initCart: 'initCart',
@@ -207,6 +218,7 @@
                 updateLeadEmail: 'updateLeadEmail',
                 setShippingReady: 'setShippingReady',
                 setBillingReady: 'setBillingReady',
+                setPostageReady: 'setPostageReady',
             }),
             /*
             ...mapMutations({
@@ -350,6 +362,7 @@
             this.configCheckout({type:this.checkoutType, id:this.checkoutId});
             this.setShop(this.shopId);
             this.initCart(this.items);
+            this.setShippingMethods(this.shippingMethods)
 
             setTimeout(() => this.setLoading(false), 1500);
             console.log('DefaultCheckoutExperienceContainer mounted!', this.items);

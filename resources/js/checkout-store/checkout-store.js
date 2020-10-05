@@ -14,9 +14,7 @@ export default new Vuex.Store({
         leadManager,
         geography,
         priceCalc,
-        /*
         shipping,
-         */
     },
     state() {
         return {
@@ -88,6 +86,11 @@ export default new Vuex.Store({
             state.optInMailing = flag;
 
             // @todo - send to whatever other modules need it.
+        },
+        postageReady(state, flag) {
+            console.log('Mutating postageReady to '+ flag);
+            state.postageReady = flag;
+
         },
         cart(state, cart) {
             console.log('Mutating cart to ',cart);
@@ -190,6 +193,11 @@ export default new Vuex.Store({
 
                 context.dispatch('leadManager/updateLeadBilling', payload);
             }
+        },
+        setPostageReady(context, flag) {
+            console.log('Committing postageReady to '+flag);
+            context.commit('postageReady', flag);
+            context.commit('shipping/moduleReady', flag);
         },
         initCart(context, cart) {
             console.log('Committing cart to ',cart);

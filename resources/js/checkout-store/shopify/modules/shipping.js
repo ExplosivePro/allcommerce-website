@@ -9,7 +9,9 @@ const shipping = {
             shipping: 0.00,
             rates: '',
             qualifiedRates: '',
-            selectedRate: ''
+            selectedRate: '',
+            moduleReady: false,
+            availableMethods: [],
         };
     },
     mutations: {
@@ -24,9 +26,24 @@ const shipping = {
         },
         selectedRate(state, rate) {
             state.selectedRate = rate;
+        },
+        moduleReady(state, flag) {
+            console.log('Mutating moduleReady to '+ flag);
+            state.moduleReady = flag;
+        },
+        availableMethods(state, methods) {
+            console.log('Mutating availableMethods with ', methods);
+            state.availableMethods = methods;
         }
     },
-    getters: {},
+    getters: {
+        moduleReady(state) {
+            return state.moduleReady;
+        },
+        availableMethods(state) {
+            return state.availableMethods;
+        }
+    },
     actions: {
         updateShippingRates({commit}, rates) {
 

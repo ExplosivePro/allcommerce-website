@@ -2,5 +2,6 @@
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css",
     "/css/shopify-app.css": "/css/shopify-app.css",
+    "/js/cx-app.js": "/js/cx-app.js",
     "/js/shopify-app.js": "/js/shopify-app.js"
 }

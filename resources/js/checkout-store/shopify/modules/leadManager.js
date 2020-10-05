@@ -124,6 +124,9 @@ const leadManager = {
         billingReady(state) {
             return state.billingReady;
         },
+        emailReady(state) {
+            return state.emailReady;
+        },
         isDraftEligible(state) {
             let results = state.draftOrderReady;
 
@@ -142,6 +145,9 @@ const leadManager = {
         setLoading(context, flag) {
             console.log('Committing loading to '+flag);
             context.commit('loading', flag);
+        },
+        setShippingMethods(context, data) {
+
         },
         createNewLeadWithEmail(context, payload) {
             context.commit('loading', true);

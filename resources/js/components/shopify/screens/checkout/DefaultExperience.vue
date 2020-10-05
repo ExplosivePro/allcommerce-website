@@ -153,30 +153,7 @@
                             </div>
                         </div>
 
-                        <div class="shipping-method-panel">
-                            <div class="inner-shipping-method-panel inner-form-segment">
-                                <div class="untoggled-shipping" v-if="!showShippingMethods">
-                                    <div class="inner-untoggled-shipping">
-                                        <div class="Polaris-Connected">
-                                            <div class="Polaris-Connected__Item Polaris-Connected__Item--primary">
-                                                <div class="Polaris-TextField" style="height: 5rem;">
-                                                    <label id="PolarisTextField7" class="Polaris-TextField__Input" style="color: #000">
-                                                        <i class="fad fa-truck fa-flip-horizontal"></i>
-                                                        <span style="padding-left: 1.5em;">
-                                                            <span>Enter your shipping address to see shipping options</span>
-                                                        </span>
-                                                    </label>
-                                                    <div class="Polaris-TextField__Backdrop"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="toggled-shipping" v-else>
-                                    <h1> Sup Shipping Methods? </h1>
-                                </div>
-                            </div>
-                        </div>
+                        <shipping-method-panel></shipping-method-panel>
                     </div>
                 </div>
                 <div class="form-segment payment-info-segment">
@@ -258,11 +235,13 @@
 </template>
 
 <script>
+    import ShippingMethodPanel from "../../containers/checkout/ShopifyShippingMethodsContainer";
     import SexyHurricaneLoading from "../../../presenters/widgets/loading/SexyHurricane";
 
     export default {
         name: "DefaultExperience",
         components: {
+            ShippingMethodPanel,
             SexyHurricaneLoading
         },
         props: [

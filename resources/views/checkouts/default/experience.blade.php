@@ -109,6 +109,7 @@
             </div>
             <default-checkout-experience
                 :items="{{ json_encode($items) }}"
+                :shipping-methods="{{ json_encode($shipping_methods) }}"
                 shop-id="{!! $shop_uuid !!}"
                 checkout-type="{!! $checkout_type !!}"
                 checkout-id="{!! $checkout_id !!}"
