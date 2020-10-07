@@ -70,7 +70,6 @@ class ShopifyAccessController extends Controller
             'locale' => 'bail|required',
         ]);
 
-
         if ($validated->fails())
         {
             return view('errors.404');

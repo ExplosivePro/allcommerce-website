@@ -117,7 +117,6 @@ class HomeController extends Controller
 
         if(array_key_exists('session', $data))
         {
-
             return redirect('shopify/merchant/account?'.http_build_query($data));
         }
         else
