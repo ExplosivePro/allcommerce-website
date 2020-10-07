@@ -73,7 +73,7 @@ class ShopifyCheckoutController extends Controller
                 {
                     $blade = $blade_attr->funnel_value;
                 }
-                // @todo - get the shipping zones and pass them in to the args;
+                // get the shipping zones and pass them in to the args;
                 $token = $shop->oauth_api_token()->first();
 
                 if(!is_null($token))

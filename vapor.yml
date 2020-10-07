@@ -50,6 +50,8 @@ environments:
     database-user: acuser
     gateway-version: 2
     runtime: php-7.4
+    queues:
+      - allcommerce-develop-emails
     build:
         - 'composer install'
         - 'php artisan event:cache'

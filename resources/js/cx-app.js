@@ -17,6 +17,8 @@ window.Vue = require('vue');
  */
 Vue.component('default-checkout-experience', require('./components/shopify/containers/checkout/DefaultCheckoutExperienceContainer.vue').default);
 Vue.component('shopify-account-summary', require('./components/shopify/containers/checkout/AccountSummaryComponentContainer.vue').default);
+Vue.component('shopify-default-one-step', require('./components/shopify/containers/checkout/DefaultOneStepContainer.vue').default);
+
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

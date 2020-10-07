@@ -12,6 +12,7 @@ class FeatureAttributes extends Model
 
     protected $casts = [
         'id' => 'uuid',
-        'feature_id' => 'uuid'
+        'feature_id' => 'uuid',
+        'attribute_desc_misc' => 'array'
     ];
 }

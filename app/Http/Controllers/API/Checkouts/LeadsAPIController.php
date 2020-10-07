@@ -2,17 +2,18 @@
 
 namespace AnchorCMS\Http\Controllers\API\Checkouts;
 
-use AllCommerce\DepartmentStore\Facades\DepartmentStore;
-use AllCommerce\DepartmentStore\Library\Sales\Lead;
-use AnchorCMS\Actions\Leads\CreateLeadWithShipping;
+use AnchorCMS\Shops;
+use AnchorCMS\Leads;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use AnchorCMS\Http\Controllers\Controller;
 use AnchorCMS\Actions\Leads\CreateOrUpdateLead;
 use AnchorCMS\Actions\Leads\UpdateLeadWithBilling;
+use AnchorCMS\Actions\Leads\CreateLeadWithShipping;
 use AnchorCMS\Actions\Leads\UpdateLeadWithShipping;
-use AnchorCMS\Leads;
-use AnchorCMS\Shops;
-use Illuminate\Http\Request;
-use AnchorCMS\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Validator;
+use AllCommerce\DepartmentStore\Library\Sales\Lead;
+use AllCommerce\DepartmentStore\Facades\DepartmentStore;
+use AnchorCMS\Actions\Checkout\OneClick\GetQualifiedOneClickDetails;
 
 class LeadsAPIController extends Controller
 {
@@ -24,7 +25,7 @@ class LeadsAPIController extends Controller
         $this->shops_model = $shops;
     }
 
-    public function create_lead_with_email(Lead $ac_lead)
+    public function create_lead_with_email(Lead $ac_lead, GetQualifiedOneClickDetails $action)
     {
         $results = ['success' => false, 'reason' => 'Could not Save Information'];
 
@@ -66,6 +67,25 @@ class LeadsAPIController extends Controller
                 if($lead = $ac_lead->commit('email'))
                 {
                     $results = ['success' => true, 'lead_uuid' => $lead->getLeadId()];
+
+                    // real quick, do a 1-click check!
+                    try
+                    {
+                        if($one_click = $action->execute($lead->getLeadId()))
+                        {
+                            $results['one_click'] = $one_click;
+                        }
+                    }
+                    catch(\Exception $e) {
+                        // @todo - fire an email that 1-click crashed somewhere!
+                        // @todo - or a high priority sentry thang
+
+                        // Return the lead that was created anyway!
+                        if(array_key_exists('one_click', $results))
+                        {
+                            unset($results['one_click']);
+                        }
+                    }
                 }
             }
             else

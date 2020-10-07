@@ -26,7 +26,8 @@
         "silber/bouncer": "v1.0.0-rc.8",
         "spatie/laravel-activitylog": "^3.14",
         "spatie/laravel-event-sourcing": "^4.2",
-        "staudenmeir/eloquent-json-relations": "^1.1"
+        "staudenmeir/eloquent-json-relations": "^1.1",
+        "twilio/sdk": "^6.10"
     },
     "require-dev": {
         "andrey-helldar/laravel-app": "^1.0",

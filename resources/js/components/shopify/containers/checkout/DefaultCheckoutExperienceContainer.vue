@@ -3,6 +3,8 @@
         :loading="loading"
         :countries="countyDrop"
         :state-drops="stateDrops"
+        :show-one-click="showOneClick"
+        :prefill-data="billShipPreFill"
         @updated="updateCheckoutState"
     ></checkout-experience>
 
@@ -34,6 +36,9 @@
             devMode(flag) {
                 console.log('Oh boy, devMode = '+flag);
             },
+            showOneClick(flag) {
+                console.log('Oh boy, showOneClick = '+flag);
+            },
             email(addy) {
                 console.log('Email Address was updated to '+addy);
                 this.updateLeadEmail();
@@ -52,6 +57,16 @@
                 let ready = (this.emailReady && this.shippingReady);
                 this.setPostageReady(ready);
             },
+            oneClickReady(flag) {
+                console.log('oneClickReady changed to '+flag, this.oneClickData);
+
+                this.toggleOneClickMode(flag);
+                this.setClickData(this.oneClickData);
+            },
+            oneClickResults(data) {
+                this.billShipSame = false;
+                this.billShipPreFill = data;
+            }
             /*
             leadLoading(flag) {
                 console.log('LeadLoading set to - '+flag)
@@ -101,7 +116,8 @@
         },
         data() {
             return {
-                billShipSame: true
+                billShipSame: true,
+                billShipPreFill: ''
                 /*
                 timerSegment: false,
                 expressCheckout: false,
@@ -123,7 +139,11 @@
                 billingReady: 'leadManager/billingReady',
                 postageReady: 'postageReady',
                 countyDrop: 'geography/getCountries',
-                stateDrops: 'geography/getStates'
+                stateDrops: 'geography/getStates',
+                showOneClick: 'oneClickManager/active',
+                oneClickReady: 'leadManager/oneClickReady',
+                oneClickData: 'leadManager/oneClickData',
+                oneClickResults: 'oneClickManager/oneClickResults'
             }),
             /*
             ...mapState({
@@ -210,7 +230,8 @@
                 updateEmailList: 'optInMailing',
                 setShipping: 'leadManager/shippingAddress',
                 setBilling: 'leadManager/billingAddress',
-                setShippingMethods: 'shipping/availableMethods'
+                setShippingMethods: 'shipping/availableMethods',
+                setClickData: 'oneClickManager/clickData'
             }),
             ...mapActions({
                 initCart: 'initCart',
@@ -219,6 +240,7 @@
                 setShippingReady: 'setShippingReady',
                 setBillingReady: 'setBillingReady',
                 setPostageReady: 'setPostageReady',
+                toggleOneClickMode: 'oneClickManager/toggleOneClickMode'
             }),
             /*
             ...mapMutations({

@@ -41,4 +41,19 @@ class LeadAttributes extends Model
         'client_uuid' => 'uuid',
         'misc' => 'collection',
     ];
+
+    public function client()
+    {
+        return $this->belongsTo('AnchorCMS\Clients', 'client_uuid', 'id');
+    }
+
+    public function shop()
+    {
+        return $this->belongsTo('AnchorCMS\Shops', 'shop_uuid', 'id');
+    }
+
+    public function lead()
+    {
+        return $this->belongsTo('AnchorCMS\Leads', 'lead_uuid', 'id');
+    }
 }

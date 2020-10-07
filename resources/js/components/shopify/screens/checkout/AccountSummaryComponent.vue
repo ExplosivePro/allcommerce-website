@@ -148,7 +148,7 @@ export default {
 <style scoped>
     @media screen {
         .payment-section {
-            height: auto;
+            /*height: auto;*/
         }
 
         .inner-payment-section {
@@ -348,8 +348,8 @@ export default {
 
     @media screen and (min-width: 1000px) {
         .payment-section {
-            height: auto;
-            min-height: 75%;
+            /*height: auto;
+            min-height: 75%;*/
         }
 
         .inner-payment-section {

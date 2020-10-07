@@ -50,5 +50,28 @@ class Leads extends Model
         return $this->belongsTo('AnchorCMS\Shops', 'shop_uuid', 'id');
     }
 
+    public function client()
+    {
+        return $this->belongsTo('AnchorCMS\Clients', 'client_uuid', 'id');
+    }
 
+    public function order()
+    {
+        return $this->hasOne('AnchorCMS\Orders', 'id', 'order_uuid');
+    }
+
+    public function lead_attributes()
+    {
+        return $this->hasMany('AnchorCMS\LeadAttributes', 'lead_uuid', 'id');
+    }
+
+    public function shipping_address()
+    {
+        return $this->hasOne('AnchorCMS\ShippingAddresses', 'lead_uuid', 'id');
+    }
+
+    public function billing_address()
+    {
+        return $this->hasOne('AnchorCMS\BillingAddresses', 'lead_uuid', 'id');
+    }
 }

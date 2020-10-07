@@ -11,7 +11,13 @@
             </div>
         </div>
     </div>
-
+    <div class="inner-payment-section one-click" v-else-if="showOneClick">
+        <div class="one-click-piece">
+            <shopify-default-one-step
+                :show-form="launchOneClick"
+            ></shopify-default-one-step>
+        </div>
+    </div>
     <div class="inner-payment-section" v-else>
         <div class="order-form-column">
             <div class="inner-order-form">
@@ -246,9 +252,38 @@
         },
         props: [
             'hasTimer', 'hasExpressCheckout', 'lineItems', 'loading', 'disableFields',
-            'countries', 'stateDrops', 'shippingLine', 'pricing', 'tax'
+            'countries', 'stateDrops', 'shippingLine', 'pricing', 'tax', 'showOneClick',
+            'prefillData',
         ],
         watch: {
+            prefillData(data) {
+                if(data !== '') {
+                    let _this = this;
+
+                    if('shipping' in data) {
+                        _this.parsePrefillBilling(data['shipping']);
+                        _this.parsePrefillShipping(data['shipping']);
+                    }
+
+                    setTimeout(function() {
+                        this.billingShippingSame = false;
+
+                        if('billing' in data) {
+                            _this.parsePrefillBilling(data['billing']);
+                        }
+                    }, 1500);
+
+
+/*
+                    setTimeout(function() {
+                        if('billing' in data) {
+                            _this.parsePrefillBilling(data['billing']);
+                        }
+                    }, 4000);
+
+*/
+                }
+            },
             email(addy) {
                 if(addy === '') {
                     this.shippingEmailError = 'Missing Email';
@@ -656,9 +691,18 @@
 
                 this.$emit('updated', payload);
             },
+            showOneClick(flag) {
+                console.log('Toggling 1-Click Mode! - '+ flag);
+
+                let _this = this;
+                setTimeout(function() {
+                    _this.launchOneClick = flag;
+                }, 100);
+            }
         },
         data() {
             return {
+                launchOneClick: false,
                 joinMailingList: true,
                 billingShippingSame: true,
                 email: '',
@@ -827,6 +871,107 @@
 
                 console.log(`Testing Zip Code - ${zip}`, [valid]);
                 return valid === true;
+            },
+            parsePrefillShipping(ship) {
+                for(let col in ship) {
+                    switch(col) {
+                        case 'address':
+                            this.shippingAddress = ship[col];
+                            break;
+
+                        case 'apt':
+                            this.shippingApt = ship[col];
+                            break;
+
+                        case 'city':
+                            this.shippingCity = ship[col];
+                            break;
+
+                        case 'company':
+                            this.shippingCompany = ship[col];
+                            break;
+
+                        case 'country':
+                            if(ship[col] === null) {
+                                this.shippingCountry = 'us';
+                            }
+                            else {
+                                this.shippingCountry = ship[col];
+                            }
+
+                            break;
+
+                        case 'first_name':
+                            this.shippingFirst = ship[col];
+                            break;
+
+                        case 'last_name':
+                            this.shippingLast = ship[col];
+                            break;
+
+                        case 'phone':
+                            this.shippingPhone = ship[col];
+                            break;
+
+                        case 'state':
+                            this.shippingState = ship[col];
+                            break;
+
+                        case 'zip':
+                            this.shippingZip = ship[col];
+                            break;
+                    }
+                }
+            },
+            parsePrefillBilling(bill) {
+                for(let col in bill) {
+                    switch(col) {
+                        case 'address':
+                            this.billingAddress = bill[col];
+                            break;
+
+                        case 'apt':
+                            this.billingApt = bill[col];
+                            break;
+
+                        case 'city':
+                            this.billingCity = bill[col];
+                            break;
+
+                        case 'company':
+                            this.billingCompany = bill[col];
+                            break;
+
+                        case 'country':
+                            if(bill[col] === null) {
+                                this.billingCountry = 'us';
+                            }
+                            else {
+                                this.billingCountry = bill[col];
+                            }
+                            break;
+
+                        case 'first_name':
+                            this.billingFirst = bill[col];
+                            break;
+
+                        case 'last_name':
+                            this.billingLast = bill[col];
+                            break;
+
+                        case 'phone':
+                            this.billingPhone = bill[col];
+                            break;
+
+                        case 'state':
+                            this.billingState = bill[col];
+                            break;
+
+                        case 'zip':
+                            this.billingZip = bill[col];
+                            break;
+                    }
+                }
             }
         },
         mounted() {
@@ -891,8 +1036,24 @@
 
 <style scoped>
     @media screen {
+        #checkoutApp {
+            height: 100%;
+        }
+
+        .slide-enter-active, .slide-leave-active {
+            transition: margin-bottom .8s ease-out;
+        }
+
+        .slide-enter, .slide-leave-to {
+            margin-bottom: -200px;
+        }
+
+        .slide-enter-to, .slide-leave {
+            margin-bottom: 0px;
+        }
+
         .payment-section {
-            height: auto;
+            /*height: auto;*/
         }
 
         .inner-payment-section {
@@ -1092,8 +1253,8 @@
 
     @media screen and (min-width: 1000px) {
         .payment-section {
-            height: auto;
-            min-height: 75%;
+            /*height: auto;
+            min-height: 75%;*/
         }
 
         .inner-payment-section {

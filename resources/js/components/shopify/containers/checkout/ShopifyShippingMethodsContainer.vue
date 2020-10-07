@@ -1,7 +1,8 @@
 <template>
     <shipping-methods-load-out
-        :show-shipping-methods="showShippingMethods"
+        :show-shipping-methods="moduleReady"
         :shipping-methods="availableMethods"
+        @selected="setSelectedShipping"
     ></shipping-methods-load-out>
 </template>
 
@@ -17,6 +18,7 @@
         props: [],
         watch: {
             moduleReady(flag) {
+                console.log('ShopifyShippingMethodsContainer moduleReady - ' + flag)
                 this.showShippingMethods = flag;
             }
         },
@@ -31,7 +33,12 @@
                 availableMethods: 'shipping/availableMethods'
             })
         },
-        methods: {},
+        methods: {
+            setSelectedShipping(idx) {
+                let methods = this.availableMethods
+                console.log('Updating state for ', methods[idx])
+            }
+        },
         mounted() {
             console.log('ShopifyShippingMethodsContainer mounted!')
         }

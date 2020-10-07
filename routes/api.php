@@ -43,6 +43,9 @@ Route::group(['prefix' => 'checkout'], function () {
                 Route::put('/billing', 'API\Checkouts\LeadsAPIController@update_lead_with_billing');
             });
         });
+        Route::group(['prefix' => 'one-click'], function () {
+            Route::post('/validate', 'API\Checkouts\OneClickCheckoutAPIController@validate_input');
+        });
         Route::post('/shipping-tax', 'API\Checkouts\LeadsAPIController@get_lead_cart_shipping_and_tax');
     });
 });

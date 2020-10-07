@@ -59,4 +59,9 @@ class Clients extends Model
 
         return $results;
     }
+
+    public function features()
+    {
+        return $this->hasMany('AnchorCMS\Features', 'client_id', 'id');
+    }
 }

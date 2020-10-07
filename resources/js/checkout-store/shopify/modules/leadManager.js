@@ -14,6 +14,8 @@ const leadManager = {
             shippingReady:   false,
             billingReady:    false,
             draftOrderReady: false,
+            oneClickReady: false,
+            oneClickData: '',
             shippingAddress: {},
             billingAddress: {},
             billingAddressUuid: '',
@@ -40,6 +42,14 @@ const leadManager = {
         billingReady(state, flag) {
             console.log('Mutating billingReady to '+ flag);
             state.billingReady = flag;
+        },
+        oneClickReady(state, flag) {
+            console.log('Mutating oneClickReady to '+ flag);
+            state.oneClickReady = flag;
+        },
+        oneClickData(state, data) {
+            console.log('Mutating oneClickData to ', data);
+            state.oneClickData = data;
         },
         shippingAddress(state, args) {
             console.log(`Mutating ${args.method} in shippingAddress to `+ args.value);
@@ -127,6 +137,12 @@ const leadManager = {
         emailReady(state) {
             return state.emailReady;
         },
+        oneClickReady(state) {
+            return state.oneClickReady;
+        },
+        oneClickData(state) {
+            return state.oneClickData;
+        },
         isDraftEligible(state) {
             let results = state.draftOrderReady;
 
@@ -172,18 +188,10 @@ const leadManager = {
                                     context.commit('leadUuid', data['lead_uuid']);
                                     context.commit('emailReady', true);
 
-                                    /* @todo - get ready to uncomment this!
-                                    if('shipping_uuid' in data) {
-                                        context.commit('shippingAddressUuid', data['shipping_uuid']);
-                                        console.log('Calling getShippingAndTax -')
-                                        context.commit('shippingReady', true);
-                                        context.dispatch('getShippingAndTax', payload);
+                                    if('one_click' in data) {
+                                        context.commit('oneClickReady', true);
+                                        context.commit('oneClickData', data['one_click']);
                                     }
-
-                                    if('billing_uuid' in data) {
-                                        context.commit('billingAddressUuid', data['billing_uuid']);
-                                    }
-                                    */
                                 }
                             }
                             else {

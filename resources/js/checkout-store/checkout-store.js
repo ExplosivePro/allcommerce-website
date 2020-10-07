@@ -6,11 +6,13 @@ import leadManager from "./shopify/modules/leadManager";
 import geography from "./geography";
 import shipping from "./shopify/modules/shipping";
 import priceCalc from "./shopify/modules/priceCalc";
+import oneClickManager from "./shopify/modules/oneClickManager";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
     modules: {
+        oneClickManager,
         leadManager,
         geography,
         priceCalc,
@@ -56,6 +58,7 @@ export default new Vuex.Store({
             console.log('Mutating backendUrl to '+ url);
             state.backendUrl = url;
             state.leadManager.apiUrl = url;
+            state.oneClickManager.apiUrl = url;
         },
         checkoutType(state, checkoutType) {
             console.log('Mutating checkoutType to '+checkoutType);
