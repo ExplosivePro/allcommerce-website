@@ -138,6 +138,7 @@
                 shippingReady: 'leadManager/shippingReady',
                 billingReady: 'leadManager/billingReady',
                 postageReady: 'postageReady',
+                taxReady: 'taxReady',
                 countyDrop: 'geography/getCountries',
                 stateDrops: 'geography/getStates',
                 showOneClick: 'oneClickManager/active',
@@ -242,69 +243,6 @@
                 setPostageReady: 'setPostageReady',
                 toggleOneClickMode: 'oneClickManager/toggleOneClickMode'
             }),
-            /*
-            ...mapMutations({
-                setTotalTax: 'priceCalc/tax',
-                setPriceShip: 'priceCalc/shipping',
-                setShowShipping: 'leadManager/showShipping'
-            }),
-            ...mapActions({
-                updateTotal: 'priceCalc/calculateTotal',
-            }),
-            updateCheckoutState(payload) {
-                if('method' in payload) {
-                    console.log('Receiving checkout state update - ', payload);
-
-                    switch(payload.method) {
-                        case 'email':
-                            this.updateEmail(payload.value);
-                            break;
-
-                        case 'emailList':
-                            this.updateEmailList(payload.value);
-                            break;
-
-                        case 'billingShippingSame':
-                            this.setBillingShippingSame(payload.value);
-                            break;
-
-                        case 'shippingFirst':
-                        case 'shippingLast':
-                        case 'shippingCompany':
-                        case 'shippingAddress':
-                        case 'shippingApt':
-                        case 'shippingCity':
-                        case 'shippingCountry':
-                        case 'shippingState':
-                        case 'shippingZip':
-                        case 'shippingPhone':
-                            this.updateShippingAddress({col: payload.method, val:payload.value});
-                            this.updateBillingShipping()
-                            break;
-
-                        case 'billingFirst':
-                        case 'billingLast':
-                        case 'billingCompany':
-                        case 'billingAddress':
-                        case 'billingApt':
-                        case 'billingCity':
-                        case 'billingCountry':
-                        case 'billingState':
-                        case 'billingZip':
-                        case 'billingPhone':
-                            this.updateBillingAddress({col: payload.method, val:payload.value});
-                            this.updateBillingShipping()
-                            break;
-
-                        default:
-                            console.log('Invalid Checkout State method - ', payload.method);
-                    }
-                }
-                else {
-                    console.log('Invalid entry - ', payload)
-                }
-            }
-            */
             updateCheckoutState(payload) {
                 if('method' in payload) {
                     console.log('Receiving checkout state update - ', payload);

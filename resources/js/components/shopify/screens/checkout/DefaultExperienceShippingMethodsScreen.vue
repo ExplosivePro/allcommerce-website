@@ -50,7 +50,7 @@ export default {
             this.toggle();
         },
         shippingMethods(methods) {
-            console.log('Passing Shippping methods to the view - ', methods);
+            console.log('Passing Shipping methods to the view - ', methods);
         },
         selectedShippingMethod(idx) {
             console.log('Shipping Method Selected - ', this.shippingMethods[idx]);

@@ -9,7 +9,7 @@ const shipping = {
             shipping: 0.00,
             rates: '',
             qualifiedRates: '',
-            selectedRate: '',
+            selectedRate: 0.00,
             moduleReady: false,
             availableMethods: [],
         };
@@ -25,6 +25,7 @@ const shipping = {
             state.qualifiedRates = rates;
         },
         selectedRate(state, rate) {
+            console.log('Mutating selectedRate to '+ rate);
             state.selectedRate = rate;
         },
         moduleReady(state, flag) {
@@ -42,6 +43,9 @@ const shipping = {
         },
         availableMethods(state) {
             return state.availableMethods;
+        },
+        selectedRate(state) {
+            return state.selectedRate;
         }
     },
     actions: {

@@ -2,6 +2,7 @@
 
 namespace AnchorCMS\Http\Controllers\API\Checkouts;
 
+use AnchorCMS\Actions\Leads\AccessDraftOrderWithShippingMethods;
 use AnchorCMS\Shops;
 use AnchorCMS\Leads;
 use Illuminate\Http\Request;
@@ -229,6 +230,34 @@ class LeadsAPIController extends Controller
             'checkoutId'   => 'bail|required',
             'shopUuid'     => 'bail|required|exists:shops,id',
             'emailList'    => 'sometimes|required|boolean',
+        ]);
+
+        if($validated->fails())
+        {
+            foreach($validated->errors()->toArray() as $col => $msg)
+            {
+                $results['reason'] = $msg[0];
+                break;
+            }
+        }
+        else
+        {
+            $results = $action->execute($data);
+
+            return response()->json($results);
+        }
+    }
+
+    public function draft_order_with_shipping_methods(AccessDraftOrderWithShippingMethods $action)
+    {
+        $results = ['success' => false, 'reason' => 'Could not Access Draft Order'];
+
+        $data = $this->request->all();
+
+        $validated = Validator::make($data, [
+            'shopUuid'    => 'bail|required|exists:shops,id',
+            'leadUuid'    => 'bail|required|exists:leads,id',
+            'shippingMethod' => 'bail|required|array',
         ]);
 
         if($validated->fails())

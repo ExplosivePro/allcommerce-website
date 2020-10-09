@@ -975,6 +975,15 @@
             }
         },
         mounted() {
+            let payload2 = {
+                method: 'billingCountry',
+                value: this.billingCountry
+            };
+            this.$emit('updated', payload2);
+
+
+            payload2.method = 'shippingCountry';
+            this.$emit('updated', payload2);
             /*
             this.calculateSubTotal();
             this.calculateTotal();

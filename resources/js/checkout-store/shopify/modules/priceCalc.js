@@ -11,6 +11,7 @@ const priceCalc = {
             subtotal: 0.00,
             total: 0.00,
             itemPrices: [],
+            taxLines: []
         };
     },
     mutations: {
@@ -21,6 +22,8 @@ const priceCalc = {
         shipping(state, price) {
             console.log('Committing new shipping -', price);
             state.shipping = price;
+
+            console.log('You should see a new price of '+ (state.subtotal + state.tax + state.shipping))
         },
         subTotal(state, price) {
             console.log('Committing new subtotal -', price);
@@ -47,8 +50,14 @@ const priceCalc = {
             return state.subtotal;
         },
         getTotal(state) {
-            return state.total;
+            let a = parseFloat(parseFloat(state.subtotal) + parseFloat(state.tax));
+            let b = parseFloat(state.shipping);
+
+            return (a + b);
         },
+        getTaxLines(state) {
+            return state.taxLines;
+        }
     },
     actions: {
         itemPrices({commit, dispatch}, priceObj) {
@@ -98,6 +107,9 @@ const priceCalc = {
             }
 
             context.dispatch('calculateSubTotal', curated);
+        },
+        updateTax(context, tax) {
+
         }
     }
 };

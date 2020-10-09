@@ -1,5 +1,10 @@
 <template>
     <account-summary-view
+        :total="total"
+        :subtotal="subtotal"
+        :shipping="shipping"
+        :tax-lines="getTaxLines"
+
         :line-items="itemPrices"
         :pricing="pricing"
         :tax-text="taxText"
@@ -11,7 +16,7 @@
 <script>
     import AccountSummaryView from "../../screens/checkout/AccountSummaryComponent";
 
-    import { mapActions, mapGetters } from 'vuex';
+    import { mapActions, mapGetters, mapMutations } from 'vuex';
 
     export default {
         name: "AccountSummaryComponentContainer",
@@ -36,6 +41,17 @@
                     console.log('Lead Manager Loading', flag);
                     this.updateShipTaxText();
                 }
+            },
+            shippingRate(rate) {
+                this.setShippingRate(rate)
+            },
+            getTaxLines(lines) {
+                if(lines.length === 0) {
+                    this.taxText = '$0.00'
+                }
+                else {
+                    this.taxText = '';
+                }
             }
         },
         data() {
@@ -43,18 +59,39 @@
                 taxText: '<small>Shipping Address Required</small>',
                 shippingText: '<small>Shipping Address Required</small>',
                 pricing: {
+                    shipping: 0.00,
                     subTotal: 0.00,
                     total: 0.00,
                 }
             };
         },
         computed: {
+            shipping() {
+                if(this.shippingMethodsReady) {
+                    return '$'+this.shippingRate;
+                }
+                else {
+                    return this.shippingText;
+                }
+            },
+            total() {
+                let total = 0.00;
+
+                if(this.getNewTotal > 0) {
+                    total = this.getNewTotal;
+                }
+
+                return total;
+            },
             ...mapGetters({
-               'itemPrices': 'itemPrices',
+                'itemPrices': 'itemPrices',
                 'subtotal': 'priceCalc/getSubTotal',
-                'total': 'priceCalc/getTotal',
+                'getNewTotal': 'priceCalc/getTotal',
+                'getTaxLines': 'priceCalc/getTaxLines',
                 'shippingReady': 'leadManager/shippingReady',
                 'lmLoading': 'leadManager/loading',
+                'shippingRate': 'shipping/selectedRate',
+                'shippingMethodsReady': 'shipping/moduleReady'
             }),
         },
         methods: {
@@ -76,11 +113,12 @@
                     this.taxText = '<small>Shipping Address Required</small>'
                     this.shippingText = '<small>Shipping Address Required</small>'
                 }
-            }
+            },
+            ...mapMutations({
+                setShippingRate: 'priceCalc/shipping'
+            })
         },
         mounted() {
-            this.pricing.subTotal = this.subtotal;
-            this.pricing.total = this.total;
             console.log('AccountSummaryComponentContainer mounted!', this.itemPrices)
         }
     }

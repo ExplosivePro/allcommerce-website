@@ -70,16 +70,13 @@
                     <div class="subtotal-row">
                         <div class="inner-subtotal-row">
                             <p>Subtotal</p>
-                            <p>${{ pricing.subTotal }}</p>
+                            <p>${{ subtotal }}</p>
                         </div>
                     </div>
                     <div class="subtotal-row">
                         <div class="inner-subtotal-row">
                             <p>Shipping</p>
-                            <p v-if="shippingText !== ''" v-html="shippingText"></p>
-                        </div>
-                        <div  v-if="shippingLine.length > 0">
-                            <p>stuff goes here!</p>
+                            <p v-html="shipping"></p>
                         </div>
                     </div>
                     <div class="subtotal-row">
@@ -101,13 +98,12 @@
                     <div class="total-row">
                         <div class="inner-total-row">
                             <p>Total</p>
-                            <p>${{ pricing.total }}</p>
+                            <p>${{ total }}</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
 </template>
 
@@ -119,14 +115,15 @@ export default {
     components: {
         FloatLabel,
     },
-    props: ['lineItems', 'pricing', 'taxText', 'shippingText'],
+    props: [
+        'total', 'shipping', 'subtotal', 'taxLines',
+        'lineItems', 'pricing', 'taxText', 'shippingText'],
     watch: {},
     data() {
         return {
             giftCardCode: '',
             disableFields: false,
             subTotal: 0.00,
-            taxLines: [],
             shippingLine: [],
             typeOfTax: '',
         };

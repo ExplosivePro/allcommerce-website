@@ -35,6 +35,7 @@ Route::group(['prefix' => 'checkout'], function () {
             Route::group(['prefix' => 'create'], function () {
                 Route::post('/email', 'API\Checkouts\LeadsAPIController@create_lead_with_email');
                 Route::post('/shipping', 'API\Checkouts\LeadsAPIController@create_lead_with_shipping');
+                Route::post('/draft-order/sm', 'API\Checkouts\LeadsAPIController@draft_order_with_shipping_methods');
             });
 
             Route::group(['prefix' => 'update'], function () {

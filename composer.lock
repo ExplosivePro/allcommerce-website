@@ -103,16 +103,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.158.3",
+            "version": "3.158.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "ac883fef515dc92785136f251a8337b33bff1d54"
+                "reference": "dae8d62d976adc737d9daf4817ac36de6d53c3e8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/ac883fef515dc92785136f251a8337b33bff1d54",
-                "reference": "ac883fef515dc92785136f251a8337b33bff1d54",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/dae8d62d976adc737d9daf4817ac36de6d53c3e8",
+                "reference": "dae8d62d976adc737d9daf4817ac36de6d53c3e8",
                 "shasum": ""
             },
             "require": {
@@ -184,7 +184,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2020-10-06T18:16:08+00:00"
+            "time": "2020-10-08T18:13:24+00:00"
         },
         {
             "name": "backpack/base",
@@ -332,12 +332,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/capeandbay-devs/allcommerce-merchant-api-sdk.git",
-                "reference": "d59d9c77322d616ac3f6a5de479a017db2e3c620"
+                "reference": "b600849054560447a14712803c469377baae241b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/capeandbay-devs/allcommerce-merchant-api-sdk/zipball/d59d9c77322d616ac3f6a5de479a017db2e3c620",
-                "reference": "d59d9c77322d616ac3f6a5de479a017db2e3c620",
+                "url": "https://api.github.com/repos/capeandbay-devs/allcommerce-merchant-api-sdk/zipball/b600849054560447a14712803c469377baae241b",
+                "reference": "b600849054560447a14712803c469377baae241b",
                 "shasum": ""
             },
             "require": {
@@ -385,7 +385,7 @@
                 "source": "https://github.com/capeandbay-devs/allcommerce-merchant-api-sdk/tree/master",
                 "issues": "https://github.com/capeandbay-devs/allcommerce-merchant-api-sdk/issues"
             },
-            "time": "2020-10-07T01:51:56+00:00"
+            "time": "2020-10-09T05:38:34+00:00"
         },
         {
             "name": "capeandbay/allcommerce-service-desk",
@@ -2183,16 +2183,16 @@
         },
         {
             "name": "laravel/vapor-core",
-            "version": "v2.9.3",
+            "version": "v2.9.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/vapor-core.git",
-                "reference": "17aaa735872874278641c7e085d35cb8c7df127e"
+                "reference": "9768b8488b95788bcc584b15f0185a07cda12348"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/vapor-core/zipball/17aaa735872874278641c7e085d35cb8c7df127e",
-                "reference": "17aaa735872874278641c7e085d35cb8c7df127e",
+                "url": "https://api.github.com/repos/laravel/vapor-core/zipball/9768b8488b95788bcc584b15f0185a07cda12348",
+                "reference": "9768b8488b95788bcc584b15f0185a07cda12348",
                 "shasum": ""
             },
             "require": {
@@ -2247,7 +2247,7 @@
                 "laravel",
                 "vapor"
             ],
-            "time": "2020-09-29T13:19:17+00:00"
+            "time": "2020-10-08T13:23:56+00:00"
         },
         {
             "name": "league/commonmark",
@@ -2437,16 +2437,16 @@
         },
         {
             "name": "league/flysystem-aws-s3-v3",
-            "version": "1.0.28",
+            "version": "1.0.29",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem-aws-s3-v3.git",
-                "reference": "af7384a12f7cd7d08183390d930c9d0ec629c990"
+                "reference": "4e25cc0582a36a786c31115e419c6e40498f6972"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem-aws-s3-v3/zipball/af7384a12f7cd7d08183390d930c9d0ec629c990",
-                "reference": "af7384a12f7cd7d08183390d930c9d0ec629c990",
+                "url": "https://api.github.com/repos/thephpleague/flysystem-aws-s3-v3/zipball/4e25cc0582a36a786c31115e419c6e40498f6972",
+                "reference": "4e25cc0582a36a786c31115e419c6e40498f6972",
                 "shasum": ""
             },
             "require": {
@@ -2480,7 +2480,7 @@
                 }
             ],
             "description": "Flysystem adapter for the AWS S3 SDK v3.x",
-            "time": "2020-08-22T08:43:01+00:00"
+            "time": "2020-10-08T18:58:37+00:00"
         },
         {
             "name": "league/mime-type-detection",

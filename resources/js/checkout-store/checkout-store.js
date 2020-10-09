@@ -29,6 +29,7 @@ export default new Vuex.Store({
             postageReady:    false,
             customerReady:   false,
             draftOrderReady: false,
+            taxReady:        false,
             paymentReady:    false,
 
             loading:         true,
@@ -90,6 +91,18 @@ export default new Vuex.Store({
 
             // @todo - send to whatever other modules need it.
         },
+        draftOrderReady(state, flag) {
+            console.log('Mutating draftOrderReady to '+ flag);
+            state.draftOrderReady = flag;
+            state.leadManager.draftOrderReady = flag;
+
+        },
+        taxReady(state, flag) {
+            console.log('Mutating taxReady to '+ flag);
+            state.taxReady = flag;
+            state.leadManager.taxReady = flag;
+
+        },
         postageReady(state, flag) {
             console.log('Mutating postageReady to '+ flag);
             state.postageReady = flag;
@@ -99,6 +112,12 @@ export default new Vuex.Store({
             console.log('Mutating cart to ',cart);
             state.cart = cart;
         },
+        setTaxInPriceCalc(state, tax) {
+            console.log('setTaxInPriceCalc mutating -', tax);
+
+            state.priceCalc.tax = tax.totalTax;
+            state.priceCalc.taxLines = tax.lines;
+        }
     },
     getters: {
         loading(state) {
@@ -109,7 +128,10 @@ export default new Vuex.Store({
         },
         itemPrices(state) {
             return state.priceCalc.itemPrices;
-        }
+        },
+        taxReady(state) {
+            return state.taxReady;
+        },
         /*
         shippingAmt({shipping}) {
             return shipping.shipping;
@@ -207,5 +229,52 @@ export default new Vuex.Store({
             context.commit('cart', cart);
             context.dispatch('priceCalc/initCart', cart);
         },
+        ajaxDraftOrderFromShippingMethod(context, shippingRate) {
+
+            console.log('Going to create or update the draftOrder! + '+context.state.leadUuid, shippingRate);
+            let payload = {
+                shopUuid: context.state.shopUuid,
+                leadUuid: context.state.leadUuid,
+                shippingMethod: shippingRate
+            };
+
+            let url = `${context.state.backendUrl}/api/checkout/shopify/leads/create/draft-order/sm`;
+            console.log(`Pinging ${url}`, payload);
+
+            // Call the endpoint
+            axios.post(url, payload)
+                .then(res => {
+                    console.log('DraftOrder call response - ', res);
+
+                    if('data' in res) {
+                        let data = res.data;
+
+                        if('success' in data) {
+                            // On success, update price calc with shipping and tax data
+                            if(data['success']) {
+                                let tax = {
+                                    totalTax: data['total_tax'],
+                                    lines: data['tax_lines']
+                                }
+
+                                context.commit('setTaxInPriceCalc', tax);
+                                context.commit('draftOrderReady', true);
+                                context.commit('taxReady', true);
+                            }
+                        }
+                        else {
+                            console.log(data['reason']);
+                        }
+                    }
+                    else {
+                        console.log('Strange response from server');
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                    context.commit('loading', false);
+                    context.commit('emailReady', false);
+                });
+        }
     }
 });
