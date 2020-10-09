@@ -256,7 +256,7 @@
             'prefillData',
         ],
         watch: {
-            prefillData(data) {
+            prefillData(data)  {
                 if(data !== '') {
                     let _this = this;
 
@@ -265,15 +265,17 @@
                         _this.parsePrefillShipping(data['shipping']);
                     }
 
-                    setTimeout(function() {
-                        this.billingShippingSame = false;
+                    _this.billingShippingSame = false;
 
+                    setTimeout(function() {
                         if('billing' in data) {
                             _this.parsePrefillBilling(data['billing']);
                         }
+
+                        $('html, body').animate({
+                            scrollTop: 1223 //$('.shipping-method-segment').offset().top
+                        }, 2000);
                     }, 1500);
-
-
 /*
                     setTimeout(function() {
                         if('billing' in data) {

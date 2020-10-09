@@ -24,7 +24,7 @@
                             <div class="Polaris-Connected__Item Polaris-Connected__Item--primary">
                                 <div class="Polaris-TextField shipping-fields" style="height: 5rem;" v-for="(method, idx) in shippingMethods">
                                     <label class="Polaris-TextField__Input" style="color: #000; z-index:100; display: flex; flex-flow: row;">
-                                        <input type="radio" :value="idx" name="shippingMethod" v-model="selectedShippingMethod">
+                                        <input type="radio" :value="idx" name="shippingMethod" v-model="selectedShippingMethod" :disabled="method.disabled">
                                         <span style="padding-left: 1.5em; display: flex; flex-flow: row; justify-content: space-between; width: 100%;">
                                             <span><b>{{ method.title }}</b></span><span> ${{ method.price }}</span>
                                     </span>

@@ -1,7 +1,7 @@
 <template>
     <shipping-methods-load-out
         :show-shipping-methods="moduleReady"
-        :shipping-methods="availableMethods"
+        :shipping-methods="curatedAvailableMethods"
         @selected="setSelectedShipping"
     ></shipping-methods-load-out>
 </template>
@@ -25,12 +25,16 @@
                 if(!flag && this.moduleReady && this.taxReady) {
                     this.setSelectedShipping(this.selectedIdx);
                 }
+            },
+            availableMethods(methods) {
+                this.curateAvailableMethods(methods);
             }
         },
         data() {
             return {
                 showShippingMethods: false,
                 selectedIdx: 0,
+                curatedAvailableMethods: []
             }
         },
         computed: {
@@ -38,7 +42,8 @@
                 lmLoading: 'leadManager/loading',
                 taxReady: 'taxReady',
                 moduleReady: 'shipping/moduleReady',
-                availableMethods: 'shipping/availableMethods'
+                availableMethods: 'shipping/availableMethods',
+                subtotal: 'priceCalc/getSubTotal'
             })
         },
         methods: {
@@ -48,6 +53,22 @@
             ...mapActions({
                 ajaxDraftOrderFromShippingMethod: 'ajaxDraftOrderFromShippingMethod'
             }),
+            curateAvailableMethods(methods) {
+                for(let method in methods) {
+                    let subtotal = this.subtotal;
+                    let maxPrice = methods[method]['max_price'];
+                    let minPrice = methods[method]['min_price'];
+                    // if (minPrice is NULL || subtotal > minPrice) && (maxPrice is NULL || subTotal < maxPrice) enable
+                    methods[method]['disabled'] = true;
+                    if((minPrice === null) || (subtotal > minPrice)) {
+                        if((maxPrice === null) || (subtotal < maxPrice)) {
+                            methods[method]['disabled'] = false;
+                        }
+                    }
+                }
+
+                this.curatedAvailableMethods = methods;
+            },
             setSelectedShipping(idx) {
                 this.selectedIdx = idx;
                 let methods = this.availableMethods
@@ -57,6 +78,7 @@
             }
         },
         mounted() {
+            this.curateAvailableMethods(this.availableMethods);
             console.log('ShopifyShippingMethodsContainer mounted!')
         }
     }

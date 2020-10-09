@@ -125,6 +125,7 @@ class OneClickCheckoutService
             ->where('lead_attributes.name', '=', 'emailList')
             ->where('lead_attributes.value', '=', 1)
             ->where('lead_attributes.active', '=', 1)
+            ->orderBy('leads.created_at', 'DESC')
             //->get();
             ->first();
 
