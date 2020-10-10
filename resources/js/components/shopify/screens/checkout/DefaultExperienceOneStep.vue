@@ -6,7 +6,8 @@
                     <div class="title-segment">
                         <div class="inner-title-segment" v-if="!success">
                             <p class="upper-text" v-if="(!failed)"><b>Welcome back! Ready to Checkout Instantly?</b></p>
-                            <p class="upper-text" v-if="(failed)"><b>Ouch! Sorry that didn't work out..</b></p>
+                            <p class="upper-text" v-if="(failed && (!expired))"><b>Ouch! Sorry that didn't work out..</b></p>
+                            <p class="upper-text" v-if="(failed && expired)"><b>Oh no! Your session expired..</b></p>
                         </div>
                         <div class="inner-title-segment" v-if="success">
                             <p class="upper-text"><b>Checkout Code Validated!</b></p>
@@ -18,7 +19,7 @@
                         <div class="inner-code-segment" v-if="!success">
                             <input type="number" v-model="dataCode" min="0" max="4" placeholder="* * * *" :disabled="loading" v-show="(!loading) && (!failed)"/>
                             <h1 v-if="loading"><i class="fad fa-spinner-third fa-spin"></i></h1>
-                            <h1 v-if="failed"><i class="fad fa-spider-black-widow"></i></h1>
+                            <h1 v-if="failed"><i class="fad fa-spider-black-widow faa-ring animated-hover faa-fast" :style="{'--fa-secondary-opacity': 1.4}"></i></h1>
                             <h1 v-if="failed">Verification Failed. Please Continue as Guest.</h1>
                         </div>
                         <div class="inner-code-segment success" v-if="success">
@@ -30,6 +31,7 @@
                         <div class="inner-subtitle-segment" v-if="(!success)">
                             <p v-if="(error !== '') && (!failed)" class="error-msg"><i class="fal fa-exclamation-circle"></i> {{ error }}</p>
                             <small class="upper-text subtext" v-if="(!failed)">Enter the special code sent to your phone ending in <b>{{ last4 }}</b>.</small>
+                            <small class="upper-text subtext" :style="'color: red;'" v-if="(timeToExpire <= 30) && (!expired)">Warning! Your session will expire in <b>{{ timeToExpire }} second{{ timeToExpire !== 1 ? 's' : '' }}</b>.</small>
                         </div>
                         <div class="inner-subtitle-segment" v-if="success">
                             <small class="upper-text subtext">We're setting up your session! Hang tight just a sec!</small>
@@ -68,8 +70,8 @@
     export default {
         name: "DefaultExperienceOneStep",
         props: [
-            'last4', 'showForm', 'loading', 'error',
-            'failed', 'allowResets', 'success', 'customer'
+            'last4', 'showForm', 'loading', 'error', 'expired',
+            'failed', 'allowResets', 'success', 'customer', 'timeToExpire'
         ],
         watch: {
             showForm(flag) {
@@ -153,6 +155,11 @@
         /* Firefox */
         input[type=number] {
             -moz-appearance: textfield;
+        }
+
+        .fad.fa-spider-black-widow:after {
+            content: "\10F718";
+            color: red;
         }
     }
 

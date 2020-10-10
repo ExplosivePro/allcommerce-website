@@ -46,6 +46,7 @@ Route::group(['prefix' => 'checkout'], function () {
         });
         Route::group(['prefix' => 'one-click'], function () {
             Route::post('/validate', 'API\Checkouts\OneClickCheckoutAPIController@validate_input');
+            Route::post('/resend', 'API\Checkouts\OneClickCheckoutAPIController@resend_code');
         });
         Route::post('/shipping-tax', 'API\Checkouts\LeadsAPIController@get_lead_cart_shipping_and_tax');
     });

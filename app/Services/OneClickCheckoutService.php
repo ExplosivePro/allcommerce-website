@@ -2,18 +2,22 @@
 
 namespace AnchorCMS\Services;
 
+use AnchorCMS\Aggregates\SMS\PhoneAggregate;
+use AnchorCMS\Exceptions\SMS\CouldNotSendSMS;
 use AnchorCMS\Leads;
 use AnchorCMS\Jobs\OneClick\InitOneClickSession;
+use AnchorCMS\Phones;
 
 class OneClickCheckoutService
 {
-    protected $lead;
+    protected $lead, $phones;
     protected $client, $order;
     protected $entity_type, $entity_id, $entity_phone;
 
-    public function __construct(Leads $leads)
+    public function __construct(Leads $leads, Phones $phones)
     {
         $this->lead = $leads;
+        $this->phones = $phones;
     }
 
     public function setLead($uuid) : bool
@@ -102,6 +106,7 @@ class OneClickCheckoutService
             if(!is_null($record))
             {
                 // Check if this order has opted into communications
+                // @todo - find the phone number and see if it's reached the limit
                 $this->order = $record;
                 $results = true;
             }
@@ -118,7 +123,7 @@ class OneClickCheckoutService
         //  - Make sure they have the  shipping
         //  - Make sure they have the lead_attr emailList (the optin)
         //  - Get the first that qualifies or fail
-        $qualified_lead = $this->getLead()->select('leads.id', 'leads.phone')
+        $qualified_lead = $this->getLead()->select('leads.id', 'leads.phone', 'leads.shop_uuid', 'leads.client_uuid')
             ->where('leads.email', '=', $this->getLead()->email)
             ->join('shipping_addresses', 'shipping_addresses.id', '=', 'leads.shipping_uuid')
             ->join('lead_attributes', 'lead_attributes.lead_uuid', 'leads.id')
@@ -137,7 +142,30 @@ class OneClickCheckoutService
             //$this->entity_id = $qualified_lead[0]->id;
             $this->entity_id = $qualified_lead->id;
             $this->entity_phone = $qualified_lead->phone;
-            $results = true;
+
+            // find the phone number and see if it's reached the limit
+            $phone_exists = true;
+            if(!($phone = $this->phones->loadNumber($qualified_lead->phone)))
+            {
+                $phone = $this->phones->addNumber($qualified_lead->phone);
+                $phone_exists = false;
+            }
+
+            // get or create record in the phones table and send the uuid into the aggregate
+            $shop = $qualified_lead->shop()->first();
+
+            try
+            {
+                PhoneAggregate::retrieve($phone->id)
+                    ->logPhoneRecord($phone, $shop)
+                    ->addTextAttempt($phone, $shop);
+
+                $results = true;
+            }
+            catch(CouldNotSendSMS $e)
+            {
+                $results = false;
+            }
         }
 
         return $results;

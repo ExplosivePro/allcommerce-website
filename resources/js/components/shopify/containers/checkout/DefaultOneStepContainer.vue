@@ -5,6 +5,8 @@
         :loading="loading"
         :error="errorMsg"
         :failed="failed"
+        :expired="expired"
+        :time-to-expire="countdown"
         :success="success"
         :allow-resets="allowResets"
         :customer="customerName"
@@ -38,13 +40,33 @@
                     this.success = true;
                     this.customerName = `${data.shipping['first_name']} ${data.shipping['last_name']}`;
                 }
+            },
+            countdown(count) {
+                if((count > 0) && (!this.failed)) {
+                    let _this = this;
+                    setTimeout(function() {
+                        // console.log('sec left- '+ count);
+                        _this.reduceCountdown();
+                    } , 1000);
+                }
+                else {
+                    this.expired = true;
+                    this.setFailed(true);
+                }
+            },
+            showForm(flag) {
+                if(flag) {
+                    console.log('Starting countdown');
+                    this.reduceCountdown();
+                }
             }
         },
         data() {
             return {
                 last4: '',
                 success: false,
-                customerName: ''
+                customerName: '',
+                expired: false
             };
         },
         computed: {
@@ -54,7 +76,8 @@
                 errorMsg: 'oneClickManager/errorMsg',
                 failed: 'oneClickManager/failed',
                 allowResets: 'oneClickManager/allowResets',
-                oneClickResults: 'oneClickManager/oneClickResults'
+                oneClickResults: 'oneClickManager/oneClickResults',
+                countdown: 'oneClickManager/countdown'
             }),
             getClickDataPhone() {
                 if((this.oneClickData !== undefined) && ('phone' in this.oneClickData)) {
@@ -72,10 +95,12 @@
             ...mapActions({
                 toggle: 'oneClickManager/toggleOneClickMode',
                 submit: 'oneClickManager/submitCheckoutCode',
-                resetForm: 'oneClickManager/resendCheckoutCode'
+                resetForm: 'oneClickManager/resendCheckoutCode',
             }),
             ...mapMutations({
-                setClickData: 'oneClickManager/clickData'
+                setClickData: 'oneClickManager/clickData',
+                reduceCountdown: 'oneClickManager/reduceCountdown',
+                setFailed: 'oneClickManager/failed'
             })
         }
     }

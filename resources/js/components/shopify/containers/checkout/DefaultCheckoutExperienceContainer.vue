@@ -7,18 +7,6 @@
         :prefill-data="billShipPreFill"
         @updated="updateCheckoutState"
     ></checkout-experience>
-
-    <!--
-    <checkout-experience
-        :has-timer="timerSegment"
-        :has-express-checkout="expressCheckout"
-        :line-items="items"
-        :disable-fields="loading"
-        :shipping-line="calculateShipping"
-        :pricing="pricing"
-        :tax="renderTax"
-    ></checkout-experience>
-    -->
 </template>
 
 <script>
@@ -67,66 +55,11 @@
                 this.billShipSame = false;
                 this.billShipPreFill = data;
             }
-            /*
-            leadLoading(flag) {
-                console.log('LeadLoading set to - '+flag)
-            },
-            leadUuid(uuid) {
-                console.log('LeadUuid set to - '+uuid);
-                this.setLeadUuid(uuid);
-            },
-            shippingValidated(flag) {
-                console.log('shippingValidated set to - '+flag)
-                if(flag) {
-                    this.updateBillingShipping()
-                }
-            },
-            billingValidated(flag) {
-                console.log('billingValidated set to - '+flag)
-                if(flag) {
-                    this.updateBillingShipping()
-                }
-            },
-            purchaseSubtotal(amt) {
-                console.log('subTotal set to - '+amt);
-                this.pricing.subTotal = amt;
-            },
-            total(amt) {
-                console.log('total set to - '+amt);
-                this.pricing.total = amt;
-            },
-            taxLine(lines) {
-                console.log('Incoming tax line(s) - ', lines);
-
-                this.setTotalTax(lines.total);
-                this.updateTotal();
-            },
-            shippingLine(lines) {
-                console.log('Incoming shipping line(s) - ', lines);
-                this.initShipping(lines);
-            },
-
-            shipping(price) {
-                console.log('Active shipping price set to - $'+price);
-                this.setPriceShip(price);
-                this.setShowShipping(true);
-                this.updateTotal();
-            },
-            */
         },
         data() {
             return {
                 billShipSame: true,
                 billShipPreFill: ''
-                /*
-                timerSegment: false,
-                expressCheckout: false,
-                pricing: {
-                    subTotal: 10.00,
-                    total: 0.00
-                },
-                tax: []
-                */
             };
         },
         computed: {
@@ -146,80 +79,6 @@
                 oneClickData: 'leadManager/oneClickData',
                 oneClickResults: 'oneClickManager/oneClickResults'
             }),
-            /*
-            ...mapState({
-                email: 'email',
-                cart: 'cart',
-                globalLoading: 'loading',
-            }),
-            ...mapGetters({
-                shippingAmt: 'shippingAmt',
-                getSubTotal: 'getSubTotal'
-            }),
-            ...mapState('leadManager', {
-                leadLoading: 'loading',
-                leadUuid: 'leadUuid',
-                shippingValidated: 'shippingValidated',
-                billingValidated: 'billingValidated',
-                taxLine: 'taxLine',
-                shippingLine: 'shippingLine',
-                shippingReady: 'shippingReady',
-                showShipping: 'showShipping'
-            }),
-            ...mapState('priceCalc', {
-                purchaseSubtotal: 'subtotal',
-                total: 'total'
-            }),
-            ...mapState('shipping', {
-                shipping: 'shipping',
-            }),
-            loading() {
-                let results = false;
-
-                if(this.globalLoading) {
-                    results = true;
-                }
-                else {
-                    results = (
-                        this.leadLoading == true
-                    );
-                }
-
-                return results;
-            },
-            renderTax() {
-                let results = `<small>Shipping Address Required</small>`;
-
-                if(this.taxLine !== '') {
-                    if(this.taxLine['tax_lines'].length == 0) {
-                        results = `$${this.taxLine.total}`
-                    }
-                    else
-                    {
-                        results = this.taxLine
-                    }
-                }
-
-                return results;
-            },
-            calculateShipping() {
-                let results = `<small>Shipping Address Required</small>`;
-
-                if(this.shippingReady === true) {
-                    //results = `<small>Select Shipping Option.</small>`;
-                    results = `<small>Loading Shipping Rates... <i class="fad fa-spinner-third fa-spin"></i></small>`;
-
-                    if(this.showShipping) {
-                        results = this.shipping;
-                    }
-                }
-                else if(this.shippingReady === -1) {
-                    let results = `<small>Error</small>`;
-                }
-
-                return results;
-            },
-            */
         },
         methods: {
             ...mapMutations({
@@ -324,7 +183,7 @@
             this.initCart(this.items);
             this.setShippingMethods(this.shippingMethods)
 
-            setTimeout(() => this.setLoading(false), 1500);
+            setTimeout(() => this.setLoading(false), 1250);
             console.log('DefaultCheckoutExperienceContainer mounted!', this.items);
         }
     }

@@ -39,4 +39,32 @@ class Phones extends Model
         'merchant_uuid' => 'uuid',
         'client_uuid' => 'uuid',
     ];
+
+    public function loadNumber($number)
+    {
+        $results = false;
+
+        $record = $this->wherePhone($number)->first();
+
+        if(!is_null($record))
+        {
+            $results = $record;
+        }
+
+        return $results;
+    }
+
+    public function addNumber($number)
+    {
+        $results = false;
+
+        $model = new $this;
+        $model->phone = $number;
+        if($model->save())
+        {
+            $results = $model;
+        }
+
+        return $results;
+    }
 }

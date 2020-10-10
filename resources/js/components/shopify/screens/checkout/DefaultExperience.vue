@@ -1,5 +1,5 @@
 <template>
-<div class="row payment-section">
+<div class="row payment-section" :style="paymentSectionHeight">
     <div class="inner-payment-section loading" v-if="loading">
         <div class="loading-piece" v-if="loading">
             <div class="inner-loading-piece">
@@ -757,6 +757,17 @@
             };
         },
         computed: {
+            paymentSectionHeight() {
+                if(this.loading) {
+                    return {'--pHeight': '100%', '--mHeight': '85%'}
+                }
+                else if(this.showOneClick) {
+                    return {'--pHeight': '80%', '--mHeight': '85%'}
+                }
+                else {
+                    return {'--pHeight': 'auto', '--mHeight': 'auto'}
+                }
+            },
             typeOfTax() {
                 if(typeof this.tax === 'string') {
                     return 'string';
@@ -1212,6 +1223,9 @@
     }
 
     @media screen and (max-width: 999px) {
+        .payment-section {
+            height: var(--mHeight);
+        }
         .inner-payment-section {
             flex-flow: column;
             margin-top: 2.5%;
@@ -1264,8 +1278,7 @@
 
     @media screen and (min-width: 1000px) {
         .payment-section {
-            /*height: auto;
-            min-height: 75%;*/
+            height: var(--pHeight);
         }
 
         .inner-payment-section {
@@ -1280,7 +1293,13 @@
 
         .inner-payment-section .loading-piece {
             height: 100%;
-            margin: 25% 0;
+        }
+
+        .inner-payment-section.loading .inner-loading-piece {
+            display: flex;
+            flex-flow: column;
+            justify-content: center;
+            height: 100%;
         }
 
         .order-form-column {
