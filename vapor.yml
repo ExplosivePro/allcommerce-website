@@ -12,8 +12,10 @@ environments:
     queue-timeout: 600
     timeout: 120
     runtime: php-7.4
+    queue-concurrency: 1
     queues:
         - allcommerce-production-emails
+        - allcommerce-production-events
     build:
         - 'composer install --no-dev --no-interaction'
         - 'php artisan event:cache'
@@ -32,8 +34,10 @@ environments:
     queue-timeout: 600
     timeout: 120
     runtime: php-7.4
+    queue-concurrency: 1
     queues:
       - allcommerce-staging-emails
+      - allcommerce-staging-events
     build:
         - 'composer install --no-dev --no-interaction'
         - 'php artisan event:cache'
@@ -50,8 +54,10 @@ environments:
     database-user: acuser
     gateway-version: 2
     runtime: php-7.4
+    queue-concurrency: 1
     queues:
       - allcommerce-develop-emails
+      - allcommerce-develop-events
     build:
         - 'composer install'
         - 'php artisan event:cache'
