@@ -80,6 +80,9 @@ class LeadsAPIController extends Controller
                     catch(\Exception $e) {
                         // @todo - fire an email that 1-click crashed somewhere!
                         // @todo - or a high priority sentry thang
+                        activity('one-click-check-failed')
+                            ->withProperties($data)
+                            ->log($e->getMessage());
 
                         // Return the lead that was created anyway!
                         if(array_key_exists('one_click', $results))
