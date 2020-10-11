@@ -34,23 +34,21 @@ export default new Vuetify(opts);
 
 Vue.component('role-ability-assign', require('./components/containers/RoleAbilitySelectContainer.vue').default);
 Vue.component('user-client-role-ability-assign', require('./components/containers/UserClientRoleAbilitySelectContainer.vue').default);
-Vue.component('push-notifications', require('./components/containers/PushNotificationsContainer.vue').default);
 Vue.component('main-dashboard', require('./components/containers/dashboards/DefaultDashboardContainer.vue').default);
 Vue.component('shop-dashboard', require('./components/containers/dashboards/ShopDashboardContainer.vue').default);
 
 Vue.component('aside-bar', require('./components/containers/asidebar/AsideBarContainer.vue').default);
 Vue.component('aside-context-tab', require('./components/containers/asidebar/ContextTabContainer.vue').default);
 
-Vue.component('kpi-report', require('./components/containers/reports/kpi-sales/KPISalesWidgetContainer.vue').default);
-Vue.component('kpi-full-report', require('./components/containers/reports/kpi-sales/KPIReportContainer.vue').default);
-Vue.component('kpi-aside-context', require('./components/containers/reports/kpi-sales/KPIReportAsideBarContainer.vue').default);
-Vue.component('kpi-report-roi-fb', require('./components/containers/widgets/kpi-sales/FacebookROIWidgetContainer.vue').default);
-Vue.component('kpi-report-roi-google', require('./components/containers/widgets/kpi-sales/GoogleROIWidgetContainer.vue').default);
+
 Vue.component('mega-button-card', require('./components/containers/widgets/mega-button/MegaButtonContainer.vue').default);
-Vue.component('mailchimp-klip', require('./components/containers/widgets/mailchimp/MailchimpWidgetContainer.vue').default);
 Vue.component('default-left-widget', require('./components/containers/widgets/default/defaultLeftContainer.vue').default);
 Vue.component('default-right-widget', require('./components/containers/widgets/default/defaultRightContainer.vue').default);
 Vue.component('default-top-widget', require('./components/containers/widgets/default/defaultTopContainer.vue').default);
+
+Vue.component('sms-manager', require('./components/containers/managers/sms/SMSManagerContainer.vue').default);
+Vue.component('manager-tabbed-links', require('./components/containers/managers/tabbedLinks/ManagerTabbledLinksContainer.vue').default);
+
 
 
 //Vue.component('checkbox-grid', require('./components/presenters/CheckboxGridComponent.vue').default);

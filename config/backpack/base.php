@@ -12,11 +12,12 @@ return [
     */
 
     // Project name. Shown in the breadcrumbs and a few other places.
-    'project_name' => 'AnchorCMS',
+    'project_name' => 'AllCommerce',
 
     // Menu logos
     'logo_lg'   => '<p>AllCommerce</p>',
-    'logo_mini' => '<img src="/img/icon.png" style="width: 50%;">',
+    'logo_mini' => '<p>AllCommerce</p>',
+    //'logo_mini' => '<img src="/img/icon.png" style="width: 50%;">',
 
     // Developer or company name. Shown in footer.
     'developer_name' => 'Cape & Bay',

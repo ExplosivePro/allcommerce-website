@@ -64,4 +64,9 @@ class Clients extends Model
     {
         return $this->hasMany('AnchorCMS\Features', 'client_id', 'id');
     }
+
+    public function merchants()
+    {
+        return $this->hasMany('AnchorCMS\Merchants', 'client_id', 'id');
+    }
 }

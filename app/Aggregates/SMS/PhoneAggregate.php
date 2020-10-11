@@ -31,7 +31,8 @@ class PhoneAggregate extends AggregateRoot
 
     public function logPhoneRecord($phone, $shop)
     {
-        $this->recordThat(new PhoneNumberLogged($phone, $shop));
+        $logged = date('Y-m-d H:i:s', strtotime('now'));
+        $this->recordThat(new PhoneNumberLogged($phone, $shop, $logged));
 
         return $this;
     }
@@ -83,7 +84,8 @@ class PhoneAggregate extends AggregateRoot
         // see if we've reached a shop, client or 24_hour limit
         if($this->phoneNumberHasDailyAttemptsLeft())
         {
-            $this->recordThat(new PhoneNumberTexted($phone, $shop));
+            $logged = date('Y-m-d H:i:s', strtotime('now'));
+            $this->recordThat(new PhoneNumberTexted($phone, $shop, $logged));
             $this->persist();
         }
         else
@@ -131,18 +133,17 @@ class PhoneAggregate extends AggregateRoot
         }
     }
 
-
     public function applyPhoneNumberTexted(PhoneNumberTexted $event)
     {
-        $now_minus_24 = date('Y-m-d h:i:s', strtotime('now -24 HOUR'));
-        $now = date('Y-m-d h:i:s', strtotime('now'));
+        $now_minus_24 = date('Y-m-d H:i:s', strtotime('now -24 HOUR'));
+        $now = date('Y-m-d H:i:s', strtotime('now'));
 
         $this->total_attempts++;
 
         $shop = Shops::find($event->getShop()['id']);
 
         $this->times_attempted[] = [
-            'time' => $now,
+            'time' => $event->getTimeLogged(),
             'shop' => $shop->id,
             'client' => $shop->client_id
         ];

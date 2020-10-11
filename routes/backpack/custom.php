@@ -35,24 +35,23 @@ Route::group([
         });
     });
 
-    Route::group(['prefix' => 'reports'], function () {
-        Route::get('/{client_id}/kpi', 'API\Reports\KPIReportsAPIController@get_report');
-        Route::get('/{client_id}/mailchimp/engage', 'API\Reports\MailchimpAPIController@get_engagement_report');
-    });
-
     Route::group(['prefix' => 'reporting'], function () {
-        Route::get('/kpi', 'Admin\Reporting\KPIReportingController@index');
-        Route::get('/mailchimp', 'Admin\Reporting\MailchimpReportingController@index');
+
     });
 
-    Route::get('/abilities', 'Admin\InternalAdminJSONController@abilities');
-    Route::get('/abilities/{role}', 'Admin\InternalAdminJSONController@role_abilities');
-    Route::get('/roles/{client_id}', 'Admin\InternalAdminJSONController@client_roles');
-
-    Route::group(['prefix' => 'push-notifications'], function () {
-        Route::get('/', 'Admin\PushNotificationsController@index');
+    Route::group(['prefix' => 'abilities'], function () {
+        Route::get('/', 'Admin\InternalAdminJSONController@abilities');
+        Route::get('/{role}', 'Admin\InternalAdminJSONController@role_abilities');
     });
 
+    Route::group(['prefix' => 'roles'], function () {
+        Route::get('/{client_id}', 'Admin\InternalAdminJSONController@client_roles');
+    });
+
+    Route::group(['prefix' => 'sms-manager'], function () {
+        Route::get('/', 'Admin\SMS\SMSManagementController@index');
+        Route::post('/tabbed-links', 'Admin\Manager\TabbedLinkController@index');
+    });
 
     CRUD::resource('manage-merchants', 'Admin\MerchantsCrudController');
     CRUD::resource('manage-shops', 'Admin\ShopsCrudController');

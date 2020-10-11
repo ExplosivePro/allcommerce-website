@@ -12,7 +12,7 @@
 <link rel="apple-touch-icon-precomposed" href="{!! asset('/img/icon.png') !!}">
 
 <title>
-  {{ isset($title) ? $title.' :: '.config('backpack.base.project_name').' Admin' : config('backpack.base.project_name').' Admin' }}
+  {{ isset($title) ? $title.' :: '.env('APP_NAME').' Admin' : env('APP_NAME').' Admin' }}
 </title>
 
 <link rel="stylesheet" href="{!! mix('css/app.css') !!}"/>

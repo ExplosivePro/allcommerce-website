@@ -88,4 +88,44 @@ class Controller extends BaseController
 
         return $results;
     }
+
+    public function getClientToUse()
+    {
+        $client = $this->clients->find(backpack_user()->client_id);
+
+        if(backpack_user()->isHostUser())
+        {
+            if(session()->has('active_client'))
+            {
+                $client = $this->clients->find(session()->get('active_client'));
+            }
+        }
+
+        return $client;
+    }
+
+    public function merchantToUse()
+    {
+        $merchant = null;
+
+        if(session()->has('active_merchant'))
+        {
+            $client = $this->clients->find(session()->get('active_client'));
+            $merchant = $client->merchants()->whereId(session()->get('active_merchant'))->first();
+        }
+
+        return $merchant;
+    }
+
+    public function shopToUse()
+    {
+        $shop = null;
+
+        if(session()->has('active_client'))
+        {
+            $client = $this->clients->find(session()->get('active_client'));
+        }
+
+        return $shop;
+    }
 }

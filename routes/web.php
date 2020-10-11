@@ -53,6 +53,11 @@ Route::get('/switch/{client_id}', function ($client_id) {
             }
         }
     }
+    else
+    {
+        session()->forget('active_merchant');
+    }
+
     return redirect(url()->previous());
 });
 

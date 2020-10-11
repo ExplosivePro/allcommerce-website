@@ -20,17 +20,19 @@ class PhoneNumberTexted extends ShouldBeStored
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    private $phone, $shop;
+    private $phone, $shop, $timeLogged;
     /**
      * Create a new event instance.
-     * @param $phone
-     * @param $shop
+     * @param Phones $phone
+     * @param Shops $shop
+     * @param string $timeLogged
      * @return void
      */
-    public function __construct(Phones $phone, Shops $shop)
+    public function __construct(Phones $phone, Shops $shop, string $timeLogged)
     {
         $this->phone = $phone;
         $this->shop = $shop;
+        $this->timeLogged = $timeLogged;
     }
 
     /**
@@ -51,5 +53,10 @@ class PhoneNumberTexted extends ShouldBeStored
     public function getShop()
     {
         return $this->shop;
+    }
+
+    public function getTimeLogged()
+    {
+        return $this->timeLogged;
     }
 }

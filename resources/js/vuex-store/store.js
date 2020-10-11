@@ -5,6 +5,7 @@ import dashboard from './dashboard';
 import shopDash from './shop-dashboard';
 import kpi from './kpi';
 import asidebar from "./asidebar/asidebar";
+import smsManager from "./managerModules/smsManager";
 
 Vue.use(Vuex);
 
@@ -13,7 +14,8 @@ export default new Vuex.Store({
         asidebar,
         dashboard,
         kpi,
-        shopDash
+        shopDash,
+        smsManager
     },
     state: {
         count: 2

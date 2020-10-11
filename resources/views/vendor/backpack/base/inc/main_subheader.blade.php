@@ -3,12 +3,25 @@
     <ol class="breadcrumb border-0 m-0 px-0 px-md-3">
         <li class="breadcrumb-item">AnchorCMS</li>
         <!-- this is the Active Client -->
-        <li class="breadcrumb-item"><a href="/access/dashboard">{!! backpack_user()->getActiveClient() !!}</a></li>
+        @switch(request()->route()->uri())
+            @case('access/sms-manager')
+            <li class="breadcrumb-item"><a href="/switch/{!! $client->id !!}">{!! backpack_user()->getActiveClient() !!}</a></li>
+            @break
+
+            @default
+            <li class="breadcrumb-item"><a href="/access/dashboard">{!! backpack_user()->getActiveClient() !!}</a></li>
+        @endswitch
 
         <!-- the bread crumb loop  -->
         @switch(request()->route()->uri())
             @case('access/dashboard')
             <li class="breadcrumb-item active">Dashboard</li>
+            @break
+
+            @case('access/sms-manager')
+            @if(!is_null($merchant))<li class="breadcrumb-item"><a class="text-capitalize">{{ $merchant->name }}</a></li>@endif
+
+            <li class="breadcrumb-item active">SMS Manager</li>
             @break
 
             @case('access/shop/dashboard')
