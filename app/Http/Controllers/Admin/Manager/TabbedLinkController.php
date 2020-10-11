@@ -43,6 +43,7 @@ class TabbedLinkController extends Controller
                 break;
 
             case 'payment-gateways':
+            case 'paymentGateways':
                 $results['links'] = [
                     [
                         'title' => 'SMS Manager',

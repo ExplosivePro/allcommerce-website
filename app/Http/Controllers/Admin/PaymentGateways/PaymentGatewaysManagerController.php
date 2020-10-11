@@ -1,12 +1,12 @@
 <?php
 
-namespace AnchorCMS\Http\Controllers\Admin\SMS;
+namespace AnchorCMS\Http\Controllers\Admin\PaymentGateways;
 
 use AnchorCMS\Clients;
 use Illuminate\Http\Request;
 use AnchorCMS\Http\Controllers\Controller;
 
-class SMSManagementController extends Controller
+class PaymentGatewaysManagerController extends Controller
 {
     protected $request, $clients;
 
@@ -19,25 +19,18 @@ class SMSManagementController extends Controller
     public function index()
     {
         $args = [
-            'page' => 'sms-manager',
-            //'sidebar_menu' => $this->menu_options()->getOptions('sms-manager')
-            /*'components' => [
-                'dashboard' => [
-                    'layout' => 'default',
-                    'args' => []
-                ]
-            ] */
+            'page' => 'payment-gateways',
         ];
 
         $args['client'] = $this->getClientToUse();
         $args['merchant'] = $this->merchantToUse();
 
         $args['title'] = (!is_null($args['merchant']))
-            ? $args['merchant']->name.' | SMS Manager'
-            : $args['client']->name.' | SMS Manager'
+            ? $args['merchant']->name.' | Payment Gateways'
+            : $args['client']->name.' | Payment Gateways'
         ;
 
-        $blade = 'allcommerce.features.sms.sms-index';
+        $blade = 'allcommerce.features.payment-gateways.pg-index';
 
         return view($blade, $args);
     }

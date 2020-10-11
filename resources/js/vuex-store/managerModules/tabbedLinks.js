@@ -40,6 +40,10 @@ const tabbedLinks = {
                 case 'sms':
                     results = 'sms-manager';
                     break;
+
+                case 'paymentGateways':
+                    results = 'payment-gateways';
+                    break;
             }
 
             return results;

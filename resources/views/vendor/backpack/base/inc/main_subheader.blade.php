@@ -5,6 +5,7 @@
         <!-- this is the Active Client -->
         @switch(request()->route()->uri())
             @case('access/sms-manager')
+            @case('access/payment-gateways')
             <li class="breadcrumb-item"><a href="/switch/{!! $client->id !!}">{!! backpack_user()->getActiveClient() !!}</a></li>
             @break
 
@@ -22,6 +23,12 @@
             @if(!is_null($merchant))<li class="breadcrumb-item"><a class="text-capitalize">{{ $merchant->name }}</a></li>@endif
 
             <li class="breadcrumb-item active">SMS Manager</li>
+            @break
+
+            @case('access/payment-gateways')
+            @if(!is_null($merchant))<li class="breadcrumb-item"><a class="text-capitalize">{{ $merchant->name }}</a></li>@endif
+
+            <li class="breadcrumb-item active">Payment Gateways Manager</li>
             @break
 
             @case('access/shop/dashboard')

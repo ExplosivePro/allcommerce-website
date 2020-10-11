@@ -45,8 +45,10 @@ export default {
     },
     methods: {
         ...mapActions({
-            initLinks: 'smsManager/fetchTabbedLinks'
-        })
+            initLinks (dispatch) {
+                dispatch(this.type+'/fetchTabbedLinks');
+            }
+        }),
     },
     mounted() {
         this.initLinks();

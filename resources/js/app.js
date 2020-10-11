@@ -47,6 +47,7 @@ Vue.component('default-right-widget', require('./components/containers/widgets/d
 Vue.component('default-top-widget', require('./components/containers/widgets/default/defaultTopContainer.vue').default);
 
 Vue.component('sms-manager', require('./components/containers/managers/sms/SMSManagerContainer.vue').default);
+Vue.component('payment-gateway-manager', require('./components/containers/managers/paymentGateways/PGManagerContainer.vue').default);
 Vue.component('manager-tabbed-links', require('./components/containers/managers/tabbedLinks/ManagerTabbledLinksContainer.vue').default);
 
 

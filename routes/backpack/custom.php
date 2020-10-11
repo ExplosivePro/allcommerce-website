@@ -53,6 +53,11 @@ Route::group([
         Route::post('/tabbed-links', 'Admin\Manager\TabbedLinkController@index');
     });
 
+    Route::group(['prefix' => 'payment-gateways'], function () {
+        Route::get('/', 'Admin\PaymentGateways\PaymentGatewaysManagerController@index');
+        Route::post('/tabbed-links', 'Admin\Manager\TabbedLinkController@index');
+    });
+
     CRUD::resource('manage-merchants', 'Admin\MerchantsCrudController');
     CRUD::resource('manage-shops', 'Admin\ShopsCrudController');
 
