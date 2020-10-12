@@ -15,10 +15,6 @@
                 height: 10%;
             }
 
-            .content {
-                height: 85%;
-            }
-
             .small-h1 {
                 padding-left: 1em;
                 font-size: 35% !important;
@@ -34,6 +30,25 @@
 
             .box {
                 height: 100%;
+            }
+        }
+
+        @media screen and (max-width: 999px) {
+
+            .content-header {
+                display: flex;
+                flex-flow: column;
+                height: 5%;
+            }
+
+            .content {
+                height: 82.5%;
+            }
+        }
+
+        @media screen and (min-width: 1000px) {
+            .content {
+                height: 85%;
             }
         }
     </style>

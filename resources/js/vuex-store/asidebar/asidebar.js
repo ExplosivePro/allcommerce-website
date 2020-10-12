@@ -24,7 +24,7 @@ const asidebar = {
     },
     actions: {
         setContextTabActiveComponent(context, tab) {
-            console.log('setContentTabActiveComponent context', context);
+            //console.log('setContentTabActiveComponent context', context);
             console.log('setContentTabActiveComponent tab', tab);
 
             context.commit('contextTab/setActiveTab', tab);

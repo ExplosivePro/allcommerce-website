@@ -1,5 +1,5 @@
 <template>
-    <div class="sms-manager">
+    <div class="sms-manager" :style="height">
         <div class="inner-sms-manager">
             <div class="tabbed-linked-section">
                 <div class="inner-tabbed-linked-section">
@@ -34,7 +34,7 @@
             MerchantManager,
             TabbedLinks
         },
-        props: ['viewMode'],
+        props: ['viewMode', 'height'],
         data() {
             return {
                 toggleErrorAnimation: false
@@ -62,7 +62,7 @@
 <style scoped>
     @media screen {
     .sms-manager {
-        height: 100%;
+        /* height: 100%; */
         width: 100%;
     }
 
@@ -70,10 +70,13 @@
         height: 100%;
         display: flex;
         flex-flow: column;
+        justify-content: center;
+        align-items: center;
     }
 
     .tabbed-linked-section {
         height: 7.5%;
+        width: 100%;
         border-top-left-radius: 0.25em;
         border-top-right-radius: 0.25em;
         background-color: #fff;
@@ -95,6 +98,7 @@
 
     .view-mode-section {
         height: 92.5%;
+        width: 100%;
         background-color: #3c4b64;
     }
 
@@ -106,7 +110,7 @@
         height: 100%;
         display: flex;
         flex-flow: column;
-        justify-content: center;
+        justify-content: flex-start;
         align-items: center;
     }
 
@@ -125,6 +129,10 @@
 }
 
     @media screen and (max-width: 999px) {
+        .sms-manager {
+            height: var(--msHeight);
+        }
+
         .inner-sms-manager {
             margin: 0 3%;
         }
@@ -145,6 +153,10 @@
     }
 
     @media screen and (min-width: 1000px) {
+        .sms-manager {
+            height: var(--sHeight);
+        }
+
         .inner-view-mode-error i {
             font-size: 5em;
 

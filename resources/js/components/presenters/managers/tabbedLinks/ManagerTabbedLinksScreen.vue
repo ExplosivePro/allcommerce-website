@@ -19,7 +19,7 @@
                             </div>
                         </div>
                         <div class="inner-mobile-links">
-                            <select v-model="selectedLink">
+                            <select v-model="selectedLink" class="form-control">
                                 <option value="">Jump To</option>
                                 <option v-for="(link, idx) in links" :value="idx">{{ link.title }}</option>
                             </select>
@@ -80,8 +80,10 @@ export default {
 
         .link {
             border-radius: 2em;
-            width: 15%;
+            max-width: 25%;
+            min-width: 21%;
             margin-left: 1em;
+            padding: 0 1%
         }
 
         .link-label {
@@ -128,6 +130,7 @@ export default {
         .inner-mobile-links select {
             width: 100%;
             padding-left: 2.5%;
+            height: calc(0.6em + 0.75rem + 2px) !important;
         }
     }
 

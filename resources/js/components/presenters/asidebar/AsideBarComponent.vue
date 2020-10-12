@@ -145,5 +145,9 @@ export default {
 </script>
 
 <style scoped>
-
+    @media screen {
+        .c-dark-theme .c-sidebar-close.c-class-toggler i {
+            color: #fff;
+        }
+    }
 </style>

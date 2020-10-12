@@ -39,6 +39,7 @@ Vue.component('shop-dashboard', require('./components/containers/dashboards/Shop
 
 Vue.component('aside-bar', require('./components/containers/asidebar/AsideBarContainer.vue').default);
 Vue.component('aside-context-tab', require('./components/containers/asidebar/ContextTabContainer.vue').default);
+Vue.component('aside-sms-manager-context-tab', require('./components/containers/managers/asideBarModules/contextTab/SmsManagerContextTabContainer.vue').default);
 
 
 Vue.component('mega-button-card', require('./components/containers/widgets/mega-button/MegaButtonContainer.vue').default);
@@ -63,12 +64,59 @@ Vue.component('manager-tabbed-links', require('./components/containers/managers/
 import VuexStore from './vuex-store/store';
 window.store = VuexStore;
 
+import { mapActions } from 'vuex';
+
 new Vue({
     el: '#app',
     store,
+    watch: {
+        windowHeight(newHeight, oldHeight) {
+            console.log(`screen height changed to ${newHeight} from ${oldHeight}`);
+
+            let payload = {
+                height: newHeight,
+                width: this.windowWidth
+            };
+
+            this.setScreenSize(payload);
+        },
+        windowWidth(newWidth, oldWidth) {
+            console.log(`screen width changed to ${newWidth} from ${oldWidth}`);
+
+            let payload = {
+                height: this.windowHeight,
+                width: newWidth
+            };
+
+            this.setScreenSize(payload);
+        }
+    },
     data() {
         return {
-            themeColor: ''
+            themeColor: '',
+            windowHeight: window.innerHeight,
+            windowWidth: window.innerWidth
         };
+    },
+    methods: {
+        ...mapActions({
+            setScreenSize: 'setScreenSize'
+        }),
+        onResize() {
+            this.windowHeight = window.innerHeight;
+            this.windowWidth = window.innerWidth;
+        }
+    },
+    mounted() {
+        this.setScreenSize({
+            height: this.windowHeight,
+            width: this.windowWidth
+        });
+        this.$nextTick(() => {
+            window.addEventListener('resize', this.onResize);
+        });
+    },
+    beforeDestroy() {
+        window.removeEventListener('resize', this.onResize);
     }
 });

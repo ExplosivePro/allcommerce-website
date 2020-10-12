@@ -1,5 +1,5 @@
 <template>
-    <div class="payment-gateways">
+    <div class="payment-gateways" :style="height">
         <div class="inner-payment-gateways">
             <div class="tabbed-linked-section">
                 <div class="inner-tabbed-linked-section">
@@ -34,7 +34,7 @@
             MerchantManager,
             TabbedLinks
         },
-        props: ['viewMode'],
+        props: ['viewMode', 'height'],
         data() {
             return {
                 toggleErrorAnimation: false
@@ -59,10 +59,19 @@
     }
 </script>
 
+<style>
+    @media screen and (max-width: 999px) {
+        .content-header {
+            height: 4em !important;
+        }
+    }
+
+</style>
+
 <style scoped>
 @media screen {
     .payment-gateways {
-        height: 100%;
+        /* height: 100%; */
         width: 100%;
     }
 
@@ -70,10 +79,13 @@
         height: 100%;
         display: flex;
         flex-flow: column;
+        justify-content: center;
+        align-items: center;
     }
 
     .tabbed-linked-section {
         height: 7.5%;
+        width: 100%;
         border-top-left-radius: 0.25em;
         border-top-right-radius: 0.25em;
         background-color: #fff;
@@ -95,6 +107,7 @@
 
     .view-mode-section {
         height: 92.5%;
+        width: 100%;
         background-color: #3c4b64;
     }
 
@@ -125,6 +138,10 @@
 }
 
 @media screen and (max-width: 999px) {
+    .payment-gateways {
+        height: var(--msHeight);
+    }
+
     .inner-payment-gateways {
         margin: 0 3%;
     }

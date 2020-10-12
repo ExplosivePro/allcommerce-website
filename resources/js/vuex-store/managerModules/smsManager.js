@@ -11,11 +11,14 @@ const smsManager = {
     },
     state() {
         return {
-
+            clientContentView: 'providers'
         };
     },
     mutations: {
-
+        clientContentView(state, view) {
+            console.log('Mutating clientContentView to ' + view);
+            state.clientContentView = view;
+        }
     },
     getters: {
         tabbedLinksAreLoading(state) {
@@ -23,6 +26,10 @@ const smsManager = {
         },
         tabbedLinks(state) {
             return state.tabbedLinks.links;
+        },
+        getClientContentView(state) {
+            // @todo - do some validation so it returns a standard error if applicable
+            return state.clientContentView;
         }
     },
     actions: {

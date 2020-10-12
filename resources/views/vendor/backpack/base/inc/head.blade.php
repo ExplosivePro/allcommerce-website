@@ -64,6 +64,20 @@
     }
 
     @media screen and (max-width: 999px) {
+        .c-header-toggler.c-class-toggler.mfe-md-3 {
+            padding: 0;
+        }
+
+        .c-header-brand.a {
+            width: 25%;
+        }
+
+        .content-header h1 {
+            font-size: 1.25em !important;
+            margin: 0;
+            padding: 0;
+        }
+
         .content-header .small-h1 {
             font-size: 45%;
         }
