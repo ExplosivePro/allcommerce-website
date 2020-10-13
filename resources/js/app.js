@@ -40,6 +40,7 @@ Vue.component('shop-dashboard', require('./components/containers/dashboards/Shop
 Vue.component('aside-bar', require('./components/containers/asidebar/AsideBarContainer.vue').default);
 Vue.component('aside-context-tab', require('./components/containers/asidebar/ContextTabContainer.vue').default);
 Vue.component('aside-sms-manager-context-tab', require('./components/containers/managers/asideBarModules/contextTab/SmsManagerContextTabContainer.vue').default);
+Vue.component('aside-pg-manager-context-tab', require('./components/containers/managers/asideBarModules/contextTab/PgManagerContextTabContainer.vue').default);
 
 
 Vue.component('mega-button-card', require('./components/containers/widgets/mega-button/MegaButtonContainer.vue').default);

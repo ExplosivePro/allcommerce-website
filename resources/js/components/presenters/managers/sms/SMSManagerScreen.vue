@@ -62,7 +62,7 @@
 <style scoped>
     @media screen {
     .sms-manager {
-        /* height: 100%; */
+        height: 100%;
         width: 100%;
     }
 
@@ -130,7 +130,7 @@
 
     @media screen and (max-width: 999px) {
         .sms-manager {
-            height: var(--msHeight);
+            /*height: var(--msHeight);*/
         }
 
         .inner-sms-manager {
@@ -154,7 +154,7 @@
 
     @media screen and (min-width: 1000px) {
         .sms-manager {
-            height: var(--sHeight);
+            /*height: var(--sHeight);*/
         }
 
         .inner-view-mode-error i {

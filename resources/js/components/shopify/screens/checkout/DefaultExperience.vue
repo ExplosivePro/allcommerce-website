@@ -76,11 +76,11 @@
                                                 :options="stateDrops[shippingCountry]"
                                                 :placeholder="(shippingCountry === 'us') ? 'Select a State' : 'Select a Province'">
                                             </polaris-select>
-                                            <polaris-text-field v-model="shippingZip" placeholder="Postal Code" :error="(shippingZipError === '') ? false : shippingZipError"></polaris-text-field>
+                                            <polaris-text-field v-model="shippingZip" type="tel" placeholder="Postal Code" :error="(shippingZipError === '') ? false : shippingZipError" maxlength="5"></polaris-text-field>
                                         </polaris-form-layout-group>
 
                                         <polaris-form-layout-group>
-                                            <polaris-text-field v-model="shippingPhone" placeholder="Phone #" :error="(shippingPhoneError === '') ? false : shippingPhoneError"></polaris-text-field>
+                                            <polaris-text-field v-model="shippingPhone" placeholder="Phone #" type="tel" :error="(shippingPhoneError === '') ? false : shippingPhoneError"></polaris-text-field>
                                         </polaris-form-layout-group>
                                     </polaris-form-layout>
                                 </div>
@@ -135,11 +135,11 @@
                                                         :options="stateDrops[billingCountry]"
                                                         :placeholder="(billingCountry === 'us') ? 'Select a State' : 'Select a Province'">
                                                     </polaris-select>
-                                                    <polaris-text-field v-model="billingZip" placeholder="Postal Code" :error="(billingZipError === '') ? false : billingZipError"></polaris-text-field>
+                                                    <polaris-text-field v-model="billingZip" placeholder="Postal Code" :error="(billingZipError === '') ? false : billingZipError" type="tel"></polaris-text-field>
                                                 </polaris-form-layout-group>
 
                                                 <polaris-form-layout-group>
-                                                    <polaris-text-field v-model="billingPhone" placeholder="Phone #" :error="(billingPhoneError === '') ? false : billingPhoneError"></polaris-text-field>
+                                                    <polaris-text-field v-model="billingPhone" placeholder="Phone #" :error="(billingPhoneError === '') ? false : billingPhoneError" type="tel"></polaris-text-field>
                                                 </polaris-form-layout-group>
                                             </polaris-form-layout>
                                         </div>

@@ -18,14 +18,14 @@ export default {
     watch: {
         screenHeight(h) {
             console.log('Watching screenHeight update to ' +h);
-            this.contentHeight['--sHeight'] = h+'px';
+            this.contentHeight['--sHeight']  = this.desktopScreenHeight+'px';
             this.contentHeight['--msHeight'] = this.mobileScreenHeight+'px';
         }
     },
     data() {
         return {
             contentHeight: {
-                '--sHeight': this.screenHeight+'px',
+                '--sHeight': this.desktopScreenHeight+'px',
                 '--msHeight': this.mobileScreenHeight+'px',
             }
         };
@@ -44,6 +44,17 @@ export default {
 
             return h
         },
+        desktopScreenHeight() {
+            let h = (this.screenHeight * 0.675);
+
+            /*
+            if(h > 550) {
+                h = (this.screenHeight * 0.725);
+            }
+            */
+
+            return h
+        },
         viewMode() {
             let mode = 'client';
             if(this.merchant !== undefined) {
@@ -55,7 +66,7 @@ export default {
     },
     mounted() {
         this.contentHeight = {
-            '--sHeight': this.screenHeight+'px',
+            '--sHeight': this.desktopScreenHeight+'px',
             '--msHeight': this.mobileScreenHeight+'px',
         }
 

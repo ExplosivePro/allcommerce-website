@@ -1,5 +1,5 @@
 <template>
-    <div class="payment-gateways" :style="height">
+    <div class="payment-gateways">
         <div class="inner-payment-gateways">
             <div class="tabbed-linked-section">
                 <div class="inner-tabbed-linked-section">
@@ -71,7 +71,7 @@
 <style scoped>
 @media screen {
     .payment-gateways {
-        /* height: 100%; */
+        height: 100%;
         width: 100%;
     }
 
@@ -139,7 +139,7 @@
 
 @media screen and (max-width: 999px) {
     .payment-gateways {
-        height: var(--msHeight);
+        /*height: var(--msHeight);*/
     }
 
     .inner-payment-gateways {

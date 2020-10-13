@@ -7,7 +7,6 @@
 
 <script>
 import SmsManagerScreen from "../../../presenters/managers/sms/SMSManagerScreen";
-
 import { mapGetters } from 'vuex';
 
 export default {
