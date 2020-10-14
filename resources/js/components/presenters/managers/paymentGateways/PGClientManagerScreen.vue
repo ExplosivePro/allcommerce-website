@@ -221,8 +221,6 @@ export default {
     .description-segment, .list-segment {
         width: 100%;
     }
-
-
 }
 
 @media screen and (max-width: 999px) {
@@ -231,7 +229,7 @@ export default {
     }
 
     .inner-description-segment {
-        margin: 0 5% 5%;
+        margin: 2.5%;
     }
 
     .inner-description-segment p {
@@ -240,6 +238,12 @@ export default {
 
     .inner-list-segment {
         margin: 0 1% 5%;
+    }
+
+    .inner-list-segment h2 {
+        font-size: 1.25em;
+        font-weight: 600;
+        text-transform: uppercase;
     }
 
     .inner-render-form .form-control {
@@ -270,7 +274,7 @@ export default {
     }
 
     .inner-description-segment {
-        margin: 0 5% 2.5%;
+        margin: 2.5%;
     }
 
     .inner-description-segment p {
@@ -279,6 +283,12 @@ export default {
 
     .inner-list-segment {
         margin: 0 5% 2.5%;
+    }
+
+    .inner-list-segment h2 {
+        font-size: 1.25em;
+        font-weight: 600;
+        text-transform: uppercase;
     }
 
     @media screen and (min-width: 1280px) {

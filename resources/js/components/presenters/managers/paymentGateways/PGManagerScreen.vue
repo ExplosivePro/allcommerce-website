@@ -84,7 +84,7 @@
     }
 
     .tabbed-linked-section {
-        height: 7.5%;
+        height: 5%;
         width: 100%;
         border-top-left-radius: 0.25em;
         border-top-right-radius: 0.25em;
