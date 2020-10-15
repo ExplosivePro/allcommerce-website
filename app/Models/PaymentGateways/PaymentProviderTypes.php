@@ -40,14 +40,17 @@ class PaymentProviderTypes extends Model
 
     public function payment_gateways()
     {
-        return $this->hasMany('AnchorCMS\Models\PaymentGateways\PaymentProviders', 'provider_type', 'id');
+        return $this->hasMany('AnchorCMS\Models\PaymentGateways\PaymentProviders', 'provider_type', 'id')
+            ->with('gateway_attributes');
     }
 
     public function getAllCreditGateways()
     {
         $results = [];
 
-        $type = $this->whereSlug('credit')->with('payment_gateways')->first();
+        $type = $this->whereSlug('credit')
+            ->with('payment_gateways')
+            ->first();
 
         if((!is_null($type)) && (count($type->payment_gateways) > 0))
         {

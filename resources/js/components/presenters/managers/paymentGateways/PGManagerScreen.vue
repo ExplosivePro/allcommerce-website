@@ -85,7 +85,6 @@
     }
 
     .tabbed-linked-section {
-        height: 5%;
         width: 100%;
         border-top-left-radius: 0.25em;
         border-top-right-radius: 0.25em;
@@ -107,7 +106,7 @@
     }
 
     .view-mode-section {
-        height: 92.5%;
+        height: 100%;
         width: 100%;
         background-color: #3c4b64;
     }
@@ -139,6 +138,10 @@
 }
 
 @media screen and (max-width: 999px) {
+    .tabbed-linked-section {
+        height: 3em;
+    }
+
     .payment-gateways {
         /*height: var(--msHeight);*/
     }
@@ -163,6 +166,10 @@
 }
 
 @media screen and (min-width: 1000px) {
+    .tabbed-linked-section {
+        height: 3em;
+    }
+
     .inner-view-mode-error i {
         font-size: 5em;
 

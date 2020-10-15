@@ -43,4 +43,9 @@ class PaymentProviders extends Model
     {
         return $this->hasOne('AnchorCMS\Models\PaymentGateways\PaymentProviderTypes', 'id', 'provider_type');
     }
+
+    public function gateway_attributes()
+    {
+        return $this->hasMany('AnchorCMS\Models\PaymentGateways\PaymentProviderAttributes', 'provider_id', 'id');
+    }
 }

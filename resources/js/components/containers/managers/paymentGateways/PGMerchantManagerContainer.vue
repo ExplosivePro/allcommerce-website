@@ -1,8 +1,8 @@
 <template>
     <manager-screen
         :shops="getMerchantShops"
-        @shop-triggered=""
         :gateways="availableProviders"
+        @shop-triggered=""
     ></manager-screen>
 </template>
 

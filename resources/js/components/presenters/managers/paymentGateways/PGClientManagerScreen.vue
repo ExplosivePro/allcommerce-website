@@ -88,10 +88,13 @@
                                         <tbody>
                                         <tr v-for="(provider, idx) in providers">
                                             <td v-for="(val, col) in provider" :scope="(col === 'title') ? 'row' : ''" v-if="(col !== 'disabled') && (provider.type === 'Installment Pay')">{{ val }}</td>
-                                            <td v-if="(provider.type === 'Installment Pay')"><button type="button"
-                                                                                                 class="btn "
-                                                                                                 :class="(provider.status === 'Enabled') ? 'btn-info' : 'btn-primary'"
-                                                                                                 @click="iClickedTheButton(provider.status, idx)" :disabled="provider.disabled">{{ (provider.status === 'Enabled') ? 'Manage' : 'Set Up' }}</button></td>
+                                            <td v-if="(provider.type === 'Installment Pay')">
+                                                <button type="button"
+                                                        class="btn "
+                                                        :class="(provider.status === 'Enabled') ? 'btn-info' : 'btn-primary'"
+                                                        @click="iClickedTheButton(provider.status, idx)" :disabled="provider.disabled">{{ (provider.status === 'Enabled') ? 'Manage' : 'Set Up' }}
+                                                </button>
+                                            </td>
                                         </tr>
                                         </tbody>
                                     </table>

@@ -52,6 +52,7 @@
                                     <h1>Manage Gateways for {{ shops[activeShop].name }}</h1>
                                 </div>
                             </div>
+
                             <div class="card-type-row" v-for="(typeData, idx) in gatewayTypes">
                                 <div class="inner-card-type-row">
                                     <div class="card-type-title-piece">
@@ -65,16 +66,14 @@
                                             <div class="card" style="width: 18rem;" v-for="(gate, idx) in gateways[typeData.slug]">
                                                 <div class="card-body">
                                                     <h5 class="card-title">{{ gate.name }}</h5>
-                                                    <p class="card-text">Quick sample text to create the card title and make up the body of the card's content.</p>
+                                                    <p class="card-text" v-for="(attrs, idy) in gate['gateway_attributes']" v-if="attrs.value === 'desc'">{{ attrs.misc[0] }}</p>
                                                 </div>
-                                                <ul class="list-group list-group-flush">
-                                                    <li class="list-group-item">Cras justo odio</li>
-                                                    <li class="list-group-item">Dapibus ac facilisis in</li>
-                                                    <li class="list-group-item">Vestibulum at eros</li>
+                                                <ul class="list-group list-group-flush" style="text-align: center;">
+                                                    <li class="list-group-item">{{ setShopStatus(gateways[typeData.slug][idx]) }}</li>
                                                 </ul>
-                                                <div class="card-body">
-                                                    <a href="#" class="card-link">Card link</a>
-                                                    <a href="#" class="card-link">Another link</a>
+                                                <div class="card-body" style="text-align: center;">
+                                                    <a href="#" class="card-link" @click="toggleGatewayAssign(gateways[typeData.slug][idx])" v-if="!setGatewayDisabled(gateways[typeData.slug][idx])">{{ setAssignLinkText(gateways[typeData.slug][idx]) }}</a>
+                                                    <p class="card-link" v-else>Not Available</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -122,8 +121,88 @@ export default {
             activeShop: ''
         };
     },
-    computed: {},
+    computed: {
+        isDryRunEnabled() {
+            let results = false;
+
+            let enabled_credit = this.shops[this.activeShop]['curated_payment_gateways']['credit'];
+            for(let x in enabled_credit) {
+
+                // if gateway is not dry run, but shop has dry run enabled, disable
+                if(enabled_credit[x]['payment_provider'].name === "Dry Run Test Gateway") {
+                    console.log('Dry run is enabled.')
+                    results = true;
+                    break;
+                }
+            }
+
+            return results;
+        }
+    },
     methods: {
+        setShopStatus(gateway) {
+            let r = 'Not Available';
+            console.log('setShopStatus...', gateway);
+
+            // locate status in the gateway's attributes.
+            for(let x in gateway['gateway_attributes']) {
+                if(gateway['gateway_attributes'][x].name === 'Status') {
+                    r = gateway['gateway_attributes'][x].value;
+                }
+            }
+
+            // else, locate the assigned shop's curated gateways
+            if(r === 'Available') {
+                r = r + ' - Not Assigned';
+
+                if(gateway.name !== "Dry Run Test Gateway") {
+
+                    if(this.isDryRunEnabled) {
+                        r = 'Turn off Dry Run to Enable.';
+                    }
+                }
+                else {
+                    if(this.isDryRunEnabled) {
+                        r = 'Enabled';
+                    }
+                }
+            }
+
+            return r;
+        },
+        setAssignLinkText(gateway) {
+            let r = 'Assign';
+            console.log('setAssignLinkText...', gateway);
+            if(gateway.name !== "Dry Run Test Gateway") {
+                // @todo - check if the shop is assigned in the shop's curated assigned gateways.
+                // if yes, Unassign
+            }
+            else {
+                if(this.isDryRunEnabled) {
+                    r = 'Unassign';
+                }
+            }
+
+
+            return r;
+        },
+        setGatewayDisabled(gateway) {
+            let results = (this.setShopStatus(gateway) === 'Coming Soon!');
+
+            if (!results) {
+                if(gateway.name !== "Dry Run Test Gateway") {
+                    results = this.isDryRunEnabled;
+                    // @todo - if gateway is credit or install and there is a gateway enabled, disable
+                }
+
+            }
+
+            return results;
+        },
+        toggleGatewayAssign(gateway) {
+            let action = this.setAssignLinkText(gateway);
+            console.log('About to trigger the gateway '+action+' call...', gateway);
+        },
         reToggleMerchantPage() {
             $('.card-section').slideUp();
             this.loading = true;
@@ -189,12 +268,32 @@ export default {
         },
     },
     mounted() {
-        console.log('Shopos - ', this.shops);
+        console.log('Shops - ', this.shops);
     }
 }
 </script>
 
 <style scoped>
+    @media screen {
+        .card-announce {
+            width: 100%;
+        }
+
+        .inner-card-announce {
+            text-align: center;
+        }
+
+        .inner-card-type-title-piece {
+            text-align: center;
+        }
+    }
+
+    @media screen and (min-width: 999px) {
+        .card-section {
+            margin-top: 15%;
+        }
+    }
+
     @media screen and (min-width: 1000px) {
         .row-of-cards {
             width: 100%;
@@ -203,6 +302,14 @@ export default {
         .inner-row-of-cards {
             display: flex;
             flex-flow: row-wrap;
+        }
+
+        .card-section {
+            margin-top: 1em;
+        }
+
+        .inner-card-type-row {
+            margin-top: 1.5em;
         }
     }
 </style>
