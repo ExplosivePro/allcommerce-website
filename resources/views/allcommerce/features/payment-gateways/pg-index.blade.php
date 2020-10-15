@@ -69,7 +69,11 @@
             <div class="box">
                 <payment-gateway-manager
                         :client="{{ json_encode($client->toArray()) }}"
-                        @if(!is_null($merchant)) :merchant="{{ json_encode($merchant->toArray()) }}" @endif
+                        @if(!is_null($merchant))
+                        :merchant="{{ json_encode($merchant->toArray()) }}"
+                        :shops="{{ json_encode($shops->toArray()) }}"
+                        @endif
+                        :gateways="{{ json_encode($all_gateways) }}"
                 ></payment-gateway-manager>
             </div>
         </div>

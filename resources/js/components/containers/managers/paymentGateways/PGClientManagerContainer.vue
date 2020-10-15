@@ -112,8 +112,18 @@ export default {
     },
     computed: {
         ...mapGetters({
-            getView: 'paymentGatewaysManager/getClientContentView'
+            getView: 'paymentGatewaysManager/getClientContentView',
+            creditProviders: 'paymentGatewaysManager/creditProviders',
+            expressProviders: 'paymentGatewaysManager/expressProviders',
+            installmentProviders: 'paymentGatewaysManager/installmentProviders'
         }),
+        getAvailableProviders() {
+            return {
+                credit: this.creditProviders,
+                express: this.expressProviders,
+                install: this.installmentProviders,
+            }
+        }
     },
     methods: {
         ...mapActions({

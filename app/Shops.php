@@ -50,4 +50,10 @@ class Shops extends Model
     {
         return $this->hasOne('AnchorCMS\MerchantApiTokens', 'scopes->shop_id', 'id');
     }
+
+    public function shop_assigned_payment_providers()
+    {
+        return $this->hasMany('AnchorCMS\Models\PaymentGateways\ShopAssignedPaymentProviders', 'shop_uuid', 'id')
+            ->with('payment_provider');
+    }
 }

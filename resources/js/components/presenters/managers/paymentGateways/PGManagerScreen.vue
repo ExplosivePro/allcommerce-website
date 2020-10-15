@@ -56,6 +56,7 @@
                 this.toggleErrorAnimation = !this.toggleErrorAnimation;
             }
         },
+        mounted() {}
     }
 </script>
 
