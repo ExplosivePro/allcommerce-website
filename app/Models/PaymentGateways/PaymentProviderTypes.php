@@ -1,6 +1,6 @@
 <?php
 
-namespace AnchorCMS\Models\PaymentGateways;
+namespace AllCommerce\Models\PaymentGateways;
 
 use Backpack\CRUD\CrudTrait;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
@@ -40,11 +40,11 @@ class PaymentProviderTypes extends Model
 
     public function payment_gateways()
     {
-        return $this->hasMany('AnchorCMS\Models\PaymentGateways\PaymentProviders', 'provider_type', 'id')
+        return $this->hasMany('AllCommerce\Models\PaymentGateways\PaymentProviders', 'provider_type', 'id')
             ->with('gateway_attributes');
     }
 
-    public function getAllCreditGateways()
+    public function getAllCreditGateways($client_id)
     {
         $results = [];
 
@@ -54,7 +54,59 @@ class PaymentProviderTypes extends Model
 
         if((!is_null($type)) && (count($type->payment_gateways) > 0))
         {
-            $results = $type->payment_gateways->toArray();
+            foreach($type->payment_gateways->toArray() as $idx => $gate)
+            {
+                $pre_status = $type->payment_gateways[$idx]->gateway_attributes->where('name', '=', 'Status')->first();
+                $val = '';
+                $disabled = true;
+                $enabled =  false;
+                switch($pre_status->value)
+                {
+                    case 'Available':
+                        $val = 'Not Set Up';
+
+                        if($gate['name'] == 'Dry Run Test Gateway')
+                        {
+                            $val = 'Enabled';
+                        }
+                        else
+                        {
+                            // @todo - if there is a client assigned record - set "Enabled"
+                            $c_enabled = ClientEnabledPaymentProviders::whereProviderId($gate['id'])
+                                ->whereClientId($client_id)
+                                ->first();
+
+                            if(!is_null($c_enabled))
+                            {
+                                $val = 'Enabled';
+                                if(count($c_enabled->misc) > 0)
+                                {
+                                    $enabled = [];
+                                    foreach ($c_enabled->misc as $misc)
+                                    {
+                                        $enabled[] = $misc;
+                                    }
+                                }
+                            }
+                        }
+
+                        $disabled = false;
+                        break;
+
+                    case 'Coming Soon!':
+                    default:
+                    $val = $pre_status->value;
+
+                }
+                $results[$idx] = $gate;
+                $results[$idx]['availability'] = [
+                    'title' => $gate['name'],
+                    'status' => $val,
+                    'type' => 'Credit Card',
+                    'disabled' => $disabled,
+                    'enabled' => $enabled
+                ];
+            }
         }
 
         return $results;
@@ -68,7 +120,33 @@ class PaymentProviderTypes extends Model
 
         if((!is_null($type)) && (count($type->payment_gateways) > 0))
         {
-            $results = $type->payment_gateways->toArray();
+            foreach($type->payment_gateways->toArray() as $idx => $gate)
+            {
+                $pre_status = $type->payment_gateways[$idx]->gateway_attributes->where('name', '=', 'Status')->first();
+                $val = '';
+                $disabled = true;
+                switch($pre_status->value)
+                {
+                    case 'Available':
+                        $val = 'Not Set Up';
+                        // @todo - if there is a client assigned record - set "Enabled"
+                        // @todo - else - Not Set up
+                        $disabled = false;
+                        break;
+
+                    case 'Coming Soon!':
+                    default:
+                        $val = $pre_status->value;
+
+                }
+                $results[$idx] = $gate;
+                $results[$idx]['availability'] = [
+                    'title' => $gate['name'],
+                    'status' => $val,
+                    'type' => 'Express Pay',
+                    'disabled' => $disabled,
+                ];
+            }
         }
 
         return $results;
@@ -82,7 +160,33 @@ class PaymentProviderTypes extends Model
 
         if((!is_null($type)) && (count($type->payment_gateways) > 0))
         {
-            $results = $type->payment_gateways->toArray();
+            foreach($type->payment_gateways->toArray() as $idx => $gate)
+            {
+                $pre_status = $type->payment_gateways[$idx]->gateway_attributes->where('name', '=', 'Status')->first();
+                $val = '';
+                $disabled = true;
+                switch($pre_status->value)
+                {
+                    case 'Available':
+                        $val = 'Not Set Up';
+                        // @todo - if there is a client assigned record - set "Enabled"
+                        // @todo - else - Not Set up
+                        $disabled = false;
+                        break;
+
+                    case 'Coming Soon!':
+                    default:
+                        $val = $pre_status->value;
+
+                }
+                $results[$idx] = $gate;
+                $results[$idx]['availability'] = [
+                    'title' => $gate['name'],
+                    'status' => $val,
+                    'type' => 'Installment Pay',
+                    'disabled' => $disabled,
+                ];
+            }
         }
 
         return $results;

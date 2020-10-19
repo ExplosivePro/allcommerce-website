@@ -1,6 +1,6 @@
 <?php
 
-namespace AnchorCMS\Models\SMS;
+namespace AllCommerce\Models\SMS;
 
 use Backpack\CRUD\CrudTrait;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
@@ -23,6 +23,6 @@ class SmsProviders extends Model
 
     public function provider_attributes()
     {
-        return $this->hasMany('AnchorCMS\Models\SMS\SmsProviderAttributes', 'provider_id', 'id');
+        return $this->hasMany('AllCommerce\Models\SMS\SmsProviderAttributes', 'provider_id', 'id');
     }
 }

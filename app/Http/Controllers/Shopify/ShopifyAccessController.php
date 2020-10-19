@@ -1,10 +1,10 @@
 <?php
 
-namespace AnchorCMS\Http\Controllers\Shopify;
+namespace AllCommerce\Http\Controllers\Shopify;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use AnchorCMS\Http\Controllers\Controller;
+use AllCommerce\Http\Controllers\Controller;
 use CapeAndBay\AllCommerce\Facades\ServiceDesk;
 use AllCommerce\DepartmentStore\Facades\DepartmentStore;
 

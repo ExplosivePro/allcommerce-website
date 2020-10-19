@@ -1,10 +1,10 @@
 <?php
 
-namespace AnchorCMS\Http\Controllers\Admin\SMS;
+namespace AllCommerce\Http\Controllers\Admin\SMS;
 
-use AnchorCMS\Clients;
+use AllCommerce\Clients;
 use Illuminate\Http\Request;
-use AnchorCMS\Http\Controllers\Controller;
+use AllCommerce\Http\Controllers\Controller;
 
 class SMSManagementController extends Controller
 {

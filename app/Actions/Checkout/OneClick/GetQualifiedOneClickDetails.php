@@ -1,8 +1,8 @@
 <?php
 
-namespace AnchorCMS\Actions\Checkout\OneClick;
+namespace AllCommerce\Actions\Checkout\OneClick;
 
-use AnchorCMS\Services\OneClickCheckoutService;
+use AllCommerce\Services\OneClickCheckoutService;
 
 class GetQualifiedOneClickDetails
 {

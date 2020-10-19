@@ -1,6 +1,6 @@
 <?php
 
-namespace AnchorCMS\Providers;
+namespace AllCommerce\Providers;
 
 use Illuminate\Support\ServiceProvider;
 

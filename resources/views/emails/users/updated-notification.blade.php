@@ -16,7 +16,7 @@
     <br />
     <br />
 
-    <p style="margin-left: 2em;"><b>AnchorCMS Support Team</b></p>
+    <p style="margin-left: 2em;"><b>AllCommerce Support Team</b></p>
 
     <br />
     <br />

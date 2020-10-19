@@ -1,9 +1,9 @@
 <?php
 
-namespace AnchorCMS\Actions\Leads;
+namespace AllCommerce\Actions\Leads;
 
 use AllCommerce\DepartmentStore\Library\Sales\Lead;
-use AnchorCMS\Shops;
+use AllCommerce\Shops;
 
 class UpdateLeadWithBilling
 {

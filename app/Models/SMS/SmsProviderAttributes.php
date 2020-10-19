@@ -1,6 +1,6 @@
 <?php
 
-namespace AnchorCMS\Models\SMS;
+namespace AllCommerce\Models\SMS;
 
 use Backpack\CRUD\CrudTrait;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;

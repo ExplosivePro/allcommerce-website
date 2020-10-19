@@ -1,9 +1,9 @@
 <?php
 
-namespace AnchorCMS;
+namespace AllCommerce;
 
-use AnchorCMS\Shops;
-use AnchorCMS\Merchants;
+use AllCommerce\Shops;
+use AllCommerce\Merchants;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
@@ -37,22 +37,22 @@ class MerchantInventory extends Model
 
     public function variants()
     {
-        return $this->hasMany('AnchorCMS\InventoryVariants', 'inventory_id', 'platform_id');
+        return $this->hasMany('AllCommerce\InventoryVariants', 'inventory_id', 'platform_id');
     }
 
     public function variant_options()
     {
-        return $this->hasMany('AnchorCMS\VariantsOptions', 'inventory_id', 'id');
+        return $this->hasMany('AllCommerce\VariantsOptions', 'inventory_id', 'id');
     }
 
     public function images()
     {
-        return $this->hasMany('AnchorCMS\InventoryImages', 'inventory_uuid', 'id');
+        return $this->hasMany('AllCommerce\InventoryImages', 'inventory_uuid', 'id');
     }
 
     public function images_by_platform()
     {
-        return $this->hasMany('AnchorCMS\InventoryImages', 'platform_id', 'platform_id');
+        return $this->hasMany('AllCommerce\InventoryImages', 'platform_id', 'platform_id');
     }
 
     public function getShopDefaultItem($shop_install_id)

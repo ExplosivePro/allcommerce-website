@@ -1,12 +1,12 @@
 <?php
 
-namespace AnchorCMS\Http\Controllers\API\Clients\Ads;
+namespace AllCommerce\Http\Controllers\API\Clients\Ads;
 
-use AnchorCMS\Clients;
-use AnchorCMS\AdBudgets;
-use AnchorCMS\AdMarkets;
+use AllCommerce\Clients;
+use AllCommerce\AdBudgets;
+use AllCommerce\AdMarkets;
 use Illuminate\Http\Request;
-use AnchorCMS\Http\Controllers\Controller;
+use AllCommerce\Http\Controllers\Controller;
 
 class ClientAdBudgetAPIController extends Controller
 {

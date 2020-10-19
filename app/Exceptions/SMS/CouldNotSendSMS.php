@@ -1,6 +1,6 @@
 <?php
 
-namespace AnchorCMS\Exceptions\SMS;
+namespace AllCommerce\Exceptions\SMS;
 
 use Exception;
 

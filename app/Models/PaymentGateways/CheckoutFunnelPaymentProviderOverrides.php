@@ -1,6 +1,6 @@
 <?php
 
-namespace AnchorCMS\Models\PaymentGateways;
+namespace AllCommerce\Models\PaymentGateways;
 
 use Illuminate\Database\Eloquent\Model;
 

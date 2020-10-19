@@ -68,7 +68,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => AnchorCMS\User::class,
+            'model' => AllCommerce\User::class,
         ],
 
         // 'users' => [

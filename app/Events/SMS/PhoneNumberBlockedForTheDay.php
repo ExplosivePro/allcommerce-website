@@ -1,9 +1,9 @@
 <?php
 
-namespace AnchorCMS\Events\SMS;
+namespace AllCommerce\Events\SMS;
 
-use AnchorCMS\Phones;
-use AnchorCMS\Clients;
+use AllCommerce\Phones;
+use AllCommerce\Clients;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;

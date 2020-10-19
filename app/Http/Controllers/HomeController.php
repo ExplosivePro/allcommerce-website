@@ -1,6 +1,6 @@
 <?php
 
-namespace AnchorCMS\Http\Controllers;
+namespace AllCommerce\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;

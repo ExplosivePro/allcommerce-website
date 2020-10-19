@@ -1,10 +1,10 @@
 <?php
 
-namespace AnchorCMS\Http\Controllers\Auth;
+namespace AllCommerce\Http\Controllers\Auth;
 
-use AnchorCMS\Http\Controllers\Controller;
-use AnchorCMS\Providers\RouteServiceProvider;
-use AnchorCMS\User;
+use AllCommerce\Http\Controllers\Controller;
+use AllCommerce\Providers\RouteServiceProvider;
+use AllCommerce\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -60,7 +60,7 @@ class RegisterController extends Controller
      * Create a new user instance after a valid registration.
      *
      * @param  array  $data
-     * @return \AnchorCMS\User
+     * @return \AllCommerce\User
      */
     protected function create(array $data)
     {

@@ -1,20 +1,20 @@
 <?php
 
-namespace AnchorCMS\Http\Controllers\API\Checkouts;
+namespace AllCommerce\Http\Controllers\API\Checkouts;
 
-use AnchorCMS\Actions\Leads\AccessDraftOrderWithShippingMethods;
-use AnchorCMS\Shops;
-use AnchorCMS\Leads;
+use AllCommerce\Actions\Leads\AccessDraftOrderWithShippingMethods;
+use AllCommerce\Shops;
+use AllCommerce\Leads;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use AnchorCMS\Http\Controllers\Controller;
-use AnchorCMS\Actions\Leads\CreateOrUpdateLead;
-use AnchorCMS\Actions\Leads\UpdateLeadWithBilling;
-use AnchorCMS\Actions\Leads\CreateLeadWithShipping;
-use AnchorCMS\Actions\Leads\UpdateLeadWithShipping;
+use AllCommerce\Http\Controllers\Controller;
+use AllCommerce\Actions\Leads\CreateOrUpdateLead;
+use AllCommerce\Actions\Leads\UpdateLeadWithBilling;
+use AllCommerce\Actions\Leads\CreateLeadWithShipping;
+use AllCommerce\Actions\Leads\UpdateLeadWithShipping;
 use AllCommerce\DepartmentStore\Library\Sales\Lead;
 use AllCommerce\DepartmentStore\Facades\DepartmentStore;
-use AnchorCMS\Actions\Checkout\OneClick\GetQualifiedOneClickDetails;
+use AllCommerce\Actions\Checkout\OneClick\GetQualifiedOneClickDetails;
 
 class LeadsAPIController extends Controller
 {

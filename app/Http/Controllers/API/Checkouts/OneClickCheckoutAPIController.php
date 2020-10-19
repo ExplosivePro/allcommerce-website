@@ -1,12 +1,12 @@
 <?php
 
-namespace AnchorCMS\Http\Controllers\API\Checkouts;
+namespace AllCommerce\Http\Controllers\API\Checkouts;
 
-use AnchorCMS\Actions\Checkout\OneClick\GetQualifiedOneClickDetails;
-use AnchorCMS\Http\Controllers\Controller;
-use AnchorCMS\Jobs\OneClick\InitOneClickSession;
-use AnchorCMS\Leads;
-use AnchorCMS\Phones;
+use AllCommerce\Actions\Checkout\OneClick\GetQualifiedOneClickDetails;
+use AllCommerce\Http\Controllers\Controller;
+use AllCommerce\Jobs\OneClick\InitOneClickSession;
+use AllCommerce\Leads;
+use AllCommerce\Phones;
 use Illuminate\Http\Request;
 
 class OneClickCheckoutAPIController extends Controller

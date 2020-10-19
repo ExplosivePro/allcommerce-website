@@ -11,8 +11,8 @@
 |
 */
 
-use AnchorCMS\Merchants;
-use AnchorCMS\UserActiveClients;
+use AllCommerce\Merchants;
+use AllCommerce\UserActiveClients;
 
 Route::get('/', 'HomeController@home');
 

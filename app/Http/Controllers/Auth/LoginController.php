@@ -1,6 +1,6 @@
 <?php
 
-namespace AnchorCMS\Http\Controllers\Auth;
+namespace AllCommerce\Http\Controllers\Auth;
 
 use Backpack\Base\app\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;

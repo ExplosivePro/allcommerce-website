@@ -89,12 +89,12 @@ return [
     */
 
     // Fully qualified namespace of the User model
-    'user_model_fqn' => AnchorCMS\Models\BackpackUser::class,
+    'user_model_fqn' => AllCommerce\Models\BackpackUser::class,
 
     // The classes for the middleware to check if the visitor is an admin
     // Can be a single class or an array of clases
     'middleware_class' => [
-        AnchorCMS\Http\Middleware\CheckIfAdmin::class,
+        AllCommerce\Http\Middleware\CheckIfAdmin::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
         // \Backpack\Base\app\Http\Middleware\UseBackpackAuthGuardInsteadOfDefaultAuthGuard::class,
     ],

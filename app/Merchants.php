@@ -1,6 +1,6 @@
 <?php
 
-namespace AnchorCMS;
+namespace AllCommerce;
 
 use Backpack\CRUD\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
@@ -41,12 +41,12 @@ class Merchants extends Model
 
     public function shops()
     {
-        return $this->hasMany('AnchorCMS\Shops', 'merchant_id', 'id');
+        return $this->hasMany('AllCommerce\Shops', 'merchant_id', 'id');
     }
 
     public function client()
     {
-        return $this->belongsTo('AnchorCMS\Clients', 'client_id', 'id');
+        return $this->belongsTo('AllCommerce\Clients', 'client_id', 'id');
     }
 
     public static function clientMerchants($client_id)

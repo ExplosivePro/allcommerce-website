@@ -110,6 +110,7 @@
             <default-checkout-experience
                 :items="{{ json_encode($items) }}"
                 :shipping-methods="{{ json_encode($shipping_methods) }}"
+                :gateways="{{ json_encode($payment_gateways) }}"
                 shop-id="{!! $shop_uuid !!}"
                 checkout-type="{!! $checkout_type !!}"
                 checkout-id="{!! $checkout_id !!}"

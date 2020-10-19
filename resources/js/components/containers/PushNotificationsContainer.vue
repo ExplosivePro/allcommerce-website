@@ -84,7 +84,7 @@
                             }
                             else
                             {
-                                _this.filters = 'Unknown Response from AnchorCMS Server';
+                                _this.filters = 'Unknown Response from AllCommerce Server';
                             }
                         }
 
@@ -93,7 +93,7 @@
                     },
                     error(e) {
                         console.log('Unable to Contact Server', e);
-                        _this.filters = 'Unable to Contact AnchorCMS Server';
+                        _this.filters = 'Unable to Contact AllCommerce Server';
                         _this.loadingFilters = false;
                     }
                 });

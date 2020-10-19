@@ -66,14 +66,15 @@
                                             <div class="card" style="width: 18rem;" v-for="(gate, idx) in gateways[typeData.slug]">
                                                 <div class="card-body">
                                                     <h5 class="card-title">{{ gate.name }}</h5>
-                                                    <p class="card-text" v-for="(attrs, idy) in gate['gateway_attributes']" v-if="attrs.value === 'desc'">{{ attrs.misc[0] }}</p>
+                                                    <p class="card-text">{{ gate.desc }}</p>
                                                 </div>
+
                                                 <ul class="list-group list-group-flush" style="text-align: center;">
-                                                    <li class="list-group-item">{{ setShopStatus(gateways[typeData.slug][idx]) }}</li>
+                                                    <li class="list-group-item">{{ gate.status[activeShop] }}</li>
                                                 </ul>
                                                 <div class="card-body" style="text-align: center;">
-                                                    <a href="#" class="card-link" @click="toggleGatewayAssign(gateways[typeData.slug][idx])" v-if="!setGatewayDisabled(gateways[typeData.slug][idx])">{{ setAssignLinkText(gateways[typeData.slug][idx]) }}</a>
-                                                    <p class="card-link" v-else>Not Available</p>
+                                                    <a href="#" class="card-link" v-if="gate.assign[activeShop].type === 'button'" @click="toggleGatewayAssign(gateways[typeData.slug][idx], gate.assign[activeShop].action, typeData.slug)">{{ gate.assign[activeShop].markup }}</a>
+                                                    <p class="card-link" v-if="gate.assign[activeShop].type === 'text'" v-html="gate.assign[activeShop].markup"></p>
                                                 </div>
                                             </div>
                                         </div>
@@ -96,8 +97,34 @@ export default {
     components: {
         SexyHurricane
     },
-    props: ['shops', 'gateways'],
-    watch: {},
+    props: ['shops', 'gateways', 'assignStatus'],
+    watch: {
+        assignStatus(status) {
+            console.log('Watching assignStatus', status)
+            if('error' in status) {
+                this.loadingMsg = status.error;
+                if(this.loading) {
+                    this.loading = false;
+                    let _this = this;
+                    setTimeout(function() {
+                        _this.loading = true;
+                    }, 100)
+                }
+                else {
+                    this.loading = true;
+                }
+            }
+            else {
+
+            }
+        },
+        activeShop(idx) {
+            this.$emit('active-shop')
+        },
+        gateways(gateways) {
+            console.log('Incoming gateways', gateways);
+        }
+    },
     data() {
         return {
             loadingMsg: 'Loading...',
@@ -140,68 +167,26 @@ export default {
         }
     },
     methods: {
-        setShopStatus(gateway) {
-            let r = 'Not Available';
-            console.log('setShopStatus...', gateway);
-
-            // locate status in the gateway's attributes.
-            for(let x in gateway['gateway_attributes']) {
-                if(gateway['gateway_attributes'][x].name === 'Status') {
-                    r = gateway['gateway_attributes'][x].value;
-                }
-            }
-
-            // else, locate the assigned shop's curated gateways
-            if(r === 'Available') {
-                r = r + ' - Not Assigned';
-
-                if(gateway.name !== "Dry Run Test Gateway") {
-
-                    if(this.isDryRunEnabled) {
-                        r = 'Turn off Dry Run to Enable.';
-                    }
-                }
-                else {
-                    if(this.isDryRunEnabled) {
-                        r = 'Enabled';
-                    }
-                }
-            }
-
-            return r;
-        },
-        setAssignLinkText(gateway) {
-            let r = 'Assign';
-            console.log('setAssignLinkText...', gateway);
-            if(gateway.name !== "Dry Run Test Gateway") {
-                // @todo - check if the shop is assigned in the shop's curated assigned gateways.
-                // if yes, Unassign
-            }
-            else {
-                if(this.isDryRunEnabled) {
-                    r = 'Unassign';
-                }
-            }
-
-
-            return r;
-        },
-        setGatewayDisabled(gateway) {
-            let results = (this.setShopStatus(gateway) === 'Coming Soon!');
-
-            if (!results) {
-                if(gateway.name !== "Dry Run Test Gateway") {
-                    results = this.isDryRunEnabled;
-                    // @todo - if gateway is credit or install and there is a gateway enabled, disable
-                }
-
-            }
-
-            return results;
-        },
-        toggleGatewayAssign(gateway) {
-            let action = this.setAssignLinkText(gateway);
+        toggleGatewayAssign(gateway, action, slug) {
             console.log('About to trigger the gateway '+action+' call...', gateway);
+            this.$emit('gateway-triggered', {
+                action: action,
+                gateway: gateway,
+                merchantShop: this.activeShop,
+                shopType: slug
+            })
+
+            let _this = this;
+            $('.card-section').slideUp();
+            let shopyName = this.shops[this.activeShop].name
+            if(action === 'assign') {
+                this.loadingMsg = `Assigning ${gateway.name} to ${shopyName}!`;
+            }
+            else if(action === 'un-assign') {
+                this.loadingMsg = `UnAssigning ${gateway.name} from ${shopyName}... :(`;
+            }
+
+            this.loading = true;
         },
         reToggleMerchantPage() {
             $('.card-section').slideUp();
@@ -268,7 +253,7 @@ export default {
         },
     },
     mounted() {
-        console.log('Shops - ', this.shops);
+        console.log('Gateways - ', this.gateways);
     }
 }
 </script>

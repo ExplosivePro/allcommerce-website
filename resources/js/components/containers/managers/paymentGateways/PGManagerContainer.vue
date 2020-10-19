@@ -14,7 +14,7 @@ export default {
     components: {
         PgManagerScreen
     },
-    props: ['client', 'merchant', 'shops', 'gateways'],
+    props: ['client', 'merchant', 'shops', 'gateways', 'clientEnabledGateways'],
     watch: {
         screenHeight(h) {
             console.log('Watching screenHeight update to ' +h);
@@ -67,6 +67,7 @@ export default {
             setCreditProviders: 'paymentGatewaysManager/creditProviders',
             setExpressProviders: 'paymentGatewaysManager/expressProviders',
             setInstallmentProviders: 'paymentGatewaysManager/installmentProviders',
+            setClientEnabledGateways: 'paymentGatewaysManager/clientEnabledGateways',
         })
     },
     mounted() {
@@ -79,6 +80,7 @@ export default {
             this.setCreditProviders(this.gateways.credit);
             this.setExpressProviders(this.gateways.express);
             this.setInstallmentProviders(this.gateways.install);
+            this.setClientEnabledGateways(this.clientEnabledGateways)
         }
 
         console.log('Payment Gateways ManagerContainer mounted!', [{client: this.client, merchant: this.merchant}]);

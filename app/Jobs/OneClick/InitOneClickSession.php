@@ -1,12 +1,12 @@
 <?php
 
-namespace AnchorCMS\Jobs\OneClick;
+namespace AllCommerce\Jobs\OneClick;
 
-use AnchorCMS\LeadAttributes;
-use AnchorCMS\Leads;
-use AnchorCMS\OrderAttributes;
-use AnchorCMS\Orders;
-use AnchorCMS\Phones;
+use AllCommerce\LeadAttributes;
+use AllCommerce\Leads;
+use AllCommerce\OrderAttributes;
+use AllCommerce\Orders;
+use AllCommerce\Phones;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;

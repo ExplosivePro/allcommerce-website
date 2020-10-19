@@ -1,14 +1,14 @@
 <?php
 
-namespace AnchorCMS\Http\Controllers\Admin;
+namespace AllCommerce\Http\Controllers\Admin;
 
-use AnchorCMS\Merchants;
-use AnchorCMS\ShopTypes;
+use AllCommerce\Merchants;
+use AllCommerce\ShopTypes;
 use Backpack\CRUD\CrudPanel;
 use Silber\Bouncer\BouncerFacade as Bouncer;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
-use AnchorCMS\Http\Requests\StandardStoreRequest as StoreRequest;
-use AnchorCMS\Http\Requests\StandardUpdateRequest as UpdateRequest;
+use AllCommerce\Http\Requests\StandardStoreRequest as StoreRequest;
+use AllCommerce\Http\Requests\StandardUpdateRequest as UpdateRequest;
 
 /**
  * Class ShopsCrudController
@@ -26,7 +26,7 @@ class ShopsCrudController extends CrudController
         | CrudPanel Basic Information
         |--------------------------------------------------------------------------
         */
-        $this->crud->setModel('AnchorCMS\Shops');
+        $this->crud->setModel('AllCommerce\Shops');
         $this->crud->setRoute(config('backpack.base.route_prefix') . '/manage-shops');
         $this->crud->setEntityNameStrings('Online Shop', 'Manage Shops');
 
@@ -71,7 +71,7 @@ class ShopsCrudController extends CrudController
             'name' => 'shop_type', // the db column for the foreign key
             'entity' => 'shop_type', // the method that defines the relationship in your Model
             'attribute' => 'name', // foreign key attribute that is shown to user
-            'model' => "AnchorCMS\ShopTypes",
+            'model' => "AllCommerce\ShopTypes",
 
             // optional
             'options'   => (function ($query) {
@@ -101,7 +101,7 @@ class ShopsCrudController extends CrudController
             'name' => 'merchant_id', // the db column for the foreign key
             'entity' => 'merchant', // the method that defines the relationship in your Model
             'attribute' => 'name', // foreign key attribute that is shown to user
-            'model' => "AnchorCMS\Merchants",
+            'model' => "AllCommerce\Merchants",
 
             // optional
             'options'   => (function ($query) use ($client_id){
@@ -118,7 +118,7 @@ class ShopsCrudController extends CrudController
                 'name' => 'client_id', // the db column for the foreign key
                 'entity' => 'client', // the method that defines the relationship in your Model
                 'attribute' => 'name', // foreign key attribute that is shown to user
-                'model' => "AnchorCMS\Clients",
+                'model' => "AllCommerce\Clients",
                 // optional
                 'options'   => (function ($query) use ($client_id){
                     return $query->whereId($client_id)
@@ -134,7 +134,7 @@ class ShopsCrudController extends CrudController
                 'name' => 'client_id', // the db column for the foreign key
                 'entity' => 'client', // the method that defines the relationship in your Model
                 'attribute' => 'name', // foreign key attribute that is shown to user
-                'model' => "AnchorCMS\Clients",
+                'model' => "AllCommerce\Clients",
                 'attributes' => [
                     'disabled' => 'disabled',
                 ],

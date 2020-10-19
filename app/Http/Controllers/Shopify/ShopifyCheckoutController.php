@@ -1,14 +1,15 @@
 <?php
 
-namespace AnchorCMS\Http\Controllers\Shopify;
+namespace AllCommerce\Http\Controllers\Shopify;
 
-use AnchorCMS\Shops;
+use AllCommerce\Models\PaymentGateways\ShopAssignedPaymentProviders;
+use AllCommerce\Shops;
 use Illuminate\Http\Request;
 use Ixudra\Curl\Facades\Curl;
-use AnchorCMS\CheckoutFunnels;
+use AllCommerce\CheckoutFunnels;
 use Illuminate\Support\Facades\Cookie;
-use AnchorCMS\CheckoutFunnelAttributes;
-use AnchorCMS\Http\Controllers\Controller;
+use AllCommerce\CheckoutFunnelAttributes;
+use AllCommerce\Http\Controllers\Controller;
 use AllCommerce\DepartmentStore\Library\Shopify\Shop\Storefront;
 
 class ShopifyCheckoutController extends Controller
@@ -22,6 +23,7 @@ class ShopifyCheckoutController extends Controller
 
     public function checkout($token,
                              CheckoutFunnels $funnels,
+                             ShopAssignedPaymentProviders $gates,
                              CheckoutFunnelAttributes $funnel_attrs)
     {
         $args = [];
@@ -64,7 +66,6 @@ class ShopifyCheckoutController extends Controller
                 $args['checkout_id'] = $token;
                 $args['items'] = $item_attrs;
 
-
                 $blade = 'checkouts.default.experience';
 
                 $blade_attr = $attrs->where('funnel_attribute', 'blade-template')->first();
@@ -87,6 +88,65 @@ class ShopifyCheckoutController extends Controller
                     if($shipping_methods && is_array($shipping_methods) && (count($shipping_methods) > 0))
                     {
                         $args['shipping_methods'] = $shipping_methods;
+                    }
+
+                    // @todo - migrate this logic into the departmentStore and the OAuth API
+                    // @todo - get the shop's assigned payment gateway(s)
+                    // @todo for migration - get funnel overrides and replace them as the assigned payment gateway(s)
+                    // Separate into the three categories
+                    $args['payment_gateways'] = [
+                        'credit' => [],
+                        'express' => [],
+                        'install' => [],
+                    ];
+
+                     // Get the shop's assigned gateways with providers and shoptypes
+                    $shop_gateways = $gates->whereShopUuid($shop->id)
+                        ->whereActive(1)
+                        ->with('payment_provider')
+                        ->get();
+
+                    if(count($shop_gateways) > 0)
+                    {
+                        foreach ($shop_gateways as $idx => $gate)
+                        {
+                            switch($gate->payment_provider->payment_type->slug)
+                            {
+                                case 'credit':
+                                    //Credit can only have 1 or 0 assigned
+                                    if(count($args['payment_gateways']['credit']) < 1)
+                                    {
+                                        // @todo - get the module name from the
+                                        $module = $gate->payment_provider->gateway_attributes()
+                                            ->whereName('vuex-module')
+                                            ->first();
+
+                                        $gatey = $gate->toArray();
+                                        $gatey['module'] = $module->misc['module'];
+
+                                        $args['payment_gateways']['credit'][] = $gatey;
+                                    }
+                                    break;
+
+                                case 'express':
+                                    // Express can have 0 - 5 assigned
+                                    if(count($args['payment_gateways']['express']) < 5)
+                                    {
+                                        $args['payment_gateways']['express'][] = $gate->toArray();
+                                    }
+                                    break;
+
+                                case 'install':
+                                    // Install Pay can only have 1 or 0 assigned
+                                    if(count($args['payment_gateways']['install']) < 1)
+                                    {
+                                        $args['payment_gateways']['install'][] = $gate->toArray();
+                                    }
+                                    break;
+                            }
+
+
+                        }
                     }
                 }
 

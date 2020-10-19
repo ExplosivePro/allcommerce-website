@@ -1,6 +1,6 @@
 <?php
 
-namespace AnchorCMS;
+namespace AllCommerce;
 
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Database\Eloquent\Model;
@@ -44,16 +44,16 @@ class LeadAttributes extends Model
 
     public function client()
     {
-        return $this->belongsTo('AnchorCMS\Clients', 'client_uuid', 'id');
+        return $this->belongsTo('AllCommerce\Clients', 'client_uuid', 'id');
     }
 
     public function shop()
     {
-        return $this->belongsTo('AnchorCMS\Shops', 'shop_uuid', 'id');
+        return $this->belongsTo('AllCommerce\Shops', 'shop_uuid', 'id');
     }
 
     public function lead()
     {
-        return $this->belongsTo('AnchorCMS\Leads', 'lead_uuid', 'id');
+        return $this->belongsTo('AllCommerce\Leads', 'lead_uuid', 'id');
     }
 }

@@ -1,8 +1,8 @@
 <?php
 
-namespace AnchorCMS\Http\Requests;
+namespace AllCommerce\Http\Requests;
 
-use AnchorCMS\Http\Requests\Request;
+use AllCommerce\Http\Requests\Request;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StandardStoreRequest extends FormRequest

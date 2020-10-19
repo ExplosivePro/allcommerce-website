@@ -1,8 +1,8 @@
 <?php
 
-namespace AnchorCMS\Http\Controllers;
+namespace AllCommerce\Http\Controllers;
 
-use AnchorCMS\MenuOptions;
+use AllCommerce\MenuOptions;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;

@@ -1,21 +1,21 @@
 <?php
 
-namespace AnchorCMS\Http\Controllers\Admin;
+namespace AllCommerce\Http\Controllers\Admin;
 
 use Bouncer;
-use AnchorCMS\Clients;
-use AnchorCMS\Services\AdBudgetMgntService;
+use AllCommerce\Clients;
+use AllCommerce\Services\AdBudgetMgntService;
 //use App\Repositories\ClientServiceRepository;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 
 // VALIDATION: change the requests to match your own file names if you need form validation
-use AnchorCMS\Http\Requests\StandardStoreRequest as StoreRequest;
-use AnchorCMS\Http\Requests\StandardUpdateRequest as UpdateRequest;
+use AllCommerce\Http\Requests\StandardStoreRequest as StoreRequest;
+use AllCommerce\Http\Requests\StandardUpdateRequest as UpdateRequest;
 use Backpack\CRUD\CrudPanel;
 
 /**
  * Class AdBudgetsCrudController
- * @package AnchorCMS\Http\Controllers\Admin
+ * @package AllCommerce\Http\Controllers\Admin
  * @property-read CrudPanel $crud
  */
 class AdBudgetsCrudController extends CrudController
@@ -41,7 +41,7 @@ class AdBudgetsCrudController extends CrudController
             | CrudPanel Basic Information
             |--------------------------------------------------------------------------
             */
-            $this->crud->setModel('AnchorCMS\AdBudgets');$this->crud->setRoute(config('backpack.base.route_prefix') . '/crud-ad-budgets');
+            $this->crud->setModel('AllCommerce\AdBudgets');$this->crud->setRoute(config('backpack.base.route_prefix') . '/crud-ad-budgets');
             $this->crud->setEntityNameStrings('Ad Budget', 'Ad Budgets');
             if(session()->has('active_client'))
             {

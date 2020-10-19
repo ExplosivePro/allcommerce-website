@@ -1,6 +1,6 @@
 <?php
 
-namespace AnchorCMS;
+namespace AllCommerce;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -16,7 +16,7 @@ class Features extends Model
 
     public function feature_attributes()
     {
-        return $this->hasMany('AnchorCMS\FeatureAttributes', 'feature_id', 'id');
+        return $this->hasMany('AllCommerce\FeatureAttributes', 'feature_id', 'id');
     }
 
     public function getFeature($name, $client_id)

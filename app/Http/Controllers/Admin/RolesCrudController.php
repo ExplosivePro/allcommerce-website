@@ -1,17 +1,17 @@
 <?php
 
-namespace AnchorCMS\Http\Controllers\Admin;
+namespace AllCommerce\Http\Controllers\Admin;
 
-use AnchorCMS\Abilities;
-use AnchorCMS\Clients;
-use AnchorCMS\Permissions;
-use AnchorCMS\Roles;
+use AllCommerce\Abilities;
+use AllCommerce\Clients;
+use AllCommerce\Permissions;
+use AllCommerce\Roles;
 use Backpack\CRUD\CrudPanel;
 use Prologue\Alerts\Facades\Alert;
 use Silber\Bouncer\BouncerFacade as Bouncer;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
-use AnchorCMS\Http\Requests\RolesRequest as StoreRequest;
-use AnchorCMS\Http\Requests\RolesRequest as UpdateRequest;
+use AllCommerce\Http\Requests\RolesRequest as StoreRequest;
+use AllCommerce\Http\Requests\RolesRequest as UpdateRequest;
 
 /**
  * Class RolesCrudController
@@ -29,7 +29,7 @@ class RolesCrudController extends CrudController
         | CrudPanel Basic Information
         |--------------------------------------------------------------------------
         */
-        $this->crud->setModel('AnchorCMS\Roles');
+        $this->crud->setModel('AllCommerce\Roles');
         $this->crud->setRoute(config('backpack.base.route_prefix') . '/crud-roles');
         $this->crud->setEntityNameStrings('roles', 'roles');
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace AnchorCMS;
+namespace AllCommerce;
 
 use Backpack\CRUD\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
@@ -23,17 +23,17 @@ class Shops extends Model
 
     public function merchant()
     {
-        return $this->belongsTo('AnchorCMS\Merchants', 'merchant_id', 'id');
+        return $this->belongsTo('AllCommerce\Merchants', 'merchant_id', 'id');
     }
 
     public function client()
     {
-        return $this->belongsTo('AnchorCMS\Clients', 'client_id', 'id');
+        return $this->belongsTo('AllCommerce\Clients', 'client_id', 'id');
     }
 
     public function shop_type()
     {
-        return $this->belongsTo('AnchorCMS\ShopTypes', 'shop_type', 'id');
+        return $this->belongsTo('AllCommerce\ShopTypes', 'shop_type', 'id');
     }
 
     public function shoptype()
@@ -43,17 +43,23 @@ class Shops extends Model
 
     public function inventory()
     {
-        return $this->hasMany('AnchorCMS\MerchantInventory', 'shop_id', 'id');
+        return $this->hasMany('AllCommerce\MerchantInventory', 'shop_id', 'id');
     }
 
     public function oauth_api_token()
     {
-        return $this->hasOne('AnchorCMS\MerchantApiTokens', 'scopes->shop_id', 'id');
+        return $this->hasOne('AllCommerce\MerchantApiTokens', 'scopes->shop_id', 'id');
     }
 
     public function shop_assigned_payment_providers()
     {
-        return $this->hasMany('AnchorCMS\Models\PaymentGateways\ShopAssignedPaymentProviders', 'shop_uuid', 'id')
+        return $this->hasMany('AllCommerce\Models\PaymentGateways\ShopAssignedPaymentProviders', 'shop_uuid', 'id')
+            ->with('payment_provider');
+    }
+
+    public function client_enabled_payment_providers()
+    {
+        return $this->hasMany('AllCommerce\Models\PaymentGateways\ClientEnabledPaymentProviders', 'client_id', 'client_id')
             ->with('payment_provider');
     }
 }

@@ -1,8 +1,8 @@
 <?php
 
-namespace AnchorCMS;
+namespace AllCommerce;
 
-use AnchorCMS\MerchantInventory;
+use AllCommerce\MerchantInventory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;

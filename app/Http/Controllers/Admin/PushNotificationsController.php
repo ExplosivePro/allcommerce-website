@@ -1,11 +1,11 @@
 <?php
 
-namespace AnchorCMS\Http\Controllers\Admin;
+namespace AllCommerce\Http\Controllers\Admin;
 
-use AnchorCMS\Clients;
-use AnchorCMS\MobileApps;
+use AllCommerce\Clients;
+use AllCommerce\MobileApps;
 use Illuminate\Http\Request;
-use AnchorCMS\Http\Controllers\Controller;
+use AllCommerce\Http\Controllers\Controller;
 
 class PushNotificationsController extends Controller
 {

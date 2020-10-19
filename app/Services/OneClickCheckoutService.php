@@ -1,12 +1,12 @@
 <?php
 
-namespace AnchorCMS\Services;
+namespace AllCommerce\Services;
 
-use AnchorCMS\Aggregates\SMS\PhoneAggregate;
-use AnchorCMS\Exceptions\SMS\CouldNotSendSMS;
-use AnchorCMS\Leads;
-use AnchorCMS\Jobs\OneClick\InitOneClickSession;
-use AnchorCMS\Phones;
+use AllCommerce\Aggregates\SMS\PhoneAggregate;
+use AllCommerce\Exceptions\SMS\CouldNotSendSMS;
+use AllCommerce\Leads;
+use AllCommerce\Jobs\OneClick\InitOneClickSession;
+use AllCommerce\Phones;
 
 class OneClickCheckoutService
 {

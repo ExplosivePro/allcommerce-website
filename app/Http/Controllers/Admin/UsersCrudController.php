@@ -1,16 +1,16 @@
 <?php
 
-namespace AnchorCMS\Http\Controllers\Admin;
+namespace AllCommerce\Http\Controllers\Admin;
 
-use AnchorCMS\Clients;
-use AnchorCMS\Jobs\User\OnboardNewUser;
-use AnchorCMS\Jobs\User\UserWasUpdated;
+use AllCommerce\Clients;
+use AllCommerce\Jobs\User\OnboardNewUser;
+use AllCommerce\Jobs\User\UserWasUpdated;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 
 // VALIDATION: change the requests to match your own file names if you need form validation
-use AnchorCMS\Roles;
-use AnchorCMS\Http\Requests\StandardStoreRequest as StoreRequest;
-use AnchorCMS\Http\Requests\StandardUpdateRequest as UpdateRequest;
+use AllCommerce\Roles;
+use AllCommerce\Http\Requests\StandardStoreRequest as StoreRequest;
+use AllCommerce\Http\Requests\StandardUpdateRequest as UpdateRequest;
 use Backpack\CRUD\CrudPanel;
 use Silber\Bouncer\BouncerFacade as Bouncer;
 
@@ -44,7 +44,7 @@ class UsersCrudController extends CrudController
         | CrudPanel Basic Information
         |--------------------------------------------------------------------------
         */
-        $this->crud->setModel('AnchorCMS\User');
+        $this->crud->setModel('AllCommerce\User');
         $this->crud->setRoute(config('backpack.base.route_prefix') . '/crud-users');
         $this->crud->setEntityNameStrings('AllCommerce User', 'AllCommerce Users');
 

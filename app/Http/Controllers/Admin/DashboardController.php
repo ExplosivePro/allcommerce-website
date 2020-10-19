@@ -1,13 +1,13 @@
 <?php
 
-namespace AnchorCMS\Http\Controllers\Admin;
+namespace AllCommerce\Http\Controllers\Admin;
 
-use AnchorCMS\Clients;
-use AnchorCMS\Merchants;
-use AnchorCMS\Shops;
+use AllCommerce\Clients;
+use AllCommerce\Merchants;
+use AllCommerce\Shops;
 use Illuminate\Http\Request;
-use AnchorCMS\ShopifyInstalls;
-use AnchorCMS\Http\Controllers\Controller;
+use AllCommerce\ShopifyInstalls;
+use AllCommerce\Http\Controllers\Controller;
 
 class DashboardController extends Controller
 {
@@ -23,7 +23,7 @@ class DashboardController extends Controller
     public function index()
     {
         $client_uuid = session()->has('active_client') ? session()->get('active_client') : backpack_user()->client_id;
-        $isHost = \AnchorCMS\User::find(backpack_user()->id)->getRoles();
+        $isHost = \AllCommerce\User::find(backpack_user()->id)->getRoles();
         $args = [
             'page' => 'dashboard',
             //'sidebar_menu' => $this->menu_options()->getOptions('sidebar')

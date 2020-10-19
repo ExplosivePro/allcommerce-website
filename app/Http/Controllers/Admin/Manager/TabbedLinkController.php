@@ -1,9 +1,9 @@
 <?php
 
-namespace AnchorCMS\Http\Controllers\Admin\Manager;
+namespace AllCommerce\Http\Controllers\Admin\Manager;
 
-use AnchorCMS\Clients;
-use AnchorCMS\Http\Controllers\Controller;
+use AllCommerce\Clients;
+use AllCommerce\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 class TabbedLinkController extends Controller

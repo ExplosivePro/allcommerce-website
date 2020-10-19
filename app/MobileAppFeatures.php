@@ -1,6 +1,6 @@
 <?php
 
-namespace AnchorCMS;
+namespace AllCommerce;
 
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Database\Eloquent\Model;
@@ -20,6 +20,6 @@ class MobileAppFeatures extends Model
 
     public function mobile_app()
     {
-        return $this->belongsTo('AnchorCMS\MobileApps', 'id', 'app_id');
+        return $this->belongsTo('AllCommerce\MobileApps', 'id', 'app_id');
     }
 }

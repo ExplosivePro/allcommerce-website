@@ -1,13 +1,13 @@
 <?php
 
-namespace AnchorCMS\Http\Controllers\Admin;
+namespace AllCommerce\Http\Controllers\Admin;
 
-use AnchorCMS\Clients;
+use AllCommerceClients;
 use Backpack\CRUD\CrudPanel;
 use Silber\Bouncer\BouncerFacade as Bouncer;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
-use AnchorCMS\Http\Requests\StandardStoreRequest as StoreRequest;
-use AnchorCMS\Http\Requests\StandardUpdateRequest as UpdateRequest;
+use AllCommerceHttp\Requests\StandardStoreRequest as StoreRequest;
+use AllCommerceHttp\Requests\StandardUpdateRequest as UpdateRequest;
 
 /**
  * Class MerchantsCrudController
@@ -25,7 +25,7 @@ class MerchantsCrudController extends CrudController
         | CrudPanel Basic Information
         |--------------------------------------------------------------------------
         */
-        $this->crud->setModel('AnchorCMS\Merchants');
+        $this->crud->setModel('AllCommerce\Merchants');
         $this->crud->setRoute(config('backpack.base.route_prefix') . '/manage-merchants');
         $this->crud->setEntityNameStrings('Merchant', 'Manage Merchants');
 

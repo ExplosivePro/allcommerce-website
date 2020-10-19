@@ -1,12 +1,12 @@
 <?php
 
-namespace AnchorCMS\Http\Controllers\API\Reports;
+namespace AllCommerce\Http\Controllers\API\Reports;
 
-use AnchorCMS\Features;
+use AllCommerce\Features;
 use CapeAndBay\Mailchimp\Mailchimp;
 use Illuminate\Http\Request;
 use Ixudra\Curl\Facades\Curl;
-use AnchorCMS\Http\Controllers\Controller;
+use AllCommerce\Http\Controllers\Controller;
 use Silber\Bouncer\BouncerFacade as Bouncer;
 
 class MailchimpAPIController extends Controller

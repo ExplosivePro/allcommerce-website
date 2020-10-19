@@ -1,13 +1,13 @@
 <?php
 
-namespace AnchorCMS\Http\Controllers\API\Reports;
+namespace AllCommerce\Http\Controllers\API\Reports;
 
-use AnchorCMS\AdBudgets;
-use AnchorCMS\AdMarkets;
-use AnchorCMS\Features;
+use AllCommerce\AdBudgets;
+use AllCommerce\AdMarkets;
+use AllCommerce\Features;
 use Illuminate\Http\Request;
 use Ixudra\Curl\Facades\Curl;
-use AnchorCMS\Http\Controllers\Controller;
+use AllCommerce\Http\Controllers\Controller;
 use Silber\Bouncer\BouncerFacade as Bouncer;
 
 class KPIReportsAPIController extends Controller

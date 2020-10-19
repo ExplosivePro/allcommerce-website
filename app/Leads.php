@@ -1,6 +1,6 @@
 <?php
 
-namespace AnchorCMS;
+namespace AllCommerce;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -47,31 +47,31 @@ class Leads extends Model
 
     public function shop()
     {
-        return $this->belongsTo('AnchorCMS\Shops', 'shop_uuid', 'id');
+        return $this->belongsTo('AllCommerce\Shops', 'shop_uuid', 'id');
     }
 
     public function client()
     {
-        return $this->belongsTo('AnchorCMS\Clients', 'client_uuid', 'id');
+        return $this->belongsTo('AllCommerce\Clients', 'client_uuid', 'id');
     }
 
     public function order()
     {
-        return $this->hasOne('AnchorCMS\Orders', 'id', 'order_uuid');
+        return $this->hasOne('AllCommerce\Orders', 'id', 'order_uuid');
     }
 
     public function lead_attributes()
     {
-        return $this->hasMany('AnchorCMS\LeadAttributes', 'lead_uuid', 'id');
+        return $this->hasMany('AllCommerce\LeadAttributes', 'lead_uuid', 'id');
     }
 
     public function shipping_address()
     {
-        return $this->hasOne('AnchorCMS\ShippingAddresses', 'lead_uuid', 'id');
+        return $this->hasOne('AllCommerce\ShippingAddresses', 'lead_uuid', 'id');
     }
 
     public function billing_address()
     {
-        return $this->hasOne('AnchorCMS\BillingAddresses', 'lead_uuid', 'id');
+        return $this->hasOne('AllCommerce\BillingAddresses', 'lead_uuid', 'id');
     }
 }

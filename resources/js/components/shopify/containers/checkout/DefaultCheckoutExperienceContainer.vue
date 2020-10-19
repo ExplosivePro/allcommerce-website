@@ -6,6 +6,7 @@
         :show-one-click="showOneClick"
         :prefill-data="billShipPreFill"
         @updated="updateCheckoutState"
+        @submit-payment="submitPayment"
     ></checkout-experience>
 </template>
 
@@ -19,7 +20,7 @@
         components: {
             CheckoutExperience
         },
-        props: ['items', 'shippingMethods', 'shopId', 'checkoutType', 'checkoutId', 'apiUrl', 'devMode'],
+        props: ['items', 'shippingMethods', 'shopId', 'checkoutType', 'checkoutId', 'apiUrl', 'devMode', 'gateways'],
         watch: {
             devMode(flag) {
                 console.log('Oh boy, devMode = '+flag);
@@ -100,7 +101,9 @@
                 setShippingReady: 'setShippingReady',
                 setBillingReady: 'setBillingReady',
                 setPostageReady: 'setPostageReady',
-                toggleOneClickMode: 'oneClickManager/toggleOneClickMode'
+                toggleOneClickMode: 'oneClickManager/toggleOneClickMode',
+                initCheckoutGatewayModules: 'initCheckoutGatewayModules',
+                executeCreditAuth: 'checkoutGatewayManager/executeCreditAuth'
             }),
             updateCheckoutState(payload) {
                 if('method' in payload) {
@@ -175,13 +178,25 @@
                     console.log('Invalid entry - ', payload)
                 }
             },
+            submitPayment(payload) {
+                switch(payload.type) {
+                    case 'credit':
+                        // @todo - all sorts of crazyness
+                        this.executeCreditAuth(payload);
+
+                        break;
+                    default:
+                        alert(`Unsupported Payment Type - ${payload.type}!`)
+                }
+            }
         },
         mounted() {
             this.setApiUrl(this.apiUrl);
             this.configCheckout({type:this.checkoutType, id:this.checkoutId});
             this.setShop(this.shopId);
             this.initCart(this.items);
-            this.setShippingMethods(this.shippingMethods)
+            this.setShippingMethods(this.shippingMethods);
+            this.initCheckoutGatewayModules(this.gateways);
 
             setTimeout(() => this.setLoading(false), 1250);
             console.log('DefaultCheckoutExperienceContainer mounted!', this.items);

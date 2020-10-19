@@ -28,17 +28,17 @@ $app = new Illuminate\Foundation\Application(
 
 $app->singleton(
     Illuminate\Contracts\Http\Kernel::class,
-    AnchorCMS\Http\Kernel::class
+    AllCommerce\Http\Kernel::class
 );
 
 $app->singleton(
     Illuminate\Contracts\Console\Kernel::class,
-    AnchorCMS\Console\Kernel::class
+    AllCommerce\Console\Kernel::class
 );
 
 $app->singleton(
     Illuminate\Contracts\Debug\ExceptionHandler::class,
-    AnchorCMS\Exceptions\Handler::class
+    AllCommerce\Exceptions\Handler::class
 );
 
 /*

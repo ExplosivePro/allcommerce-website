@@ -1,11 +1,11 @@
 <?php
 
-namespace AnchorCMS\Http\Controllers\API\Clients\MobileApps\Notifications;
+namespace AllCommerce\Http\Controllers\API\Clients\MobileApps\Notifications;
 
-use AnchorCMS\MobileApps;
+use AllCommerce\MobileApps;
 use Illuminate\Http\Request;
 use Ixudra\Curl\Facades\Curl;
-use AnchorCMS\Http\Controllers\Controller;
+use AllCommerce\Http\Controllers\Controller;
 
 class PushNotificationsAPIController extends Controller
 {

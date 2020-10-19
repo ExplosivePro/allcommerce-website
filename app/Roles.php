@@ -1,8 +1,8 @@
 <?php
 
-namespace AnchorCMS;
+namespace AllCommerce;
 
-use AnchorCMS\Permissions;
+use AllCommerce\Permissions;
 use Backpack\CRUD\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use Silber\Bouncer\Database\Concerns\HasAbilities;
@@ -104,6 +104,6 @@ class Roles extends Model
 
     public function client()
     {
-        return $this->hasOne('AnchorCMS\Clients', 'id', 'client_id');
+        return $this->hasOne('AllCommerce\Clients', 'id', 'client_id');
     }
 }

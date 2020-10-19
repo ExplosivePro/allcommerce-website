@@ -72,6 +72,7 @@
                         @if(!is_null($merchant))
                         :merchant="{{ json_encode($merchant->toArray()) }}"
                         :shops="{{ json_encode($shops->toArray()) }}"
+                        :client-enabled-gateways="{{ json_encode($client_enabled_payment_providers) }}"
                         @endif
                         :gateways="{{ json_encode($all_gateways) }}"
                 ></payment-gateway-manager>

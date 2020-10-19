@@ -1,6 +1,6 @@
 <?php
 
-namespace AnchorCMS;
+namespace AllCommerce;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -12,22 +12,22 @@ class ShopifyInstalls extends Model
 
     public function merchant()
     {
-        return $this->hasOne('AnchorCMS\Merchants', 'uuid', 'merchant_uuid');
+        return $this->hasOne('AllCommerce\Merchants', 'uuid', 'merchant_uuid');
     }
 
     public function client()
     {
-        return $this->hasOne('AnchorCMS\Clients', 'uuid', 'client_id');
+        return $this->hasOne('AllCommerce\Clients', 'uuid', 'client_id');
     }
 
     public function shop()
     {
-        return $this->hasOne('AnchorCMS\Shops', 'uuid', 'shop_uuid');
+        return $this->hasOne('AllCommerce\Shops', 'uuid', 'shop_uuid');
     }
 
     public function shop_by_url()
     {
-        return $this->hasOne('AnchorCMS\Shops', 'shop_url', 'shopify_store_url');
+        return $this->hasOne('AllCommerce\Shops', 'shop_url', 'shopify_store_url');
     }
 
     public static function isInstalled($shop_id)

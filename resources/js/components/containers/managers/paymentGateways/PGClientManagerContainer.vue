@@ -21,11 +21,21 @@ export default {
         clientContentView(flag) {
             let page = flag ? 'providers' : 'reports';
             console.log('Changing content page to '+ page);
+        },
+        creditProviders(providers) {
+            this.getAvailableProviders(providers);
+        },
+        expressProviders(providers) {
+            this.getAvailableProviders(providers);
+        },
+        installmentProviders(providers) {
+            this.getAvailableProviders(providers);
         }
     },
     data() {
         return {
-            availableProviders: [
+            availableProviders: [],
+            availableProviders2: [
                 {
                     'title': 'Dry Run Gateway',
                     status: 'Enabled',
@@ -34,7 +44,7 @@ export default {
                 },
                 {
                     'title': 'Stripe',
-                    status: 'Not Set Up',
+                    status: 'Enabled',
                     type: 'Credit Card',
                     disabled: false,
                 },
@@ -83,11 +93,6 @@ export default {
             ],
             providerInfo: [
                 {
-                    desc: 'AllCommerce\'s Built-In Dry Run Gateway, needs no configuration and is always available. However, you cannot use it when you are ready to take payments. Assign it to your shop(s) to demo your new payment pages!',
-                    fields: [],
-                    type: 'Credit Card Gateway'
-                },
-                {
                     desc: 'Stripe Payment Gateway',
                     fields: [
                         {
@@ -105,7 +110,12 @@ export default {
                         },
                     ],
                     type: 'Credit Card Gateway'
-                }
+                },
+                {
+                    desc: 'AllCommerce\'s Built-In Dry Run Gateway, needs no configuration and is always available. However, you cannot use it when you are ready to take payments. Assign it to your shop(s) to demo your new payment pages!',
+                    fields: [],
+                    type: 'Credit Card Gateway'
+                },
             ],
             activeProviderInfo: ''
         };
@@ -117,15 +127,20 @@ export default {
             expressProviders: 'paymentGatewaysManager/expressProviders',
             installmentProviders: 'paymentGatewaysManager/installmentProviders'
         }),
-        getAvailableProviders() {
-            return {
-                credit: this.creditProviders,
-                express: this.expressProviders,
-                install: this.installmentProviders,
-            }
-        }
     },
     methods: {
+        getAvailableProviders(providers) {
+            for(let c in providers) {
+                this.availableProviders.push(providers[c].availability);
+
+                if(providers[c].availability.enabled !== false) {
+                    for(let d in providers[c].availability.enabled) {
+                        this.providerInfo[c].fields[d].value = providers[c].availability.enabled[d];
+                    }
+                    // @todo - updated the field values
+                }
+            }
+        },
         ...mapActions({
             setAsideBar: 'asidebar/setContextTabActiveComponent'
         }),
@@ -140,6 +155,8 @@ export default {
     mounted() {
         this.setAsideBar('aside-pg-manager-context-tab')
         this.setAsideTitle('Payment Gateways Manager - Account View')
+        this.getAvailableProviders();
+        console.log('PGClientManagerContainer mounted!!!', this.availableProviders)
 
         /*
         setTimeout(function() {

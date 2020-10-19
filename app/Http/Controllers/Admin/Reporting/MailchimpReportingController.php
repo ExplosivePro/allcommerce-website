@@ -1,10 +1,10 @@
 <?php
 
-namespace AnchorCMS\Http\Controllers\Admin\Reporting;
+namespace AllCommerce\Http\Controllers\Admin\Reporting;
 
-use AnchorCMS\Clients;
+use AllCommerce\Clients;
 use Illuminate\Http\Request;
-use AnchorCMS\Http\Controllers\Controller;
+use AllCommerce\Http\Controllers\Controller;
 use Silber\Bouncer\BouncerFacade as Bouncer;
 
 class MailchimpReportingController extends Controller

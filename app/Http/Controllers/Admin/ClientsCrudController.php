@@ -1,13 +1,13 @@
 <?php
 
-namespace AnchorCMS\Http\Controllers\Admin;
+namespace AllCommerce\Http\Controllers\Admin;
 
 use Backpack\CRUD\CrudPanel;
 use Prologue\Alerts\Facades\Alert;
 use Silber\Bouncer\BouncerFacade as Bouncer;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
-use AnchorCMS\Http\Requests\RolesRequest as StoreRequest;
-use AnchorCMS\Http\Requests\RolesRequest as UpdateRequest;
+use AllCommerce\Http\Requests\RolesRequest as StoreRequest;
+use AllCommerce\Http\Requests\RolesRequest as UpdateRequest;
 
 /**
  * Class RolesCrudController
@@ -24,7 +24,7 @@ class ClientsCrudController extends CrudController
         | CrudPanel Basic Information
         |--------------------------------------------------------------------------
         */
-        $this->crud->setModel('AnchorCMS\Clients');
+        $this->crud->setModel('AllCommerce\Clients');
         $this->crud->setRoute(config('backpack.base.route_prefix') . '/crud-clients');
         $this->crud->setEntityNameStrings('Client', 'Clients');
 

@@ -1,16 +1,16 @@
 <?php
 
-namespace AnchorCMS\Aggregates\SMS;
+namespace AllCommerce\Aggregates\SMS;
 
-use AnchorCMS\Clients;
-use AnchorCMS\Events\SMS\PhoneNumberBlockedForClient;
-use AnchorCMS\Events\SMS\PhoneNumberBlockedForShop;
-use AnchorCMS\Events\SMS\PhoneNumberBlockedForTheDay;
-use AnchorCMS\Events\SMS\PhoneNumberLogged;
-use AnchorCMS\Events\SMS\PhoneNumberTexted;
-use AnchorCMS\Exceptions\SMS\CouldNotSendSMS;
-use AnchorCMS\Phones;
-use AnchorCMS\Shops;
+use AllCommerce\Clients;
+use AllCommerce\Events\SMS\PhoneNumberBlockedForClient;
+use AllCommerce\Events\SMS\PhoneNumberBlockedForShop;
+use AllCommerce\Events\SMS\PhoneNumberBlockedForTheDay;
+use AllCommerce\Events\SMS\PhoneNumberLogged;
+use AllCommerce\Events\SMS\PhoneNumberTexted;
+use AllCommerce\Exceptions\SMS\CouldNotSendSMS;
+use AllCommerce\Phones;
+use AllCommerce\Shops;
 use Spatie\EventSourcing\AggregateRoots\AggregateRoot;
 
 class PhoneAggregate extends AggregateRoot

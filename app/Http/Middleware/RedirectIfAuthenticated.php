@@ -1,8 +1,8 @@
 <?php
 
-namespace AnchorCMS\Http\Middleware;
+namespace AllCommerce\Http\Middleware;
 
-use AnchorCMS\Providers\RouteServiceProvider;
+use AllCommerce\Providers\RouteServiceProvider;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 

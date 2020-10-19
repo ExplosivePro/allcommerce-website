@@ -1,6 +1,6 @@
 <?php
 
-namespace AnchorCMS\Http\Middleware;
+namespace AllCommerce\Http\Middleware;
 
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
 

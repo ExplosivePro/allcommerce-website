@@ -1,6 +1,6 @@
 <?php
 
-namespace AnchorCMS\Models\PaymentGateways;
+namespace AllCommerce\Models\PaymentGateways;
 
 use Backpack\CRUD\CrudTrait;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
@@ -45,7 +45,7 @@ class ShopAssignedPaymentProviders extends Model
 
     public function payment_provider()
     {
-        return $this->hasOne('AnchorCMS\Models\PaymentGateways\PaymentProviders', 'id', 'provider_uuid')
+        return $this->hasOne('AllCommerce\Models\PaymentGateways\PaymentProviders', 'id', 'provider_uuid')
             ->with('payment_type');
     }
 }

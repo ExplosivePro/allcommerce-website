@@ -1,5 +1,5 @@
 @if($entry->shop_type()->first()->name == 'Shopify')
-    @if(\AnchorCMS\ShopifyInstalls::isInstalled($entry->id))
+    @if(\AllCommerce\ShopifyInstalls::isInstalled($entry->id))
         <a class="btn btn-xs btn-default" disabled>
             <i class="fab fa-shopify"></i> Shopify Connected
         </a>

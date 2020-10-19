@@ -1,8 +1,8 @@
 <?php
 
-namespace AnchorCMS\Services;
+namespace AllCommerce\Services;
 
-use AnchorCMS\AdMarkets;
+use AllCommerce\AdMarkets;
 
 class AdBudgetMgntService
 {

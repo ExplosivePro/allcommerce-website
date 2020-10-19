@@ -1,9 +1,9 @@
 <?php
 
-namespace AnchorCMS\Http\Controllers;
+namespace AllCommerce\Http\Controllers;
 
-use AnchorCMS\Roles;
-use AnchorCMS\User;
+use AllCommerce\Roles;
+use AllCommerce\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 

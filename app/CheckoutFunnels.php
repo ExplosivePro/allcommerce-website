@@ -1,6 +1,6 @@
 <?php
 
-namespace AnchorCMS;
+namespace AllCommerce;
 
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Database\Eloquent\Model;
@@ -94,11 +94,11 @@ class CheckoutFunnels extends Model
 
     public function funnel_attributes()
     {
-        return $this->hasMany('AnchorCMS\CheckoutFunnelAttributes', 'funnel_uuid', 'id');
+        return $this->hasMany('AllCommerce\CheckoutFunnelAttributes', 'funnel_uuid', 'id');
     }
 
     public function shop()
     {
-        return $this->belongsTo('AnchorCMS\Shops', 'shop_id','id');
+        return $this->belongsTo('AllCommerce\Shops', 'shop_id','id');
     }
 }

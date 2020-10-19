@@ -8,7 +8,7 @@
 Route::group([
     'prefix'     => config('backpack.base.route_prefix', 'admin'),
     'middleware' => ['web'],
-    'namespace'  => 'AnchorCMS\Http\Controllers',
+    'namespace'  => 'AllCommerce\Http\Controllers',
 ], function () { // custom admin routes
     Route::get('/login', 'Auth\LoginController@showLoginForm')->name('backpack.auth.login');
     //Route::get('/registration', 'Auth\LoginController@render_complete_registration');
@@ -17,7 +17,7 @@ Route::group([
 Route::group([
     'prefix'     => config('backpack.base.route_prefix', 'admin'),
     'middleware' => ['web', config('backpack.base.middleware_key', 'admin')],
-    'namespace'  => 'AnchorCMS\Http\Controllers',
+    'namespace'  => 'AllCommerce\Http\Controllers',
 ], function () { // custom admin routes
 
     Route::group(['prefix' => 'dashboard'], function () {
@@ -56,6 +56,8 @@ Route::group([
     Route::group(['prefix' => 'payment-gateways'], function () {
         Route::get('/', 'Admin\PaymentGateways\PaymentGatewaysManagerController@index');
         Route::post('/tabbed-links', 'Admin\Manager\TabbedLinkController@index');
+        Route::post('/{shop_uuid}/assign', 'Admin\PaymentGateways\PaymentGatewaysManagerController@assign_gateway_to_shop');
+        Route::delete('/{shop_uuid}/unassign', 'Admin\PaymentGateways\PaymentGatewaysManagerController@unassign_gateway_to_shop');
     });
 
     CRUD::resource('manage-merchants', 'Admin\MerchantsCrudController');

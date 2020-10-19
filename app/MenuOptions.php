@@ -1,9 +1,9 @@
 <?php
 
-namespace AnchorCMS;
+namespace AllCommerce;
 
 
-use AnchorCMS\Clients;
+use AllCommerce\Clients;
 use Illuminate\Database\Eloquent\Model;
 use Silber\Bouncer\BouncerFacade as Bouncer;
 use Illuminate\Database\Eloquent\SoftDeletes;

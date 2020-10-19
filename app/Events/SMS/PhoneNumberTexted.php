@@ -1,12 +1,12 @@
 <?php
 
-namespace AnchorCMS\Events\SMS;
+namespace AllCommerce\Events\SMS;
 
-use AnchorCMS\Leads;
-use AnchorCMS\BillingAddresses;
-use AnchorCMS\Phones;
-use AnchorCMS\ShippingAddresses;
-use AnchorCMS\Shops;
+use AllCommerce\Leads;
+use AllCommerce\BillingAddresses;
+use AllCommerce\Phones;
+use AllCommerce\ShippingAddresses;
+use AllCommerce\Shops;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;

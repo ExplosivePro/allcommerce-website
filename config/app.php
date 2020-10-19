@@ -169,11 +169,11 @@ return [
         /*
          * Application Service Providers...
          */
-        AnchorCMS\Providers\AppServiceProvider::class,
-        AnchorCMS\Providers\AuthServiceProvider::class,
-        AnchorCMS\Providers\BroadcastServiceProvider::class,
-        AnchorCMS\Providers\EventServiceProvider::class,
-        AnchorCMS\Providers\RouteServiceProvider::class,
+        AllCommerce\Providers\AppServiceProvider::class,
+        AllCommerce\Providers\AuthServiceProvider::class,
+        AllCommerce\Providers\BroadcastServiceProvider::class,
+        AllCommerce\Providers\EventServiceProvider::class,
+        AllCommerce\Providers\RouteServiceProvider::class,
 
     ],
 

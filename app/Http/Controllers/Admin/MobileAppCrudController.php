@@ -1,12 +1,12 @@
 <?php
 
-namespace AnchorCMS\Http\Controllers\Admin;
+namespace AllCommerce\Http\Controllers\Admin;
 
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 
 // VALIDATION: change the requests to match your own file names if you need form validation
-use AnchorCMS\Http\Requests\StandardStoreRequest as StoreRequest;
-use AnchorCMS\Http\Requests\StandardUpdateRequest as UpdateRequest;
+use AllCommerce\Http\Requests\StandardStoreRequest as StoreRequest;
+use AllCommerce\Http\Requests\StandardUpdateRequest as UpdateRequest;
 use Backpack\CRUD\CrudPanel;
 
 /**
@@ -24,7 +24,7 @@ class MobileAppCrudController extends CrudController
         | CrudPanel Basic Information
         |--------------------------------------------------------------------------
         */
-        $this->crud->setModel('AnchorCMS\MobileApps');
+        $this->crud->setModel('AllCommerce\MobileApps');
         $this->crud->setRoute(config('backpack.base.route_prefix') . '/crud-mobile-apps');
         $this->crud->setEntityNameStrings('Cape & Bay Produced Mobile App', 'Mobile Apps!');
 

@@ -2,7 +2,7 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use AnchorCMS\User;
+use AllCommerce\User;
 use Faker\Generator as Faker;
 use Illuminate\Support\Str;
 

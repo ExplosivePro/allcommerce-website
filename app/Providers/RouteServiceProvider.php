@@ -1,6 +1,6 @@
 <?php
 
-namespace AnchorCMS\Providers;
+namespace AllCommerce\Providers;
 
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Route;
@@ -14,7 +14,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    protected $namespace = 'AnchorCMS\Http\Controllers';
+    protected $namespace = 'AllCommerce\Http\Controllers';
 
     /**
      * The path to the "home" route for your application.

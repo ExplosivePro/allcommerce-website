@@ -1,8 +1,8 @@
 <?php
 
-namespace AnchorCMS\Mail\User;
+namespace AllCommerce\Mail\User;
 
-use AnchorCMS\User;
+use AllCommerce\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
@@ -50,7 +50,7 @@ class WelcomeNewUser extends Mailable
         $args['created_at'] = $time_created;
 
         return $this->from(env('MAIL_FROM_ADDRESS','automailer@mail.capeandbay.com'), env('MAIL_FROM_NAME'))
-            ->subject('Welcome to AnchorCMS! Finish Creating Your Account')
+            ->subject('Welcome to AllCommerce! Finish Creating Your Account')
             ->view('emails.users.created-notification', $args);
     }
 }

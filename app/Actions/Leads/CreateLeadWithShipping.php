@@ -1,8 +1,8 @@
 <?php
 
-namespace AnchorCMS\Actions\Leads;
+namespace AllCommerce\Actions\Leads;
 
-use AnchorCMS\Shops;
+use AllCommerce\Shops;
 use AllCommerce\DepartmentStore\Library\Sales\Lead;
 
 class CreateLeadWithShipping

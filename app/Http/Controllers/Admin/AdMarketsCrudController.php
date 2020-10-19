@@ -1,15 +1,15 @@
 <?php
 
-namespace AnchorCMS\Http\Controllers\Admin;
+namespace AllCommerce\Http\Controllers\Admin;
 
 use Bouncer;
-use AnchorCMS\Clients;
-//use AnchorCMS\Repositories\ClientServiceRepository;
+use AllCommerce\Clients;
+//use AllCommerce\Repositories\ClientServiceRepository;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 
 // VALIDATION: change the requests to match your own file names if you need form validation
-use AnchorCMS\Http\Requests\StandardStoreRequest as StoreRequest;
-use AnchorCMS\Http\Requests\StandardUpdateRequest as UpdateRequest;
+use AllCommerce\Http\Requests\StandardStoreRequest as StoreRequest;
+use AllCommerce\Http\Requests\StandardUpdateRequest as UpdateRequest;
 use Backpack\CRUD\CrudPanel;
 
 /**
@@ -41,7 +41,7 @@ class AdMarketsCrudController extends CrudController
             | CrudPanel Basic Information
             |--------------------------------------------------------------------------
             */
-            $this->crud->setModel('AnchorCMS\AdMarkets');
+            $this->crud->setModel('AllCommerce\AdMarkets');
             $this->crud->setRoute(config('backpack.base.route_prefix') . '/crud-ad-markets');
             $this->crud->setEntityNameStrings('Ad Market', 'Ad Markets');
 

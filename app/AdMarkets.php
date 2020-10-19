@@ -1,6 +1,6 @@
 <?php
 
-namespace AnchorCMS;
+namespace AllCommerce;
 
 use Backpack\CRUD\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
@@ -19,6 +19,6 @@ class AdMarkets extends Model
 
     public function client()
     {
-        return $this->hasOne('AnchorCMS\Clients', 'id', 'client_id');
+        return $this->hasOne('AllCommerceClients', 'id', 'client_id');
     }
 }

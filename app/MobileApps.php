@@ -1,6 +1,6 @@
 <?php
 
-namespace AnchorCMS;
+namespace AllCommerce;
 
 use Backpack\CRUD\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
@@ -21,12 +21,12 @@ class MobileApps extends Model
 
     public function app_features()
     {
-        return $this->hasMany('AnchorCMS\MobileAppFeatures', 'app_id', 'id');
+        return $this->hasMany('AllCommerce\MobileAppFeatures', 'app_id', 'id');
     }
 
     public function client()
     {
-        return $this->belongsTo('AnchorCMS\Clients', 'client_id', 'id');
+        return $this->belongsTo('AllCommerce\Clients', 'client_id', 'id');
     }
 
     public function getAllAppWithPushNotes($client_id = '', $active = 1)

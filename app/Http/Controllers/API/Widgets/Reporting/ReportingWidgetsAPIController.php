@@ -1,10 +1,10 @@
 <?php
 
-namespace AnchorCMS\Http\Controllers\API\Widgets\Reporting;
+namespace AllCommerce\Http\Controllers\API\Widgets\Reporting;
 
 use Illuminate\Http\Request;
-use AnchorCMS\Http\Controllers\Controller;
-use AnchorCMS\Actions\Widgets\GetWidgetsForUser;
+use AllCommerce\Http\Controllers\Controller;
+use AllCommerce\Actions\Widgets\GetWidgetsForUser;
 
 class ReportingWidgetsAPIController extends Controller
 {

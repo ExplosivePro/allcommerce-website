@@ -1,8 +1,8 @@
 <?php
 
-namespace AnchorCMS\Http\Controllers\Auth;
+namespace AllCommerce\Http\Controllers\Auth;
 
-use AnchorCMS\Http\Controllers\Controller;
+use AllCommerce\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 
 class ForgotPasswordController extends Controller

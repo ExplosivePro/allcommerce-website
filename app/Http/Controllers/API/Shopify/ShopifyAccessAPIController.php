@@ -1,11 +1,11 @@
 <?php
 
-namespace AnchorCMS\Http\Controllers\API\Shopify;
+namespace AllCommerce\Http\Controllers\API\Shopify;
 
-use AnchorCMS\ShopifyInstalls;
+use AllCommerce\ShopifyInstalls;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use AnchorCMS\Http\Controllers\Controller;
+use AllCommerce\Http\Controllers\Controller;
 use CapeAndBay\AllCommerce\Facades\ServiceDesk;
 
 class ShopifyAccessAPIController extends Controller

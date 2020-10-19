@@ -1,6 +1,6 @@
 <?php
 
-namespace AnchorCMS\Models\PaymentGateways;
+namespace AllCommerce\Models\PaymentGateways;
 
 use Backpack\CRUD\CrudTrait;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;

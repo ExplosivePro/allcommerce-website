@@ -14,7 +14,7 @@
     <br />
     <br />
 
-    <p> Welcome to AnchorCMS by Cape & Bay!</p>
+    <p> Welcome to AllCommerce by Cape & Bay!</p>
 
     <br />
     <br />
@@ -24,7 +24,7 @@
     <br />
     <br />
 
-    <p style="margin-left: 2em;"><b>AnchorCMS Support Team</b></p>
+    <p style="margin-left: 2em;"><b>AllCommerce Support Team</b></p>
 
     <br />
     <br />

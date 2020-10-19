@@ -1,6 +1,6 @@
 <?php
 
-namespace AnchorCMS;
+namespace AllCommerce;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -26,17 +26,17 @@ class MerchantApiTokens extends Model
 
     public function client()
     {
-        return $this->belongsTo('AnchorCMS\Clients', 'client_id', 'id');
+        return $this->belongsTo('AllCommerce\Clients', 'client_id', 'id');
     }
 
     public function merchant()
     {
-        return $this->belongsTo('AnchorCMS\Merchants', 'scopes->merchant_id', 'id');
+        return $this->belongsTo('AllCommerce\Merchants', 'scopes->merchant_id', 'id');
     }
 
     public function shop()
     {
-        return $this->belongsTo('AnchorCMS\Shops', 'scopes->shop_id', 'id');
+        return $this->belongsTo('AllCommerce\Shops', 'scopes->shop_id', 'id');
     }
 
 }

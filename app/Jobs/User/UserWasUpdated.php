@@ -1,15 +1,15 @@
 <?php
 
-namespace AnchorCMS\Jobs\User;
+namespace AllCommerce\Jobs\User;
 
-use AnchorCMS\User;
+use AllCommerce\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
-use AnchorCMS\Mail\User\UserWasUpdated as MailClass;
+use AllCommerce\Mail\User\UserWasUpdated as MailClass;
 
 class UserWasUpdated implements ShouldQueue
 {

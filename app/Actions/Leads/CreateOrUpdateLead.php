@@ -1,6 +1,6 @@
 <?php
 
-namespace AnchorCMS\Actions\Leads;
+namespace AllCommerce\Actions\Leads;
 
 use AllCommerce\DepartmentStore\Facades\DepartmentStore;
 

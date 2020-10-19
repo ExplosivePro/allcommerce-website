@@ -211,7 +211,7 @@
                         </div>
                         <div class="submit-side">
                             <div class="inner-submit">
-                                <polaris-button primary>
+                                <polaris-button primary @click="submitPayment('credit')">
                                     <i class="fad fa-arrow-alt-right"></i><span style="padding-left: 1em;"><b>Submit Order</b></span>
                                 </polaris-button>
                             </div>
@@ -985,6 +985,13 @@
                             break;
                     }
                 }
+            },
+            submitPayment(type) {
+                // @todo - all sorts of crazyness
+                let payload = {
+                    type: type
+                };
+                this.$emit('submit-payment', payload)
             }
         },
         mounted() {

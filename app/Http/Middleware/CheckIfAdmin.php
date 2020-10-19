@@ -1,8 +1,8 @@
 <?php
 
-namespace AnchorCMS\Http\Middleware;
+namespace AllCommerce\Http\Middleware;
 
-use AnchorCMS\UserActiveClients;
+use AllCommerce\UserActiveClients;
 use Closure;
 
 class CheckIfAdmin

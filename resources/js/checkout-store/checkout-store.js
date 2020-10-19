@@ -7,6 +7,7 @@ import geography from "./geography";
 import shipping from "./shopify/modules/shipping";
 import priceCalc from "./shopify/modules/priceCalc";
 import oneClickManager from "./shopify/modules/oneClickManager";
+import checkoutGatewayManager from "./paymentGateways/checkoutGatewayManager";
 
 Vue.use(Vuex);
 
@@ -17,6 +18,7 @@ export default new Vuex.Store({
         geography,
         priceCalc,
         shipping,
+        checkoutGatewayManager
     },
     state() {
         return {
@@ -275,6 +277,13 @@ export default new Vuex.Store({
                     context.commit('loading', false);
                     context.commit('emailReady', false);
                 });
+        },
+        initCheckoutGatewayModules(context, gateways) {
+            console.log('initCheckoutGatewayModules - ', gateways);
+
+            for(let c in gateways.credit) {
+                context.dispatch('checkoutGatewayManager/initCreditGateway', gateways.credit[c])
+            }
         }
     }
 });

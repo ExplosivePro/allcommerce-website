@@ -1,9 +1,9 @@
 <?php
 
-namespace AnchorCMS\Jobs\User;
+namespace AllCommerce\Jobs\User;
 
-use AnchorCMS\Mail\User\WelcomeNewUser;
-use AnchorCMS\User;
+use AllCommerce\Mail\User\WelcomeNewUser;
+use AllCommerce\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;

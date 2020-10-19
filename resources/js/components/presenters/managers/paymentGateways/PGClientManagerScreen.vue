@@ -31,13 +31,13 @@
                                     <table class="table table-bordered">
                                         <thead>
                                         <tr>
-                                            <th scope="col" v-for="(x, field) in providers[0]" v-if="field !== 'disabled'">{{ field }}</th>
+                                            <th scope="col" v-for="(x, field) in providers[0]" v-if="(field !== 'disabled') && (field !== 'enabled')">{{ field }}</th>
                                             <th>More</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         <tr v-for="(provider, idx) in providers">
-                                            <td v-for="(val, col) in provider" :scope="(col === 'title') ? 'row' : ''" v-if="(col !== 'disabled') && (provider.type === 'Credit Card')">{{ val }}</td>
+                                            <td v-for="(val, col) in provider" :scope="(col === 'title') ? 'row' : ''" v-if="(col !== 'disabled') && (col !== 'enabled') && (provider.type === 'Credit Card')">{{ val }}</td>
                                             <td v-if="(provider.type === 'Credit Card')"><button type="button"
                                                         class="btn "
                                                         :class="(provider.status === 'Enabled') ? 'btn-info' : 'btn-primary'"
@@ -127,10 +127,10 @@
                                     <form>
                                         <div v-for="(field, idx) in providerInfo.fields" class="sweet-form-row form-group">
                                             <p style="margin:0;padding:0;"><label :for="field.name">{{ field.name }}</label></p>
-                                            <input v-if="field.type === 'text'" type="text" :name="field.name"/>
+                                            <input v-if="field.type === 'text'" type="text" :name="field.name" v-model="field.value"/>
 
                                             <p><small v-if="field.type === 'text'">{{ field.desc }}</small></p>
-                                            <select v-if="field.type === 'select'" :name="field.name" class="form-control">
+                                            <select v-if="field.type === 'select'" :name="field.name" class="form-control" v-model="field.value">
                                                 <option value="">Select a {{ field.desc }}</option>
                                                 <option v-for="(lbl, val) in field.options" :value="val">{{ lbl }}</option>
                                             </select>

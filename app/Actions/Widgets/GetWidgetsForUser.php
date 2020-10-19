@@ -1,9 +1,9 @@
 <?php
 
-namespace AnchorCMS\Actions\Widgets;
+namespace AllCommerce\Actions\Widgets;
 
-use AnchorCMS\Clients;
-use AnchorCMS\Widgets;
+use AllCommerce\Clients;
+use AllCommerce\Widgets;
 use Illuminate\Support\Facades\Log;
 use Silber\Bouncer\BouncerFacade as Bouncer;
 

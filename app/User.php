@@ -1,9 +1,9 @@
 <?php
 
-namespace AnchorCMS;
+namespace AllCommerce;
 
-use AnchorCMS\Clients;
-use AnchorCMS\Jobs\User\OnboardNewUser;
+use AllCommerce\Clients;
+use AllCommerce\Jobs\User\OnboardNewUser;
 use Backpack\CRUD\CrudTrait;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -49,7 +49,7 @@ class User extends Authenticatable
 
     public function client()
     {
-        return $this->hasOne('AnchorCMS\Clients', 'id', 'client_id');
+        return $this->hasOne('AllCommerce\Clients', 'id', 'client_id');
     }
 
 

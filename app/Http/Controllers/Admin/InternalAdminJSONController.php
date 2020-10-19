@@ -1,11 +1,11 @@
 <?php
 
-namespace AnchorCMS\Http\Controllers\Admin;
+namespace AllCommerce\Http\Controllers\Admin;
 
-use AnchorCMS\Abilities;
-use AnchorCMS\Roles;
+use AllCommerce\Abilities;
+use AllCommerce\Roles;
 use Illuminate\Http\Request;
-use AnchorCMS\Http\Controllers\Controller;
+use AllCommerce\Http\Controllers\Controller;
 use Silber\Bouncer\BouncerFacade as Bouncer;
 
 class InternalAdminJSONController extends Controller

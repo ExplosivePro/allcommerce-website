@@ -1,9 +1,9 @@
 <?php
 
-namespace AnchorCMS\Services;
+namespace AllCommerce\Services;
 
 use Twilio\Rest\Client as Twilio;
-use AnchorCMS\Models\SMS\SmsProviders;
+use AllCommerce\Models\SMS\SmsProviders;
 
 class SMSTransmissionService
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace AnchorCMS;
+namespace AllCommerce;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
@@ -17,12 +17,12 @@ class Widgets extends Model
 
     public function client()
     {
-        return $this->belongsTo('AnchorCMS\Clients', 'id', 'client_id');
+        return $this->belongsTo('AllCommerce\Clients', 'id', 'client_id');
     }
 
     public function user_preferred()
     {
-        return $this->hasMany('AnchorCMS\UserPreferredWidgets', 'widget_id', 'id');
+        return $this->hasMany('AllCommerce\UserPreferredWidgets', 'widget_id', 'id');
     }
 
     public function specific_user_preferred($user_id, $page, $client_id = null)

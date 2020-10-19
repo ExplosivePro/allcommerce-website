@@ -1,9 +1,9 @@
 <?php
 
-namespace AnchorCMS\Http\Controllers\Auth;
+namespace AllCommerce\Http\Controllers\Auth;
 
-use AnchorCMS\Http\Controllers\Controller;
-use AnchorCMS\Providers\RouteServiceProvider;
+use AllCommerce\Http\Controllers\Controller;
+use AllCommerce\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\ConfirmsPasswords;
 
 class ConfirmPasswordController extends Controller

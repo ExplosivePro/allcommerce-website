@@ -1,6 +1,6 @@
 <?php
 
-namespace AnchorCMS;
+namespace AllCommerce;
 
 use Backpack\CRUD\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
@@ -62,11 +62,11 @@ class Clients extends Model
 
     public function features()
     {
-        return $this->hasMany('AnchorCMS\Features', 'client_id', 'id');
+        return $this->hasMany('AllCommerceFeatures', 'client_id', 'id');
     }
 
     public function merchants()
     {
-        return $this->hasMany('AnchorCMS\Merchants', 'client_id', 'id');
+        return $this->hasMany('AllCommerce\Merchants', 'client_id', 'id');
     }
 }

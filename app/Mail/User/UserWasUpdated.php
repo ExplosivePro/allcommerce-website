@@ -1,8 +1,8 @@
 <?php
 
-namespace AnchorCMS\Mail\User;
+namespace AllCommerce\Mail\User;
 
-use AnchorCMS\User;
+use AllCommerce\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
@@ -47,7 +47,7 @@ class UserWasUpdated extends Mailable
         $args['updated_at'] = $time_updated;
 
         return $this->from(env('MAIL_FROM_ADDRESS','automailer@mail.capeandbay.com'), env('MAIL_FROM_NAME'))
-            ->subject('We Detected An Update to your AnchorCMS Account!')
+            ->subject('We Detected An Update to your AllCommerce Account!')
             ->view('emails.users.updated-notification', $args);
     }
 }

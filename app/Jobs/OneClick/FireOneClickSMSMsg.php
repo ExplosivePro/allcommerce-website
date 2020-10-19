@@ -1,10 +1,10 @@
 <?php
 
-namespace AnchorCMS\Jobs\OneClick;
+namespace AllCommerce\Jobs\OneClick;
 
-use AnchorCMS\LeadAttributes;
-use AnchorCMS\OrderAttributes;
-use AnchorCMS\Services\SMSTransmissionService;
+use AllCommerce\LeadAttributes;
+use AllCommerce\OrderAttributes;
+use AllCommerce\Services\SMSTransmissionService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
