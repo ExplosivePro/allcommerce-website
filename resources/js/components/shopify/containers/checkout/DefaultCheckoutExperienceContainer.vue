@@ -1,6 +1,7 @@
 <template>
     <checkout-experience
         :loading="loading"
+        :loading-msg="loadingMsg"
         :countries="countyDrop"
         :state-drops="stateDrops"
         :show-one-click="showOneClick"
@@ -55,17 +56,31 @@
             oneClickResults(data) {
                 this.billShipSame = false;
                 this.billShipPreFill = data;
+            },
+            paymentLoading(flag) {
+                if(flag) {
+                    console.log('Payment initiating! Shhhhh...');
+                    this.loadingMsg = 'Submitting Payment! One Moment Please..'
+                }
+                else {
+                    console.log('Payment done.')
+                    this.loadingMsg = 'Loading Your Secure Checkout!';
+                }
+
+                this.setLoading(flag)
             }
         },
         data() {
             return {
                 billShipSame: true,
-                billShipPreFill: ''
+                billShipPreFill: '',
+                loadingMsg: 'Loading Your Secure Checkout!'
             };
         },
         computed: {
             ...mapGetters({
                 loading: 'loading',
+                paymentLoading: 'checkoutGatewayManager/loading',
                 email: 'customerEmail',
                 lmLeadUuid: 'leadManager/leadUuid',
                 emailReady: 'leadManager/emailReady',

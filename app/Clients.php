@@ -62,7 +62,7 @@ class Clients extends Model
 
     public function features()
     {
-        return $this->hasMany('AllCommerceFeatures', 'client_id', 'id');
+        return $this->hasMany('AllCommerce\Features', 'client_id', 'id');
     }
 
     public function merchants()

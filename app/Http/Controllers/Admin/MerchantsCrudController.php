@@ -2,7 +2,7 @@
 
 namespace AllCommerce\Http\Controllers\Admin;
 
-use AllCommerceClients;
+use AllCommerce\Clients;
 use Backpack\CRUD\CrudPanel;
 use Silber\Bouncer\BouncerFacade as Bouncer;
 use Backpack\CRUD\app\Http\Controllers\CrudController;

@@ -19,6 +19,6 @@ class AdMarkets extends Model
 
     public function client()
     {
-        return $this->hasOne('AllCommerceClients', 'id', 'client_id');
+        return $this->hasOne('AllCommerce\Clients', 'id', 'client_id');
     }
 }

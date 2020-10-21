@@ -4,7 +4,7 @@
         <div class="loading-piece" v-if="loading">
             <div class="inner-loading-piece">
                 <sexy-hurricane-loading
-                    loading-msg="Loading Your Secure Checkout!"
+                    :loading-msg="loadingMsg"
                     override-icon="fad fa-spinner-third"
                     override-icon-size="7.5em"
                 ></sexy-hurricane-loading>
@@ -189,12 +189,12 @@
                                 <div class="payment-pad">
                                     <polaris-form-layout>
                                         <polaris-form-layout-group>
-                                            <polaris-text-field placeholder="Card Number" :disabled="disableFields"></polaris-text-field>
+                                            <polaris-text-field v-model="cc" placeholder="Card Number" :disabled="disableFields"></polaris-text-field>
                                         </polaris-form-layout-group>
                                          <polaris-form-layout-group condensed>
-                                             <polaris-text-field placeholder="Name on Card" :disabled="disableFields"></polaris-text-field>
-                                             <polaris-text-field placeholder="MM/YY" :disabled="disableFields"></polaris-text-field>
-                                             <polaris-text-field placeholder="CVV" :disabled="disableFields"></polaris-text-field>
+                                             <polaris-text-field v-model="ccName" placeholder="Name on Card" :disabled="disableFields"></polaris-text-field>
+                                             <polaris-text-field v-model="ccExpy" placeholder="MM/YY" :disabled="disableFields"></polaris-text-field>
+                                             <polaris-text-field v-model="ccCvv" placeholder="CVV" :disabled="disableFields"></polaris-text-field>
                                          </polaris-form-layout-group>
                                     </polaris-form-layout>
                                 </div>
@@ -251,7 +251,7 @@
             SexyHurricaneLoading
         },
         props: [
-            'hasTimer', 'hasExpressCheckout', 'lineItems', 'loading', 'disableFields',
+            'hasTimer', 'hasExpressCheckout', 'lineItems', 'loading', 'loadingMsg', 'disableFields',
             'countries', 'stateDrops', 'shippingLine', 'pricing', 'tax', 'showOneClick',
             'prefillData',
         ],
@@ -753,7 +753,12 @@
                 billingCityError: '',
 
                 billingValid: false,
-                shippingValid: false
+                shippingValid: false,
+
+                cc:'',
+                ccName: '',
+                ccExpy: '',
+                ccCvv: ''
             };
         },
         computed: {
@@ -989,8 +994,17 @@
             submitPayment(type) {
                 // @todo - all sorts of crazyness
                 let payload = {
-                    type: type
+                    type: type,
                 };
+
+                if(type === 'credit') {
+                    payload['details'] = {
+                        cc:this.cc,
+                        ccName: this.ccName,
+                        ccExpy: this.ccExpy,
+                        ccCvv: this.ccCvv
+                    }
+                }
                 this.$emit('submit-payment', payload)
             }
         },

@@ -49,6 +49,12 @@ Route::group(['prefix' => 'checkout'], function () {
             Route::post('/resend', 'API\Checkouts\OneClickCheckoutAPIController@resend_code');
         });
     });
+
+    Route::group(['prefix' => 'payment'], function () {
+        Route::group(['prefix' => 'credit'], function () {
+            Route::post('/auth', 'API\Checkouts\Payments\CreditCardPaymentAPIController@auth_credit_card');
+        });
+    });
 });
 
 Route::group(['prefix' => 'shopify'], function () {

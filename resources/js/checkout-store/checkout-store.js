@@ -62,6 +62,7 @@ export default new Vuex.Store({
             state.backendUrl = url;
             state.leadManager.apiUrl = url;
             state.oneClickManager.apiUrl = url;
+            state.checkoutGatewayManager.apiUrl = url;
         },
         checkoutType(state, checkoutType) {
             console.log('Mutating checkoutType to '+checkoutType);
@@ -86,6 +87,7 @@ export default new Vuex.Store({
             console.log('Mutating leadUuid to '+uuid);
             state.leadUuid = uuid;
             state.leadManager.leadUuid = uuid;
+            state.checkoutGatewayManager.leadUuid = uuid;
         },
         optInMailing(state, flag) {
             console.log('Mutating optInMailing to '+ flag);
