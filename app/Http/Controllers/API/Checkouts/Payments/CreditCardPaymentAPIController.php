@@ -2,22 +2,26 @@
 
 namespace AllCommerce\Http\Controllers\API\Checkouts\Payments;
 
+use AllCommerce\DepartmentStore\Library\Sales\Lead;
+use AllCommerce\DepartmentStore\Library\Sales\Order;
 use AllCommerce\Http\Controllers\Controller;
 use AllCommerce\Leads;
+use AllCommerce\Shops;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class CreditCardPaymentAPIController extends Controller
 {
-    protected $leads, $request;
+    protected $leads, $request, $shops_model;
 
-    public function __construct(Request $request, Leads $leads)
+    public function __construct(Request $request, Leads $leads, Shops $shops)
     {
         $this->leads = $leads;
         $this->request = $request;
+        $this->shops_model = $shops;
     }
 
-    public function auth_credit_card()
+    public function auth_credit_card(Order $ac_order)
     {
         $results = ['success' => false , 'reason' => 'Unknown error, you were not charged.'];
 
@@ -26,10 +30,11 @@ class CreditCardPaymentAPIController extends Controller
         //run the validationz
         $validated = Validator::make($data, [
             'cc'        => 'bail|required',
-            'ccName' => 'bail|required',
-            'ccExpy'   => 'bail|required',
+            'ccName'    => 'bail|required',
+            'ccExpy'    => 'bail|required',
             'ccCvv'     => 'bail|required',
-            'leadUuid'    => 'sometimes|required|exists:leads,id',
+            'price'     => 'bail|required',
+            'leadUuid'  => 'bail|required|exists:leads,id',
         ]);
 
         if($validated->fails())
@@ -42,14 +47,44 @@ class CreditCardPaymentAPIController extends Controller
         }
         else
         {
-            /**
-             * STEPS
-             * 1. Use the lead UUID to get the details needed to set up a DepartmentStore session.
-             * 2. Use the DepartmentStore to  Get the Lead.
-             * 3. Use the DepartmentStore to Create a new Order.
-             * 4. Use populated Department Store Object to send the Payment
-             * 5. Send back the response.
-             */
+            $lead = $this->leads->find($data['leadUuid']);
+
+            // get the access token from the merchant_api_tokens table
+            $token_record = $this->shops_model->whereId($lead->shop_uuid)
+                ->with('oauth_api_token')->first();
+
+            if(!is_null($token_record->oauth_api_token))
+            {
+                // Use the lead to create or retrieve an order object
+                $ac_order->setLeadId($lead->id);
+                $ac_order->setAccessToken($token_record->oauth_api_token->token);
+
+                // Use the DepartmentStore to Create a new Order.
+                if($ac_order->get())
+                {
+                    $payload = $data;
+                    $payload['orderUuid'] = $ac_order->getOrderId();
+
+                    if($ac_order->getShopType() == 'Shopify')
+                    {
+                        $payload['shopifyDraftOrderId'] = $ac_order->getShopifyDraftOrder()['id'];
+                    }
+
+                    // Use populated Department Store Object to send the Payment
+                    if($response = $ac_order->processPaymentAuth($payload))
+                    {
+
+                    }
+                    else
+                    {
+                        $results['reason'] = 'Payment Authorization Denied';
+                    }
+                }
+                else
+                {
+                    $results['reason'] = 'Could not create order. You were not charged.';
+                }
+            }
         }
 
         return response($results);

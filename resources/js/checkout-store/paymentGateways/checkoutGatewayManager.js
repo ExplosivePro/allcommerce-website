@@ -26,7 +26,8 @@ const checkoutGatewayManager = {
             creditModule: '',
             leadUuid: '',
             loading: '',
-            apiUrl: ''
+            apiUrl: '',
+            price: 0
         };
     },
     mutations: {
@@ -42,6 +43,9 @@ const checkoutGatewayManager = {
         apiUrl(state, url) {
             state.apiUrl = url;
         },
+        price(state, amt) {
+            state.price = amt;
+        }
     },
     getters: {
         creditModule(state) {
@@ -52,6 +56,9 @@ const checkoutGatewayManager = {
         },
         apiUrl(state) {
             return state.apiUrl;
+        },
+        price(state) {
+            return state.price;
         }
     },
     actions: {

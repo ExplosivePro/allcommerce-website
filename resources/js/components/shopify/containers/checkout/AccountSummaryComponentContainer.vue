@@ -52,6 +52,10 @@
                 else {
                     this.taxText = '';
                 }
+            },
+            total(price) {
+                console.log('Updating payment gateway price '+price);
+                this.setPriceWithPayment(price)
             }
         },
         data() {
@@ -115,7 +119,8 @@
                 }
             },
             ...mapMutations({
-                setShippingRate: 'priceCalc/shipping'
+                setShippingRate: 'priceCalc/shipping',
+                setPriceWithPayment: 'checkoutGatewayManager/price'
             })
         },
         mounted() {

@@ -53,14 +53,14 @@ const dryRunGateway = {
                     }
                     else {
                         alert('Could not reach to server. Try Again');
-                        context.rootState.instance.loading = false;
+                        context.rootState.checkoutGatewayManager.loading = false;
                     }
 
                 })
                 .catch(err => {
                     console.log(err);
                     alert('Could not connect to server. Try Again');
-                    context.rootState.instance.loading = false;
+                    context.rootState.checkoutGatewayManager.loading = false;
                 });
         }
     }

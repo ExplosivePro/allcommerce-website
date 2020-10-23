@@ -107,7 +107,7 @@
                 setShipping: 'leadManager/shippingAddress',
                 setBilling: 'leadManager/billingAddress',
                 setShippingMethods: 'shipping/availableMethods',
-                setClickData: 'oneClickManager/clickData'
+                setClickData: 'oneClickManager/clickData',
             }),
             ...mapActions({
                 initCart: 'initCart',
