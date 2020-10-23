@@ -999,7 +999,7 @@
 
                 if(type === 'credit') {
                     payload['details'] = {
-                        cc:this.cc,
+                        cc: this.cc,
                         ccName: this.ccName,
                         ccExpy: this.ccExpy,
                         ccCvv: this.ccCvv

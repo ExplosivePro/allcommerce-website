@@ -68,6 +68,21 @@
                 }
 
                 this.setLoading(flag)
+            },
+            authTransactionUuid(uuid) {
+                this.loadingMsg = 'Approved! Processing..'
+
+                if(this.loading === false) {
+                    let _this = this;
+
+                    setTimeout(function () {
+                        _this.setLoading(true)
+                        _this.executeNextStepRedirect();
+                    }, 250);
+                }
+                else {
+                    this.executeNextStepRedirect();
+                }
             }
         },
         data() {
@@ -81,6 +96,7 @@
             ...mapGetters({
                 loading: 'loading',
                 paymentLoading: 'checkoutGatewayManager/loading',
+                authTransactionUuid: 'checkoutGatewayManager/authTransactionUuid',
                 email: 'customerEmail',
                 lmLeadUuid: 'leadManager/leadUuid',
                 emailReady: 'leadManager/emailReady',
@@ -93,7 +109,8 @@
                 showOneClick: 'oneClickManager/active',
                 oneClickReady: 'leadManager/oneClickReady',
                 oneClickData: 'leadManager/oneClickData',
-                oneClickResults: 'oneClickManager/oneClickResults'
+                oneClickResults: 'oneClickManager/oneClickResults',
+                total: 'priceCalc/getTotal'
             }),
         },
         methods: {
@@ -118,7 +135,8 @@
                 setPostageReady: 'setPostageReady',
                 toggleOneClickMode: 'oneClickManager/toggleOneClickMode',
                 initCheckoutGatewayModules: 'initCheckoutGatewayModules',
-                executeCreditAuth: 'checkoutGatewayManager/executeCreditAuth'
+                executeCreditAuth: 'checkoutGatewayManager/executeCreditAuth',
+                executeNextStepRedirect: 'checkoutGatewayManager/executeNextStepRedirect',
             }),
             updateCheckoutState(payload) {
                 if('method' in payload) {
@@ -197,6 +215,7 @@
                 switch(payload.type) {
                     case 'credit':
                         // @todo - all sorts of crazyness
+                        payload.details['price'] = this.total;
                         this.executeCreditAuth(payload);
 
                         break;

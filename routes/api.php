@@ -53,7 +53,10 @@ Route::group(['prefix' => 'checkout'], function () {
     Route::group(['prefix' => 'payment'], function () {
         Route::group(['prefix' => 'credit'], function () {
             Route::post('/auth', 'API\Checkouts\Payments\CreditCardPaymentAPIController@auth_credit_card');
+            Route::post('/capture', 'API\Checkouts\Payments\CreditCardPaymentAPIController@capture_credit_card');
         });
+
+        Route::get('/upsell', 'API\Checkouts\Upsells\UpsellDownSellAPIController@check_for_enabled_upsells');
     });
 });
 

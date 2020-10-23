@@ -27,7 +27,8 @@ const checkoutGatewayManager = {
             leadUuid: '',
             loading: '',
             apiUrl: '',
-            price: 0
+            price: 0,
+            authTransactionUuid:''
         };
     },
     mutations: {
@@ -45,7 +46,10 @@ const checkoutGatewayManager = {
         },
         price(state, amt) {
             state.price = amt;
-        }
+        },
+        authTransactionUuid(state, uuid) {
+            state.authTransactionUuid = uuid;
+        },
     },
     getters: {
         creditModule(state) {
@@ -59,6 +63,9 @@ const checkoutGatewayManager = {
         },
         price(state) {
             return state.price;
+        },
+        authTransactionUuid(state) {
+            return state.authTransactionUuid;
         }
     },
     actions: {
@@ -83,6 +90,55 @@ const checkoutGatewayManager = {
                 //alert(name);
             }
 
+        },
+        executeNextStepRedirect(context) {
+            console.log('Executing Next Step Redirect');
+
+            let payload = {
+                transactionId: context.state.authTransactionUuid
+            };
+
+            let url = `${context.state.apiUrl}/api/checkout/payment/upsell`;
+            console.log(`Pinging ${url}`);
+
+            axios.get(url, payload)
+                .then(res => {
+                    console.log('executeNextStepRedirect call response - ', res);
+
+                    if('data' in res) {
+                        let data = res.data;
+
+                        if('success' in data) {
+                            if(data['success']) {
+
+                                if(data['upsells'] > 0) {
+                                    window.location.href = data['upsell_url'];
+                                }
+                                else {
+                                    context.dispatch(context.getters.creditModule+'/capture', context.getters.authTransactionUuid);
+                                }
+                            }
+                            else {
+                                alert(data['reason']);
+                                context.commit('loading', false);
+                            }
+                        }
+                        else {
+                            alert('Could not connect to server. Try Again');
+                            context.commit('loading', false);
+                        }
+                    }
+                    else {
+                        alert('Could not reach to server. Try Again');
+                        context.commit('loading', false);
+                    }
+
+                })
+                .catch(err => {
+                    console.log(err);
+                    alert('Could not connect to server. Try Again');
+                    context.commit('loading', false);
+                });
         }
     }
 };

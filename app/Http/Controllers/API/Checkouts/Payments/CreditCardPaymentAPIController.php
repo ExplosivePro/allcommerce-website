@@ -2,13 +2,12 @@
 
 namespace AllCommerce\Http\Controllers\API\Checkouts\Payments;
 
-use AllCommerce\DepartmentStore\Library\Sales\Lead;
-use AllCommerce\DepartmentStore\Library\Sales\Order;
-use AllCommerce\Http\Controllers\Controller;
 use AllCommerce\Leads;
 use AllCommerce\Shops;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use AllCommerce\Http\Controllers\Controller;
+use AllCommerce\DepartmentStore\Library\Sales\Order;
 
 class CreditCardPaymentAPIController extends Controller
 {
@@ -71,9 +70,9 @@ class CreditCardPaymentAPIController extends Controller
                     }
 
                     // Use populated Department Store Object to send the Payment
-                    if($response = $ac_order->processPaymentAuth($payload))
+                    if($response = $ac_order->processCreditPaymentAuth($payload))
                     {
-
+                        $results = $response;
                     }
                     else
                     {
@@ -92,7 +91,23 @@ class CreditCardPaymentAPIController extends Controller
 
     public function capture_credit_card()
     {
-        $results = ['success' => 'false' , 'reason' => 'Unknown error, charge was not captured.'];
+        $results = ['success' => false , 'reason' => 'Unknown error, charge was not captured.'];
+
+        $data = $this->request->all();
+
+        if(array_key_exists('transactionId', $data))
+        {
+            /**
+             * STEPS
+             * 1. Get the transaction from the transactions table.
+             * 2. Get the order record from the transaction
+             * 3. Get the Shop's API token
+             * 4. Init a Department Store Order and pass in the transaction id
+             * 5. Call the Capture Payment Method
+             * 6. If successful it will return some success data including a url
+             * 7. Return success with success_url
+             */
+        }
 
         return response($results);
     }

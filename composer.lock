@@ -249,6 +249,7 @@
                 "backpack",
                 "base"
             ],
+            "abandoned": "backpack/crud",
             "time": "2019-09-17T09:02:22+00:00"
         },
         {
@@ -332,12 +333,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/capeandbay-devs/allcommerce-merchant-api-sdk.git",
-                "reference": "b600849054560447a14712803c469377baae241b"
+                "reference": "13e22516f35641e6c1ac127430341ca45eed15fd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/capeandbay-devs/allcommerce-merchant-api-sdk/zipball/b600849054560447a14712803c469377baae241b",
-                "reference": "b600849054560447a14712803c469377baae241b",
+                "url": "https://api.github.com/repos/capeandbay-devs/allcommerce-merchant-api-sdk/zipball/13e22516f35641e6c1ac127430341ca45eed15fd",
+                "reference": "13e22516f35641e6c1ac127430341ca45eed15fd",
                 "shasum": ""
             },
             "require": {
@@ -385,7 +386,7 @@
                 "source": "https://github.com/capeandbay-devs/allcommerce-merchant-api-sdk/tree/master",
                 "issues": "https://github.com/capeandbay-devs/allcommerce-merchant-api-sdk/issues"
             },
-            "time": "2020-10-09T05:38:34+00:00"
+            "time": "2020-10-23T06:04:33+00:00"
         },
         {
             "name": "capeandbay/allcommerce-service-desk",
