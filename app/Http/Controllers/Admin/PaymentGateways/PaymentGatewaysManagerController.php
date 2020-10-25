@@ -3,6 +3,7 @@
 namespace AllCommerce\Http\Controllers\Admin\PaymentGateways;
 
 use AllCommerce\Clients;
+use AllCommerce\Models\PaymentGateways\ShopAssignedPaymentProviders;
 use Illuminate\Http\Request;
 use AllCommerce\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
@@ -43,8 +44,8 @@ class PaymentGatewaysManagerController extends Controller
         {
             $args['shops'] = $args['merchant']->shops()
                 ->with('shoptype')
-                ->with('shop_assigned_payment_providers')
                 ->with('client_enabled_payment_providers')
+                ->with('shop_assigned_payment_providers')
                 ->get();
 
             if(count($args['shops']) > 0)
@@ -61,7 +62,7 @@ class PaymentGatewaysManagerController extends Controller
                         'install' => []
                     ];
 
-                    $this_shops_assigned_providers = $shop->shop_assigned_payment_providers;
+                    $this_shops_assigned_providers = $shop->shop_assigned_payment_providers()->get();
                     foreach($this_shops_assigned_providers->where('active','=',1)->toArray() as $idy => $provider)
                     {
                         $type = $provider['payment_provider']['payment_type']['slug'];

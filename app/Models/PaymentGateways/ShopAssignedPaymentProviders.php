@@ -36,7 +36,6 @@ class ShopAssignedPaymentProviders extends Model
 
     protected $casts = [
         'id' => 'uuid',
-        'shop_uuid' => 'uuid',
         'client_enabled_uuid' => 'uuid',
         'provider_uuid' => 'uuid',
         'merchant_uuid' => 'uuid',
@@ -45,7 +44,7 @@ class ShopAssignedPaymentProviders extends Model
 
     public function payment_provider()
     {
-        return $this->hasOne('AllCommerce\Models\PaymentGateways\PaymentProviders', 'id', 'provider_uuid')
+        return $this->belongsTo('AllCommerce\Models\PaymentGateways\PaymentProviders', 'provider_uuid', 'id')
             ->with('payment_type');
     }
 }

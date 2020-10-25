@@ -12,6 +12,22 @@ class Shops extends Model
 {
     use CrudTrait, HasJsonRelationships, SoftDeletes, Uuid;
 
+    protected $primaryKey  = 'id';
+
+    /**
+     * The "type" of the auto-incrementing ID.
+     *
+     * @var string
+     */
+    protected $keyType = 'string';
+
+    /**
+     * Indicates if the IDs are auto-incrementing.
+     *
+     * @var bool
+     */
+    public $incrementing = false;
+
     protected $guarded = [];
 
     protected $casts = [
