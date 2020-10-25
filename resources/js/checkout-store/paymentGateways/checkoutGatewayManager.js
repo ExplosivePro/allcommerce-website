@@ -115,7 +115,10 @@ const checkoutGatewayManager = {
                                     window.location.href = data['upsell_url'];
                                 }
                                 else {
-                                    context.dispatch(context.getters.creditModule+'/capture', context.getters.authTransactionUuid);
+                                    // Give the backend a quick second to catch up.
+                                    setTimeout(function() {
+                                        context.dispatch(context.getters.creditModule+'/capture', context.getters.authTransactionUuid);
+                                    }, 2000);
                                 }
                             }
                             else {
