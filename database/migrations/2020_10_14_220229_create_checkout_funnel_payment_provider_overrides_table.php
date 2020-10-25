@@ -14,7 +14,7 @@ class CreateCheckoutFunnelPaymentProviderOverridesTable extends Migration
     public function up()
     {
         Schema::create('checkout_funnel_payment_provider_overrides', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->uuid('id')->unique()->primary();
             $table->uuid('funnel_uuid');
             $table->uuid('client_enabled_uuid');
             $table->uuid('provider_uuid');

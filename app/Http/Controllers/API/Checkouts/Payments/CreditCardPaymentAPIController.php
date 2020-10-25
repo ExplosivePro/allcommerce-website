@@ -4,6 +4,7 @@ namespace AllCommerce\Http\Controllers\API\Checkouts\Payments;
 
 use AllCommerce\Leads;
 use AllCommerce\Shops;
+use AllCommerce\Transactions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use AllCommerce\Http\Controllers\Controller;
@@ -89,7 +90,7 @@ class CreditCardPaymentAPIController extends Controller
         return response($results);
     }
 
-    public function capture_credit_card()
+    public function capture_credit_card(Transactions $transactions, Order $ac_order)
     {
         $results = ['success' => false , 'reason' => 'Unknown error, charge was not captured.'];
 
@@ -97,16 +98,36 @@ class CreditCardPaymentAPIController extends Controller
 
         if(array_key_exists('transactionId', $data))
         {
-            /**
-             * STEPS
-             * 1. Get the transaction from the transactions table.
-             * 2. Get the order record from the transaction
-             * 3. Get the Shop's API token
-             * 4. Init a Department Store Order and pass in the transaction id
-             * 5. Call the Capture Payment Method
-             * 6. If successful it will return some success data including a url
-             * 7. Return success with success_url
-             */
+            // Get the transaction from the transactions table or fail.
+            if(!is_null($transaction = $transactions->find($data['transactionId'])))
+            {
+                // Get the order record from the transaction
+                if(!is_null($order = $transaction->order()->first()))
+                {
+                    // Get the Shop's API token
+                    $token_record = $this->shops_model->whereId($order->shop_uuid)
+                        ->with('oauth_api_token')->first();
+
+                    if(!is_null($token_record->oauth_api_token))
+                    {
+                        // Init a Department Store Order and pass in the transaction id
+                        $ac_order->setLeadId($order->lead_uuid);
+                        $ac_order->setAccessToken($token_record->oauth_api_token->token);
+
+                        $payload = ['transaction_uuid' => $data['transactionId']];
+                        // Call the Capture Payment Method
+                        if($response = $ac_order->processCreditPaymentCapture($payload))
+                        {
+                            // If successful it will return some success data including a url
+                            if($response['success'])
+                            {
+                                // Return success with success_url
+                                $results = ['success' => true, 'success_url' => $response['success_url']];
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         return response($results);

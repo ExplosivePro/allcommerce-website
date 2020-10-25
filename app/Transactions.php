@@ -41,4 +41,9 @@ class Transactions extends Model
         'client_uuid' => 'uuid',
         'misc' => 'collection',
     ];
+
+    public function order()
+    {
+        return $this->belongsTo('AllCommerce\Orders', 'order_uuid', 'id');
+    }
 }
