@@ -118,7 +118,7 @@ const checkoutGatewayManager = {
                                     // Give the backend a quick second to catch up.
                                     setTimeout(function() {
                                         context.dispatch(context.getters.creditModule+'/capture', context.getters.authTransactionUuid);
-                                    }, 2000);
+                                    }, 3000);
                                 }
                             }
                             else {
