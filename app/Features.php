@@ -10,6 +10,12 @@ class Features extends Model
 {
     use SoftDeletes, Uuid;
 
+    protected $primaryKey = 'id';
+
+    protected $keyType = 'string';
+
+    public $incrementing = false;
+
     protected $casts = [
         'id' => 'uuid'
     ];
