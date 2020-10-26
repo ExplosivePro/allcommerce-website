@@ -108,6 +108,12 @@ export default {
                             options: {live: 'Live Mode', test: 'Test Mode'},
                             value: ''
                         },
+                        {
+                            name: 'Stripe Secret Key',
+                            desc: 'Secret Key for Accessing the Stripe API',
+                            type: 'text',
+                            value: ''
+                        },
                     ],
                     type: 'Credit Card Gateway'
                 },
