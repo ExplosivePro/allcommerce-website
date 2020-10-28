@@ -29,6 +29,7 @@ Route::group([
         Route::group(['prefix' => 'dashboard'], function () {
             Route::get('/', 'Admin\DashboardController@shop_index');
         });
+        CRUD::resource('/checkout-funnels', 'Admin\Manager\CheckoutFunnelCrudController');
 
         Route::group(['prefix' => 'shopify'], function () {
             Route::post('/install-status', 'Admin\DashboardController@shopify_install_status');

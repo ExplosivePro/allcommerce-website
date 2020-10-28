@@ -28,6 +28,10 @@ class Shops extends Model
      */
     public $incrementing = false;
 
+    protected $fillable = [
+        'shop_id', 'shop_install_id', 'funnel_name', 'shop_platform', 'default', 'active',
+    ];
+
     protected $guarded = [];
 
     protected $casts = [
@@ -60,6 +64,11 @@ class Shops extends Model
     public function inventory()
     {
         return $this->hasMany('AllCommerce\MerchantInventory', 'shop_id', 'id');
+    }
+
+    public function shopify_install()
+    {
+        return $this->hasOne('AllCommerce\ShopifyInstalls', 'shop_uuid', 'id');
     }
 
     public function oauth_api_token()

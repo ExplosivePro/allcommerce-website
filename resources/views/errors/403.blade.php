@@ -2,6 +2,7 @@
 
 @php
   $error_number = 403;
+  $page = 'error'
 @endphp
 
 @section('title')

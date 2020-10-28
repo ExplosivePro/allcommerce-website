@@ -38,8 +38,12 @@
             @break
 
             @default
+            @if(isset($crud))
             <li class="breadcrumb-item"><a href="{{ url($crud->route) }}" class="text-capitalize">{{ $crud->entity_name_plural }}</a></li>
             <li class="breadcrumb-item active">{{ $active_bc }}</li>
+            @else
+                <li class="breadcrumb-item active">Unknown</li>
+            @endif
         @endswitch
     </ol>
 

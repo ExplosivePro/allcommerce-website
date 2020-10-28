@@ -24,6 +24,9 @@ class DashboardController extends Controller
     {
         $client_uuid = session()->has('active_client') ? session()->get('active_client') : backpack_user()->client_id;
         $isHost = \AllCommerce\User::find(backpack_user()->id)->getRoles();
+
+        session()->forget('active_merchant');
+        session()->forget('active_shop');
         $args = [
             'page' => 'dashboard',
             //'sidebar_menu' => $this->menu_options()->getOptions('sidebar')
@@ -68,6 +71,7 @@ class DashboardController extends Controller
                 // Get shop record with merchant record or error 500
                 if(!is_null($shop))
                 {
+                    session()->put('active_shop', $shop);
                     $merchant = $shop->merchant()->first();
                     // Active merchant matched the shop's assigned merchant or or error 501
                     if((!is_null($shop->merchant)) && ($merchant->id == session()->get('active_merchant')))
@@ -75,7 +79,7 @@ class DashboardController extends Controller
                         // Something something, dashboard breadcrumbs something.
                         $client_uuid = session()->has('active_client') ? session()->get('active_client') : backpack_user()->client_id;
                         $args = [
-                            'page' => 'dashboard',
+                            'page' => 'shop-dashboard',
                             //'sidebar_menu' => $this->menu_options()->getOptions('sidebar')
                             'components' => [
                                 'shop-dashboard' => [
@@ -112,6 +116,7 @@ class DashboardController extends Controller
                 }
                 else
                 {
+                    session()->forget('active_shop');
                     return redirect('/access/dashboard');
                 }
             }

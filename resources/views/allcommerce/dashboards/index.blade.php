@@ -3,10 +3,12 @@
         @case('sup')
             <h1> not ready </h1>
         @break
+
         @case('shop')
-        @include('anchor-cms.dashboards.shop-index')
+            @include('allcommerce.dashboards.shop-index')
         @break
+
         @default
-            @include('anchor-cms.dashboards.default')
+            @include('allcommerce.dashboards.default')
     @endswitch
 @endif

@@ -36,6 +36,7 @@ class PaymentProviderTypes extends Model
 
     protected $casts = [
         'id' => 'uuid',
+        'misc' => 'array'
     ];
 
     public function payment_gateways()
@@ -71,7 +72,7 @@ class PaymentProviderTypes extends Model
                         }
                         else
                         {
-                            // @todo - if there is a client assigned record - set "Enabled"
+                            // if there is a client assigned record - set "Enabled"
                             $c_enabled = ClientEnabledPaymentProviders::whereProviderId($gate['id'])
                                 ->whereClientId($client_id)
                                 ->first();
@@ -79,7 +80,8 @@ class PaymentProviderTypes extends Model
                             if(!is_null($c_enabled))
                             {
                                 $val = 'Enabled';
-                                if(count($c_enabled->misc) > 0)
+                                $misc = $c_enabled->misc;
+                                if(count($misc) > 0)
                                 {
                                     $enabled = [];
                                     foreach ($c_enabled->misc as $misc)

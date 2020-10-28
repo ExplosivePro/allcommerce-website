@@ -30,12 +30,14 @@ Route::get('/switch/{client_id}', function ($client_id) {
         {
             session()->forget('active_client');
             session()->forget('active_merchant');
+            session()->forget('active_shop');
             $sesh = UserActiveClients::whereUserId(backpack_user()->id)->delete();
         }
         else
         {
             session()->put('active_client', $client_id);
             session()->forget('active_merchant');
+            session()->forget('active_shop');
 
             $sesh = UserActiveClients::whereUserId(backpack_user()->id)->first();
 
@@ -56,6 +58,7 @@ Route::get('/switch/{client_id}', function ($client_id) {
     else
     {
         session()->forget('active_merchant');
+        session()->forget('active_shop');
     }
 
     return redirect(url()->previous());
@@ -71,10 +74,12 @@ Route::get('/merchant-switch/{merchant_id}', function ($merchant_id) {
         if($active_client_id == $merchant->client_id)
         {
             session()->put('active_merchant', $merchant_id);
+            session()->forget('active_shop');
         }
         else
         {
             session()->forget('active_merchant');
+            session()->forget('active_shop');
             return view('errors.500');
         }
 

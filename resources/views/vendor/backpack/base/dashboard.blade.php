@@ -18,11 +18,11 @@
                     @foreach($components as $component => $config)
                         @switch($component)
                             @case('dashboard')
-                            @include('anchor-cms.dashboards.index')
+                            @include('allcommerce.dashboards.index')
                             @break
 
                             @case('shop-dashboard')
-                                @include('anchor-cms.dashboards.index')
+                                @include('allcommerce.dashboards.index')
                             @break
                         @endswitch
 

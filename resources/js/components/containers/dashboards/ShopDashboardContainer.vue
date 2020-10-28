@@ -9,6 +9,7 @@
 
 <script>
   import ShopDash from "../../presenters/dashboards/ShopDashboardComponent";
+
   import { mapState, mapMutations, mapActions } from 'vuex';
   export default {
       name: "ShopDashboardContainer",

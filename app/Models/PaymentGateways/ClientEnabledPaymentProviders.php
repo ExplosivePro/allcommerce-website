@@ -19,7 +19,7 @@ class ClientEnabledPaymentProviders extends Model
         'merchant_id' => 'uuid',
         'client_id' => 'uuid',
         'shop_type' => 'uuid',
-        'misc'=> 'array'
+        'misc' => 'array'
     ];
 
     public function payment_provider()
