@@ -32,6 +32,7 @@ class CheckoutFunnels extends Model
      *
      * @var array
      */
+    protected $fillable = ['shop_id', 'shop_install_id', 'funnel_name', 'shop_platform', 'default', 'active'];
     protected $guarded = [];
 
     protected $casts = [
@@ -96,6 +97,13 @@ class CheckoutFunnels extends Model
     public function funnel_attributes()
     {
         return $this->hasMany('AllCommerce\CheckoutFunnelAttributes', 'funnel_uuid', 'id');
+    }
+
+    public function assigned_theme()
+    {
+        return $this->hasOne('AllCommerce\CheckoutFunnelAttributes', 'funnel_uuid', 'id')
+            ->whereFunnelAttribute('blade-template')
+            ->whereActive(1);
     }
 
     public function shop()

@@ -4,6 +4,7 @@ namespace AllCommerce\Http\Controllers\Admin;
 
 use AllCommerce\Abilities;
 use AllCommerce\Roles;
+use AllCommerce\Shops;
 use Illuminate\Http\Request;
 use AllCommerce\Http\Controllers\Controller;
 use Silber\Bouncer\BouncerFacade as Bouncer;
@@ -83,5 +84,52 @@ class InternalAdminJSONController extends Controller
         }
 
         return response($results, 200);
+    }
+
+    public function shop_products_as_select(Shops $shops)
+    {
+        $results = [];
+
+        $data = $this->request->all();
+
+        if(array_key_exists('shop_uuid', $data))
+        {
+            if(session()->has('active_client')) {
+                $client_id = session()->get('active_client');
+                $shop = $shops->whereId($data['shop_uuid'])
+                    ->whereClientId($client_id)
+                    ->with('inventory')
+                    ->first();
+
+                if (!is_null($shop))
+                {
+                    if(count($shop->inventory) > 0)
+                    {
+                        foreach ($shop->inventory as $product)
+                        {
+                            $vo = [];
+                            $variant_options = $product->variant_options()
+                                ->orderBy('position', 'ASC')->get();
+
+                            foreach($variant_options as $option)
+                            {
+                                $vo[$option->name] = $option->values;
+                            }
+
+                            if($product->active == 1)
+                            {
+                                $results[] = [
+                                    'id' => $product->id,
+                                    'name' => $product->title,
+                                    'variantOptions' => $vo
+                                ];
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return response($results);
     }
 }

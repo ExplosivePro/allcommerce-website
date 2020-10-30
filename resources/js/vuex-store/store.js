@@ -7,6 +7,7 @@ import kpi from './kpi';
 import asidebar from "./asidebar/asidebar";
 import smsManager from "./managerModules/smsManager";
 import paymentGatewaysManager from "./managerModules/paymentGatewaysManager";
+import checkoutFunnelsManager from "./managerModules/checkoutFunnelsManager";
 
 Vue.use(Vuex);
 
@@ -17,7 +18,8 @@ export default new Vuex.Store({
         kpi,
         shopDash,
         smsManager,
-        paymentGatewaysManager
+        paymentGatewaysManager,
+        checkoutFunnelsManager
     },
     state() {
         return {

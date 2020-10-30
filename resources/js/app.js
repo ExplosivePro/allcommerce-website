@@ -51,6 +51,9 @@ Vue.component('default-top-widget', require('./components/containers/widgets/def
 Vue.component('sms-manager', require('./components/containers/managers/sms/SMSManagerContainer.vue').default);
 Vue.component('payment-gateway-manager', require('./components/containers/managers/paymentGateways/PGManagerContainer.vue').default);
 Vue.component('manager-tabbed-links', require('./components/containers/managers/tabbedLinks/ManagerTabbledLinksContainer.vue').default);
+Vue.component('hidden-shop-select', require('./components/containers/managers/checkoutFunnels/FunnelShopSelect2Hidden.vue').default);
+Vue.component('funnel-shop-products', require('./components/containers/managers/checkoutFunnels/FunnelShopProductsSelect2.vue').default);
+
 
 
 

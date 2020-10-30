@@ -5,10 +5,11 @@ namespace AllCommerce\Models\CheckoutFunnels;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
+use Staudenmeir\EloquentJsonRelations\HasJsonRelationships;
 
 class CheckoutFunnelAttributes extends Model
 {
-    use SoftDeletes, Uuid;
+    use HasJsonRelationships, SoftDeletes, Uuid;
 
     protected $primaryKey  = 'id';
 

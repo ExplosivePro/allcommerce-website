@@ -38,6 +38,10 @@
             #crudTable_wrapper .col-sm-6.col-md-4 #crudTable_length .form-control.input-sm {
                 margin-right: 5%;
             }
+
+            .c-wrapper:not(.c-wrapper-fluid) .c-body {
+                overflow-y: unset
+            }
         }
 
         @media screen and (max-width: 999px) {
