@@ -207,8 +207,17 @@ class UsersCrudController extends CrudController
         // use $this->data['entry'] or $this->crud->entry
         $this->crud->entry->profile_img = 'https://png.pngitem.com/pimgs/s/508-5087336_person-man-user-account-profile-employee-profile-template.png';
         $this->crud->entry->save();
-        Bouncer::assign($data['role'])->to($this->crud->entry);
-        Bouncer::assign($data['role'])->to(backpack_user()->find($this->crud->entry->id));
+
+        try {
+            Bouncer::assign($data['role'])->to($this->crud->entry);
+            Bouncer::assign($data['role'])->to(backpack_user()->find($this->crud->entry->id));
+        }
+        catch(\Exception $e)
+        {
+            $this->crud->entry->forceDelete();
+            \Alert::error('Action Reversed! You may be missing some user roles for this client.');
+        }
+
 
         return $redirect_location;
     }

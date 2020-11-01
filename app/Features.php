@@ -16,6 +16,8 @@ class Features extends Model
 
     public $incrementing = false;
 
+    protected $fillable = ['client_id', 'name', 'allowed_roles', 'allowed_abilities', 'active'];
+
     protected $casts = [
         'id' => 'uuid'
     ];

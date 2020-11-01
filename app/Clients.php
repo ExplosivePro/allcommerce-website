@@ -18,6 +18,10 @@ class Clients extends Model
 
     protected $fillable = ['name', 'active'];
 
+    protected $casts = [
+        'id' => 'uuid'
+    ];
+
     public static function getAllClientsDropList()
     {
         $results = ['Select a Client Account'];

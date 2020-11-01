@@ -377,7 +377,7 @@ class CheckoutFunnelCrudController extends CrudController
                         $entry = $this->crud->entry->whereShopId($this->crud->entry->shop_id)
                             ->whereShopInstallId($this->crud->entry->shop_install_id)
                             ->whereFunnelName($this->crud->entry->funnel_name)
-                            ->whereActive($this->crud->entry)
+                            ->whereActive($this->crud->entry->active)
                             ->whereCreatedAt($this->crud->entry->created_at)
                             ->first();
                     }

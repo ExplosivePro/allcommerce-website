@@ -14,6 +14,8 @@ class ClientEnabledPaymentProviders extends Model
 
     protected $guarded = [];
 
+    protected $fillable = ['client_id', 'provider_id', 'misc', 'active'];
+
     protected $casts = [
         'id' => 'uuid',
         'merchant_id' => 'uuid',

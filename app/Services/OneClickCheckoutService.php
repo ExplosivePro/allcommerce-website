@@ -79,7 +79,9 @@ class OneClickCheckoutService
             if(!is_null($shop = $this->lead->shop()->first()))
             {
                 // Get the feature and attribute from the client or fail
-                $feature = $this->getClient()->features()->whereName('1-Click Checkouts')->first();
+                $feature = $this->getClient()->features()->whereName('1-Click Checkouts')
+                    ->whereActive(1)
+                    ->first();
 
                 if(!is_null($feature))
                 {
