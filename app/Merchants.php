@@ -6,10 +6,11 @@ use Backpack\CRUD\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
+use Staudenmeir\EloquentJsonRelations\HasJsonRelationships;
 
 class Merchants extends Model
 {
-    use CrudTrait, SoftDeletes, Uuid;
+    use CrudTrait, HasJsonRelationships, SoftDeletes, Uuid;
 
     protected $primaryKey  = 'id';
 

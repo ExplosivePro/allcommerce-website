@@ -9,8 +9,11 @@ use AllCommerce\Events\Clients\NewClientAPITokenSet;
 use AllCommerce\Events\Clients\NewClientCreated;
 use AllCommerce\Events\Clients\NewMenuOptionsSet;
 use AllCommerce\Events\Clients\NewSMSFeaturesSet;
+use AllCommerce\Events\Merchants\NewMerchantAPITokenSet;
+use AllCommerce\Events\Merchants\NewMerchantCreated;
 use AllCommerce\Features;
 use AllCommerce\MerchantApiTokens;
+use AllCommerce\Merchants;
 use AllCommerce\Models\PaymentGateways\ClientEnabledPaymentProviders;
 use Spatie\EventSourcing\AggregateRoots\AggregateRoot;
 
@@ -25,6 +28,9 @@ class ClientConfigAggregate extends AggregateRoot
         'merchants' => [],
         'shops' => []
     ];
+
+    protected $merchants = [];
+    protected $shops = [];
 
     /* PREVIOUSLY APPLIED DATA */
     public function applyNewClientCreated(NewClientCreated $event)
@@ -71,6 +77,11 @@ class ClientConfigAggregate extends AggregateRoot
         $this->client_name = $event->getClient()['name'];
         $this->active = $event->getClient()['active'];
         $this->last_updated = $event->getClient()['updated_at'];
+    }
+
+    public function applyNewMerchantCreated(NewMerchantCreated $event)
+    {
+        $this->merchants[$event->getMerchant()->id] = $event->getMerchant();
     }
 
     public function apply()
@@ -123,6 +134,29 @@ class ClientConfigAggregate extends AggregateRoot
         }
 
         return $this;
+    }
+
+    public function setNewMerchant(Merchants $merchant)
+    {
+        $this->merchants[$merchant->id] = $merchant;
+        $this->recordThat(new NewMerchantCreated($merchant));
+
+        return $this;
+    }
+
+    public function setNewMerchantApiToken(MerchantApiTokens $token)
+    {
+        $scopes = $token->scopes;
+        $this->oauth_api_tokens['merchant'][$scopes['merchant_id']] = $token->toArray();
+
+        $this->recordThat(new NewMerchantAPITokenSet($token->toArray(), $scopes['merchant_id']));
+
+        return $this;
+    }
+
+    public function applyNewMerchantAPITokenSet(NewMerchantAPITokenSet $event)
+    {
+        $this->oauth_api_tokens['merchant'][$event->getId()] = $event->getToken();
     }
 
     /* MUTATORS */

@@ -1,6 +1,6 @@
 <?php
 
-namespace AllCommerce;
+namespace App;
 
 use Backpack\CRUD\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
