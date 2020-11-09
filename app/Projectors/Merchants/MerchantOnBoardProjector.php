@@ -19,7 +19,7 @@ class MerchantOnBoardProjector extends Projector
         {
             $prev_token->active = 0;
             $prev_token->save();
-            
+
             $prev_token->delete();
         }
     }

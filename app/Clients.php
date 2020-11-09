@@ -16,6 +16,8 @@ class Clients extends Model
 
     protected $keyType = 'string';
 
+    public $incrementing = false;
+
     protected $fillable = ['name', 'active'];
 
     protected $casts = [

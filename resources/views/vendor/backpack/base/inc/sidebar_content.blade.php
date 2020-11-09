@@ -76,7 +76,13 @@
 @endif
 @endif
 
-@if((backpack_user()->isHostUser() && \Silber\Bouncer\BouncerFacade::is(backpack_user())->a('god', 'admin')) || backpack_user()->can('enable-admin-options'))
+@php
+    $host = backpack_user()->isHostUser();
+    $allowed = \Silber\Bouncer\BouncerFacade::is(backpack_user())->a('god', 'admin');
+    $canEnable = backpack_user()->can('enable-admin-options')
+@endphp
+
+@if(($host && $allowed) || $canEnable)
 <li class="c-sidebar-nav-title">Admin</li>
 @if(count($nav_options = \AllCommerce\MenuOptions::getOptions('sidebar', 'Admin', $page)) > 0)
     @foreach($nav_options as $nav_option)

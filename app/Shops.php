@@ -29,7 +29,7 @@ class Shops extends Model
     public $incrementing = false;
 
     protected $fillable = [
-        'shop_id', 'shop_install_id', 'funnel_name', 'shop_platform', 'default', 'active',
+        'name', 'shop_url', 'shop_type', 'merchant_id', 'client_id', 'active'
     ];
 
     protected $guarded = [];

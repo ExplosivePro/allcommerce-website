@@ -32,7 +32,8 @@ class MenuOptions extends Model
     protected $icons = [
         'cash-register' => 'fad fa-cash-register',
         'mobile' => 'fad fa-mobile',
-        'anchor' => 'fad fa-anchor'
+        'anchor' => 'fad fa-anchor',
+        'funnel' => 'fad fa-funnel-dollar'
     ];
 
     protected $sidebar_bp = 'c-sidebar-nav-icon';
@@ -189,7 +190,7 @@ class MenuOptions extends Model
             'permitted_role' => 'executive',
             'active' => 1,
             'order' => 4,
-            'icon' => "{$this->icons['cash-register']} {$this->sidebar_bp}",
+            'icon' => "{$this->icons['funnel']} {$this->sidebar_bp}",
             'is_host_user' => 0,
             'client_id' => $client_id,
             'ability' => null,

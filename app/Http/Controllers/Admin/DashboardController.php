@@ -23,10 +23,14 @@ class DashboardController extends Controller
     public function index()
     {
         $client_uuid = session()->has('active_client') ? session()->get('active_client') : backpack_user()->client_id;
-        $isHost = \AllCommerce\User::find(backpack_user()->id)->getRoles();
+        $isHost = backpack_user()->isHostUser();
 
-        session()->forget('active_merchant');
-        session()->forget('active_shop');
+        if($isHost)
+        {
+            session()->forget('active_merchant');
+            session()->forget('active_shop');
+        }
+
         $args = [
             'page' => 'dashboard',
             //'sidebar_menu' => $this->menu_options()->getOptions('sidebar')

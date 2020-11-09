@@ -27,12 +27,15 @@ class ShopAssignedPaymentProviders extends Model
      */
     public $incrementing = false;
 
+    protected $fillable = ['shop_uuid', 'client_enabled_uuid', 'provider_uuid', 'merchant_uuid', 'client_uuid', 'active'];
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $guarded = [];
+
 
     protected $casts = [
         'id' => 'uuid',

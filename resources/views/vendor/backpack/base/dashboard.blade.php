@@ -11,8 +11,8 @@
 
 
 @section('content')
-    <div class="row">
-        <div class="col-md-12">
+    <div class="row" style="justify-content: center;">
+        <div class="col-md-11">
             <div class="box">
                 @if(count($components) > 0)
                     @foreach($components as $component => $config)

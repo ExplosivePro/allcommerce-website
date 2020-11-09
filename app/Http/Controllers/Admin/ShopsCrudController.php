@@ -2,10 +2,12 @@
 
 namespace AllCommerce\Http\Controllers\Admin;
 
+use AllCommerce\Clients;
 use AllCommerce\Merchants;
 use AllCommerce\ShopTypes;
 use Backpack\CRUD\CrudPanel;
 use Silber\Bouncer\BouncerFacade as Bouncer;
+use AllCommerce\Jobs\OnBoarding\NewShopOnboarding;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use AllCommerce\Http\Requests\StandardStoreRequest as StoreRequest;
 use AllCommerce\Http\Requests\StandardUpdateRequest as UpdateRequest;
@@ -56,6 +58,7 @@ class ShopsCrudController extends CrudController
             'type' => 'text', // the kind of column to show
             'attributes' => [
                 'placeholder' => 'My Shop',
+                'required' => 'required'
             ]
         ];
 
@@ -63,11 +66,14 @@ class ShopsCrudController extends CrudController
             'name' => 'shoptype.name', // the db column name (attribute name)
             'label' => "Shop Type", // the human-readable label for it
             'type' => 'text', // the kind of column to show
+            'attributes' => [
+                'required' => 'required'
+            ]
         ];
 
         $shop_type = [  // Select
             'label' => "Shop Type",
-            'type' => 'select',
+            'type' => 'select2',
             'name' => 'shop_type', // the db column for the foreign key
             'entity' => 'shop_type', // the method that defines the relationship in your Model
             'attribute' => 'name', // foreign key attribute that is shown to user
@@ -77,6 +83,9 @@ class ShopsCrudController extends CrudController
             'options'   => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }), // force the related options to be a custom query, instead of all(); you can use this to filter the results show in the select
+            'attributes' => [
+                'required' => 'required'
+            ]
         ];
 
         $shop_url = [
@@ -85,9 +94,9 @@ class ShopsCrudController extends CrudController
             'type' => 'text', // the kind of column to show
             'attributes' => [
                 'placeholder' => 'your-store.myshopify.com',
+                'required' => 'required'
             ]
         ];
-
 
         $active = [
             'name' => 'active', // the db column name (attribute name)
@@ -97,11 +106,14 @@ class ShopsCrudController extends CrudController
 
         $merchant = [  // Select
             'label' => "Merchant",
-            'type' => 'select',
+            'type' => 'select2',
             'name' => 'merchant_id', // the db column for the foreign key
             'entity' => 'merchant', // the method that defines the relationship in your Model
             'attribute' => 'name', // foreign key attribute that is shown to user
             'model' => "AllCommerce\Merchants",
+            'attributes' => [
+                'required' => 'required'
+            ],
 
             // optional
             'options'   => (function ($query) use ($client_id){
@@ -124,25 +136,45 @@ class ShopsCrudController extends CrudController
                     return $query->whereId($client_id)
                         ->orderBy('name', 'ASC')->get();
                 }), // force the related options to be a custom query, instead of all(); you can use this to filter the results show in the select
+                'attributes' => [
+                    'required' => 'required'
+                ]
             ];
         }
         else
         {
             $client  = [  // Select
                 'label' => "Client",
-                'type' => 'text',
-                'name' => 'client_id', // the db column for the foreign key
+                'type' => 'select2_from_array',
+                'options' => Clients::getAllClientsDropList(),
+                'default' => backpack_user()->client_id,
+                'name' => 'client.id', // the db column for the foreign key
                 'entity' => 'client', // the method that defines the relationship in your Model
                 'attribute' => 'name', // foreign key attribute that is shown to user
                 'model' => "AllCommerce\Clients",
                 'attributes' => [
                     'disabled' => 'disabled',
+                    'required' => 'required'
                 ],
+            ];
+
+            $client2 = [
+                'type' => 'hidden',
+                'name' => 'client_id',
+                'value' => backpack_user()->client_id
             ];
         }
 
         $column_defs   = [$name, $shop_type_text, $shop_url, $active];
-        $add_edit_defs = [$name, $shop_url, $merchant, $client, $shop_type, $active];
+        if(backpack_user()->isHostUser())
+        {
+            $add_edit_defs = [$name, $shop_url, $merchant, $client, $shop_type, $active];
+        }
+        else
+        {
+            $add_edit_defs = [$name, $shop_url, $merchant, $client, $client2, $shop_type, $active];
+        }
+
         $this->crud->addColumns($column_defs);
         $this->crud->addFields($add_edit_defs, 'both');
 
@@ -175,6 +207,14 @@ class ShopsCrudController extends CrudController
     public function store(StoreRequest $request)
     {
         $redirect_location = parent::storeCrud($request);
+
+        $entry = $this->crud->entry;
+
+        if(!is_null($entry))
+        {
+            // execute the on-boarding job
+            NewShopOnboarding::dispatch($entry)->onQueue('allcommerce-'.env('APP_ENV').'-events');
+        }
 
         return $redirect_location;
     }

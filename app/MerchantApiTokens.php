@@ -15,6 +15,8 @@ class MerchantApiTokens extends Model
 
     protected $keyType = 'string';
 
+    public $incrementing = false;
+
     protected $fillable = ['token', 'client_id', 'token_type', 'scopes', 'active'];
 
     protected $casts = [

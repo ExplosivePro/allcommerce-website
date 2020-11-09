@@ -15,7 +15,9 @@ class SmsProviderAttributes extends Model
 
     protected $keyType = 'string';
 
-    protected $fillable = ['name', 'active'];
+    protected $fillable = ['provider_id', 'name', 'value', 'misc', 'active'];
+
+    public $incrementing = false;
 
     protected $casts = [
         'id' => 'uuid',

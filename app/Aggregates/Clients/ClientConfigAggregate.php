@@ -2,20 +2,23 @@
 
 namespace AllCommerce\Aggregates\Clients;
 
+use AllCommerce\Shops;
 use AllCommerce\Clients;
+use AllCommerce\Features;
+use AllCommerce\Merchants;
+use AllCommerce\MerchantApiTokens;
 use AllCommerce\Events\Clients\ClientUpdated;
-use AllCommerce\Events\Clients\DefaultPaymentProviderSet;
-use AllCommerce\Events\Clients\NewClientAPITokenSet;
 use AllCommerce\Events\Clients\NewClientCreated;
 use AllCommerce\Events\Clients\NewMenuOptionsSet;
+use AllCommerce\Events\Clients\NewShopIdentified;
 use AllCommerce\Events\Clients\NewSMSFeaturesSet;
-use AllCommerce\Events\Merchants\NewMerchantAPITokenSet;
+use AllCommerce\Events\Clients\NewShopAPITokenSet;
+use AllCommerce\Events\Clients\NewClientAPITokenSet;
 use AllCommerce\Events\Merchants\NewMerchantCreated;
-use AllCommerce\Features;
-use AllCommerce\MerchantApiTokens;
-use AllCommerce\Merchants;
-use AllCommerce\Models\PaymentGateways\ClientEnabledPaymentProviders;
 use Spatie\EventSourcing\AggregateRoots\AggregateRoot;
+use AllCommerce\Events\Merchants\NewMerchantAPITokenSet;
+use AllCommerce\Events\Clients\DefaultPaymentProviderSet;
+use AllCommerce\Models\PaymentGateways\ClientEnabledPaymentProviders;
 
 class ClientConfigAggregate extends AggregateRoot
 {
@@ -44,7 +47,7 @@ class ClientConfigAggregate extends AggregateRoot
 
     public function applyDefaultPaymentProviderSet(DefaultPaymentProviderSet $event)
     {
-        if(array_key_exists($event->getEnabled()['id'], $this->client_enabled_payment_providers))
+        if(!array_key_exists($event->getEnabled()['id'], $this->client_enabled_payment_providers))
         {
             $this->client_enabled_payment_providers[$event->getEnabled()['id']] = $event->getEnabled();
         }
@@ -82,6 +85,16 @@ class ClientConfigAggregate extends AggregateRoot
     public function applyNewMerchantCreated(NewMerchantCreated $event)
     {
         $this->merchants[$event->getMerchant()->id] = $event->getMerchant();
+    }
+
+    public function applyNewShopIdentified(NewShopIdentified $event)
+    {
+        $this->shops[$event->getShop()->id] = $event->getShop();
+    }
+
+    public function applyNewShopAPITokenSet(NewShopAPITokenSet $event)
+    {
+        $this->oauth_api_tokens['shops'][$event->getId()] = $event->getToken();
     }
 
     public function apply()
@@ -159,6 +172,23 @@ class ClientConfigAggregate extends AggregateRoot
         $this->oauth_api_tokens['merchant'][$event->getId()] = $event->getToken();
     }
 
+    public function setNewShop(Shops $shop)
+    {
+        $this->shops[$shop->id] = $shop->id;
+        $this->recordThat(new NewShopIdentified($shop));
+
+        return $this;
+    }
+
+    public function setNewShopApiToken(MerchantApiTokens $token, string $shop_id)
+    {
+        $this->oauth_api_tokens['shops'][$shop_id] = $token->toArray();
+
+        $this->recordThat(new NewShopAPITokenSet($token->toArray(), $shop_id));
+
+        return $this;
+    }
+
     /* MUTATORS */
     public function updateClient(Clients $client)
     {
@@ -206,9 +236,20 @@ class ClientConfigAggregate extends AggregateRoot
         $results = false;
         if(array_key_exists('SMS Profiles', $this->features))
         {
+            $results = $this->features['SMS Profiles'];
+        }
+
+        return $results;
+    }
+
+    public function hasOneClickSMSEnabled()
+    {
+        $results = false;
+        if(array_key_exists('SMS Profiles', $this->features))
+        {
             if(array_key_exists('1-Click Checkouts', $this->features))
             {
-                $results = true;
+                $results = $this->features['1-Click Checkouts'];
             }
         }
 

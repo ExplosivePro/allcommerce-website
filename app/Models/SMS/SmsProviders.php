@@ -17,6 +17,8 @@ class SmsProviders extends Model
 
     protected $fillable = ['name', 'active'];
 
+    public $incrementing = false;
+
     protected $casts = [
         'id' => 'uuid',
     ];

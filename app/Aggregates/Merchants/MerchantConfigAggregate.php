@@ -4,12 +4,15 @@ namespace AllCommerce\Aggregates\Merchants;
 
 use AllCommerce\Clients;
 use AllCommerce\Events\Clients\NewClientAPITokenSet;
+use AllCommerce\Events\Merchants\NewShopAPITokenSet;
+use AllCommerce\Events\Merchants\NewShopIdentified;
 use AllCommerce\Events\Merchants\MerchantDeleted;
 use AllCommerce\Events\Merchants\MerchantUpdated;
 use AllCommerce\Events\Merchants\NewMerchantAPITokenSet;
 use AllCommerce\Events\Merchants\SetNewMerchant;
 use AllCommerce\MerchantApiTokens;
 use AllCommerce\Merchants;
+use AllCommerce\Shops;
 use Spatie\EventSourcing\AggregateRoots\AggregateRoot;
 
 class MerchantConfigAggregate extends AggregateRoot
@@ -52,6 +55,16 @@ class MerchantConfigAggregate extends AggregateRoot
         $this->deleted = true;
     }
 
+    public function applyNewShopIdentified(NewShopIdentified $event)
+    {
+        $this->shops[$event->getShop()->id] = $event->getShop();
+    }
+
+    public function applyNewShopAPITokenSet(NewShopAPITokenSet $event)
+    {
+        $this->oauth_api_tokens['shops'][$event->getId()] = $event->getToken();
+    }
+
     public function apply()
     {
 
@@ -84,6 +97,23 @@ class MerchantConfigAggregate extends AggregateRoot
     public function deleteMerchant($id)
     {
         $this->recordThat(new MerchantDeleted($id));
+
+        return $this;
+    }
+
+    public function setNewShop(Shops $shop)
+    {
+        $this->shops[$shop->id] = $shop;
+        $this->recordThat(new NewShopIdentified($shop));
+
+        return $this;
+    }
+
+    public function setNewShopApiToken(MerchantApiTokens $token, string $shop_id)
+    {
+        $this->oauth_api_tokens['shops'][$shop_id] = $token->toArray();
+
+        $this->recordThat(new NewShopAPITokenSet($token->toArray(), $shop_id));
 
         return $this;
     }

@@ -58,7 +58,10 @@ class User extends Authenticatable
         parent::boot();
 
         static::created(function ($user) {
-            OnboardNewUser::dispatch($user, backpack_user())->onQueue('allcommerce-'.env('APP_ENV').'-emails');
+            if(!is_null(backpack_user()))
+            {
+                OnboardNewUser::dispatch($user, backpack_user())->onQueue('allcommerce-'.env('APP_ENV').'-emails');
+            }
         });
     }
 

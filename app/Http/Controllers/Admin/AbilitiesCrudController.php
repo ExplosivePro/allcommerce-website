@@ -24,7 +24,7 @@ class AbilitiesCrudController extends CrudController
         | CrudPanel Basic Information
         |--------------------------------------------------------------------------
         */
-        $this->crud->setModel('AllCommerceAbilities');
+        $this->crud->setModel('AllCommerce\Abilities');
         $this->crud->setRoute(config('backpack.base.route_prefix') . '/crud-abilities');
         $this->crud->setEntityNameStrings('ability', 'abilities');
 
