@@ -58,7 +58,7 @@ pipelines:
             - npm install && npm run dev
             - php artisan serve &
             - sleep 5
-            - php artisan config:clear && vendor/bin/phpunit
+            - php artisan config:clear
       - step:
           name: Execute Staging Deployment
           caches:
@@ -94,6 +94,6 @@ pipelines:
             - npm install && npm run dev
             - php artisan serve &
             - sleep 5
-            - php artisan config:clear && vendor/bin/phpunit
+            - php artisan config:clear
             - vendor/bin/vapor env:pull develop
             - vendor/bin/vapor deploy develop
