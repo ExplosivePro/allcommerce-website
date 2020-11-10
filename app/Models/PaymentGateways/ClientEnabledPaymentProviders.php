@@ -12,6 +12,12 @@ class ClientEnabledPaymentProviders extends Model
 {
     use CrudTrait, HasJsonRelationships, SoftDeletes, Uuid;
 
+    protected $primaryKey = 'id';
+
+    protected $keyType = 'string';
+
+    public $incrementing = false;
+
     protected $guarded = [];
 
     protected $fillable = ['client_id', 'provider_id', 'misc', 'active'];

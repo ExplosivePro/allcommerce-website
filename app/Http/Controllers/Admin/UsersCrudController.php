@@ -2,6 +2,7 @@
 
 namespace AllCommerce\Http\Controllers\Admin;
 
+use AllCommerce\AssignedRoles;
 use AllCommerce\Clients;
 use AllCommerce\Jobs\User\OnboardNewUser;
 use AllCommerce\Jobs\User\UserWasUpdated;
@@ -211,6 +212,13 @@ class UsersCrudController extends CrudController
         try {
             Bouncer::assign($data['role'])->to($this->crud->entry);
             Bouncer::assign($data['role'])->to(backpack_user()->find($this->crud->entry->id));
+
+            $role = Roles::whereName($data['role'])->whereClientId($data['client_id'])->first();
+            AssignedRoles::firstOrCreate([
+                'role_id' => $role->id,
+                'entity_id' => $this->crud->entry->id,
+                'entity_type' => 'App\User'
+            ]);
         }
         catch(\Exception $e)
         {
@@ -249,6 +257,13 @@ class UsersCrudController extends CrudController
 
         Bouncer::assign($data['role'])->to($this->crud->entry);
         Bouncer::assign($data['role'])->to(backpack_user()->find($this->crud->entry->id));
+
+        $role = Roles::whereName($data['role'])->whereClientId($data['client_id'])->first();
+        AssignedRoles::firstOrCreate([
+            'role_id' => $role->id,
+            'entity_id' => $this->crud->entry->id,
+            'entity_type' => 'App\User'
+        ]);
 
         UserWasUpdated::dispatch($this->crud->entry, backpack_user())->onQueue('anchor-'.env('APP_ENV').'-emails');
 

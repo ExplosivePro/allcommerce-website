@@ -74,7 +74,7 @@ class ClientsCrudController extends CrudController
         // your additional operations after save here
         // use $this->data['entry'] or $this->crud->entry
         // show a success message
-        if($this->crud->entry->id == 0)
+        if($this->crud->entry->id == '0')
         {
             //Re-retrieve the new entry or skip (blah)
             $entry = $this->crud->entry->whereName($this->crud->entry->name)

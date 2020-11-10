@@ -54,13 +54,13 @@ class NewShopOnboarding implements ShouldQueue
         if($token = $service->createNewShopApiToken($this->shop->client_id, $this->shop->id))
         {
             // add the api_token to merchant_aggy
-            $client_aggy->setNewShopApiToken($token, $this->shop->id);
+            $client_aggy = $client_aggy->setNewShopApiToken($token, $this->shop->id);
 
             // add the api_token to client_aggy
-            $merchant_aggy->setNewShopApiToken($token, $this->shop->id);
+            $merchant_aggy = $merchant_aggy->setNewShopApiToken($token, $this->shop->id);
 
             // add the api_token to shop_aggy
-            $shop_aggy->setNewShopApiToken($token);
+            $shop_aggy = $shop_aggy->setNewShopApiToken($token);
         }
 
         // If the client has SMS Profiles active,

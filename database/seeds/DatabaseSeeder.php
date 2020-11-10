@@ -17,5 +17,7 @@ class DatabaseSeeder extends Seeder
          $this->call(SMSProvidersAndAttributesTablesSeeder::class);
          $this->call(MerchantAPITokenTablesSeeder::class);
          $this->call(MenuOptionsTablesSeeder::class);
+         $this->call(PaymentProvidersTableSeeder::class);
+         $this->call(ShopTypesTableSeeder::class);
     }
 }

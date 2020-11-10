@@ -103,6 +103,10 @@ class LoginController extends Controller
         $this->data['title'] = 'Merchant  Account '.trans('backpack::base.login'); // set the page title
         $this->data['username'] = $this->username();
 
+        session()->forget('active_client');
+        session()->forget('active_merchant');
+        session()->forget('active_shop');
+
         return view('backpack::auth.login', $this->data);
     }
 }

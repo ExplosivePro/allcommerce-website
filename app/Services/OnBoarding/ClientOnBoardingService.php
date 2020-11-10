@@ -43,12 +43,15 @@ class ClientOnBoardingService
             $record = $this->enabled->firstOrCreate([
                 'client_id' => $client_id,
                 'provider_id' => $dry_run->id,
-                'misc' => '[]',
-                'active' => 1
+                //'misc' => '[]',
+                //'active' => 1
             ]);
 
             if(!is_null($record))
             {
+                $record->misc = [];
+                $record->active = 1;
+                $record->save();
                 $results = $record;
             }
         }
