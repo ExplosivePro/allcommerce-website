@@ -8,7 +8,6 @@ environments:
     cli-memory: 1024
     database: allcommerce
     database-user: acuser
-    gateway-version: 2
     queue-timeout: 600
     timeout: 120
     runtime: php-7.4
@@ -30,7 +29,6 @@ environments:
     cli-memory: 512
     database: allcommerce
     database-user: acuser
-    gateway-version: 2
     queue-timeout: 600
     timeout: 120
     runtime: php-7.4
@@ -52,7 +50,6 @@ environments:
     cli-memory: 512
     database: allcommerce
     database-user: acuser
-    gateway-version: 2
     runtime: php-7.4
     queue-concurrency: 1
     queues:
