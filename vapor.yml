@@ -3,7 +3,7 @@ name: allcommerce
 separate-vendor: true
 environments:
   production:
-    domain: allcommerce.capeandbay.com
+    domain: allcommerce.site
     memory: 2048
     cli-memory: 1024
     database: allcommerce
@@ -24,9 +24,9 @@ environments:
     deploy:
         - 'php artisan migrate --force'
   staging:
-    domain: allcommerce-demo.capeandbay.com
-    memory: 1024
-    cli-memory: 512
+    domain: demo.allcommerce.site
+    memory: 2048
+    cli-memory: 1024
     database: allcommerce
     database-user: acuser
     queue-timeout: 600
@@ -45,7 +45,7 @@ environments:
     deploy:
         - 'php artisan migrate --force'
   develop:
-    domain: allcommerce-dev.capeandbay.com
+    domain: dev.allcommerce.site
     memory: 1024
     cli-memory: 512
     database: allcommerce

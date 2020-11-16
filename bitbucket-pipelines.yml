@@ -14,7 +14,7 @@ pipelines:
             - composer
             - node
           script:
-            - curl -sL https://deb.nodesource.com/setup_10.x | bash -
+            - curl -sL https://deb.nodesource.com/setup_14.x | bash -
             - apt-get update && apt-get install -y libzip-dev zip nodejs
             - docker-php-ext-install zip
             - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
@@ -30,7 +30,7 @@ pipelines:
           deployment: production
           trigger: manual
           script:
-            - curl -sL https://deb.nodesource.com/setup_10.x | bash -
+            - curl -sL https://deb.nodesource.com/setup_14.x | bash -
             - apt-get update && apt-get install -y libzip-dev zip nodejs
             - docker-php-ext-install zip
             - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
@@ -49,7 +49,7 @@ pipelines:
             - composer
             - node
           script:
-            - curl -sL https://deb.nodesource.com/setup_10.x | bash -
+            - curl -sL https://deb.nodesource.com/setup_14.x | bash -
             - apt-get update && apt-get install -y libzip-dev zip nodejs
             - docker-php-ext-install zip
             - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
@@ -67,7 +67,7 @@ pipelines:
           deployment: staging
           trigger: manual
           script:
-            - curl -sL https://deb.nodesource.com/setup_10.x | bash -
+            - curl -sL https://deb.nodesource.com/setup_14.x | bash -
             - apt-get update && apt-get install -y libzip-dev zip nodejs
             - docker-php-ext-install zip
             - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
@@ -84,7 +84,7 @@ pipelines:
             - node
           deployment: test
           script:
-            - curl -sL https://deb.nodesource.com/setup_10.x | bash -
+            - curl -sL https://deb.nodesource.com/setup_14.x | bash -
             - apt-get update && apt-get install -y libzip-dev zip nodejs
             - docker-php-ext-install zip
             - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
