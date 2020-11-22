@@ -133,6 +133,16 @@ class Client extends Model
         return $this->hasMany('App\Models\ClientDetails', 'client_id', 'id');
     }
 
+    public function features()
+    {
+        return $this->hasMany('App\Models\Features\Features', 'client_id', 'id');
+    }
+
+    public function sms_enabled()
+    {
+        return $this->features()->whereName('Enable SMS');
+    }
+
     public function merchants()
     {
         return $this->hasMany('App\Models\Merchant', 'client_id', 'id');

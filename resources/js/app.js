@@ -15,6 +15,7 @@ Vue.component('dashboard-search', require('./components/dashboard/DashboardSearc
 Vue.component('image-upload', require('./components/image-upload/ImageUploadTextComponent.vue').default);
 
 Vue.component('icons-field', require('./screens/icons/iconsField.vue').default);
+Vue.component('toggle-sms', require('./screens/sms/ToggleSMSButton.vue').default);
 
 import { createPopper } from '@popperjs/core';
 

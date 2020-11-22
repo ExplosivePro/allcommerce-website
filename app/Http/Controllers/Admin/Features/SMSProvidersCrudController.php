@@ -98,6 +98,7 @@ class SMSProvidersCrudController extends CrudController
             $this->crud->denyAccess('delete');
             $this->crud->denyAccess('revise');
 
+            $this->crud->addButtonFromView('top', 'Toggle SMS', 'toggle-sms', 'beginning');
             CRUD::addButtonFromView('line', 'Manage', 'manage-client-sms', 'beginning');
         }
     }

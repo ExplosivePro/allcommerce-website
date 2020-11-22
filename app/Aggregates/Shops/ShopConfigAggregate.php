@@ -11,9 +11,11 @@ use App\StorableEvents\Shops\CreditGatewayLimitReached;
 use App\StorableEvents\Shops\CreditGatewayRemoved;
 use App\StorableEvents\Shops\ShopApiTokenCreated;
 use App\StorableEvents\Shops\ShopCreated;
+use App\StorableEvents\Shops\SMSConfigured;
 use App\StorableEvents\Shops\SMSProviderAssigned;
 use App\StorableEvents\Shops\SMSProviderLimitReached;
 use App\StorableEvents\Shops\SMSProviderRemoved;
+use App\StorableEvents\Shops\SMSUnconfigured;
 use Spatie\EventSourcing\AggregateRoots\AggregateRoot;
 
 class ShopConfigAggregate extends AggregateRoot
@@ -86,6 +88,16 @@ class ShopConfigAggregate extends AggregateRoot
     public function applySMSProviderRemoved(SMSProviderRemoved $event)
     {
         $this->assigned_sms_provider = [];
+    }
+
+    public function applySMSConfigured(SMSConfigured $event)
+    {
+        $this->activated_checklist['sms_configured'] = true;
+    }
+
+    public function applySMSUnconfigured(SMSUnconfigured $event)
+    {
+        $this->activated_checklist['sms_configured'] = false;
     }
 
     /* ACTIONS */
@@ -181,6 +193,18 @@ class ShopConfigAggregate extends AggregateRoot
     public function removeAssignedSMSProvider(array $provider, $assigned_id)
     {
         $this->recordThat(new SMSProviderRemoved($assigned_id, $provider['id'], $provider['name']));
+        return $this;
+    }
+
+    public function setSMSConfigured()
+    {
+        $this->recordThat(new SMSConfigured());
+        return $this;
+    }
+
+    public function unsetSMSConfigured()
+    {
+        $this->recordThat(new SMSUnconfigured());
         return $this;
     }
 

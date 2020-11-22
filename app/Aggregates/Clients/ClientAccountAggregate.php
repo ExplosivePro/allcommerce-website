@@ -2,6 +2,7 @@
 
 namespace App\Aggregates\Clients;
 
+use App\Aggregates\Shops\ShopConfigAggregate;
 use App\StorableEvents\Clients\ClientDetailsUpdated;
 use App\StorableEvents\Clients\AccountUserAssigned;
 use App\StorableEvents\Clients\ClientAPITokenCreated;
@@ -155,6 +156,32 @@ class ClientAccountAggregate extends AggregateRoot
     public function addShop(array $shop)
     {
         $this->recordThat(new ShopOnBoarded($shop));
+        return $this;
+    }
+
+    public function enableSMSOnShops()
+    {
+        if(count($this->shops) > 0)
+        {
+            foreach($this->shops as $shop_id => $shop)
+            {
+                ShopConfigAggregate::retrieve($shop_id)->setSMSConfigured()->persist();
+            }
+        }
+
+        return $this;
+    }
+
+    public function disableSMSOnShops()
+    {
+        if(count($this->shops) > 0)
+        {
+            foreach($this->shops as $shop_id => $shop)
+            {
+                ShopConfigAggregate::retrieve($shop_id)->unsetSMSConfigured()->persist();
+            }
+        }
+
         return $this;
     }
 

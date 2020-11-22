@@ -26,6 +26,8 @@ Route::group([
     Route::post('payment-gateways/{uuid}/manage/assign', 'PaymentGateways\AssignClientEnabledGatewayToShops');
     Route::post('payment-gateways/{uuid}/manage/enable', 'PaymentGateways\EnableClientGateway');
 
+    Route::post('sms-providers/feature/enable', 'SMSProviders\EnableSMSFeatureForClient');
+    Route::post('sms-providers/feature/disable', 'SMSProviders\DisableSMSFeatureForClient');
     Route::get('sms-providers/{uuid}/manage', 'SMSProviders\ManageClientEnabledSMS');
     Route::post('sms-providers/{uuid}/manage/assign', 'SMSProviders\AssignClientEnabledSMSToShops');
     Route::post('sms-providers/{uuid}/manage/enable', 'SMSProviders\EnableClientSMS');
