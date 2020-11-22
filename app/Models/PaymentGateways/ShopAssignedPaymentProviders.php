@@ -1,8 +1,8 @@
 <?php
 
-namespace AllCommerce\Models\PaymentGateways;
+namespace App\Models\PaymentGateways;
 
-use Backpack\CRUD\CrudTrait;
+use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -38,16 +38,12 @@ class ShopAssignedPaymentProviders extends Model
 
 
     protected $casts = [
-        'id' => 'uuid',
-        'client_enabled_uuid' => 'uuid',
-        'provider_uuid' => 'uuid',
-        'merchant_uuid' => 'uuid',
-        'client_uuid' => 'uuid',
+
     ];
 
     public function payment_provider()
     {
-        return $this->belongsTo('AllCommerce\Models\PaymentGateways\PaymentProviders', 'provider_uuid', 'id')
+        return $this->belongsTo('App\Models\PaymentGateways\PaymentProviders', 'provider_uuid', 'id')
             ->with('payment_type');
     }
 }

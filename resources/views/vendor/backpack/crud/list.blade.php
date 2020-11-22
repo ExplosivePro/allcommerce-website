@@ -1,262 +1,44 @@
-@extends('backpack::layout', ['active_bc' => trans('backpack::crud.list')])
+@extends(backpack_view('blank'))
 
-@section('before_styles')
-    <link rel="stylesheet" href="{{ asset('vendor/backpack/base/backpack.base.css') }}?v=3">
-    @if (config('backpack.base.overlays') && count(config('backpack.base.overlays')))
-        @foreach (config('backpack.base.overlays') as $overlay)
-            <link rel="stylesheet" href="{{ asset($overlay) }}">
-        @endforeach
-    @endif
+@php
+  $defaultBreadcrumbs = [
+    trans('backpack::crud.admin') => url(config('backpack.base.route_prefix'), 'dashboard'),
+    $crud->entity_name_plural => url($crud->route),
+    trans('backpack::crud.list') => false,
+  ];
 
-    <style>
-        @media screen {
-            .content-header {
-                margin-bottom: 2.5%;
-            }
-
-            .content-header h1 {
-                display:flex;
-                flex-flow: row;
-            }
-
-            .content .row .row.m-b-10 {
-                margin-bottom: 2.5%;
-            }
-
-            .content .row .col-xs-6 {
-                width: 50%;
-            }
-
-            #crudTable_wrapper {
-                width: 100%;
-            }
-
-            #crudTable_wrapper .row .col-sm-12 {
-                padding: 0 !important;
-            }
-
-            #crudTable_wrapper .col-sm-6.col-md-4 #crudTable_length .form-control.input-sm {
-                margin-right: 5%;
-            }
-
-            .c-wrapper:not(.c-wrapper-fluid) .c-body {
-                overflow-y: unset
-            }
-        }
-
-        @media screen and (max-width: 999px) {
-            .content-header .text-capitalize {
-                font-size: 80%;
-            }
-
-            #datatable_info_stack {
-                display: inline-block;
-                padding-left: 2.5%;
-                margin-top: 2%;
-                width: 40%;
-            }
-
-            .dataTables_info {
-                font-size: 45%;
-            }
-
-            .content .row .col-xs-6 .hidden-print.with-border {
-                margin-left: 5%;
-            }
-
-            .content .row .col-xs-6 #datatable_search_stack {
-                margin-right: 5%;
-            }
-
-            #crudTable_wrapper .row {
-                width: 100%;
-                margin: 0 !important;
-            }
-
-            #crudTable_wrapper .row.hidden {
-                width: unset;
-            }
-
-            @media screen and (max-width: 5745px) {
-                .pagination {
-                    margin-top: 10%;
-                    flex-flow: row;
-                    justify-content: center;
-                    align-items: center;
-                }
-
-                .pagination li {
-                    display: inline;
-                    margin: 0 0.5em;
-                    text-align: center;
-                }
-
-                #crudTable_wrapper .col-sm-6.col-md-4.hidden-print .dataTables_paginate .active a{
-                    z-index: 3;
-                    color: #fff;
-                    cursor: default;
-                    background-color: #337ab7;
-                    border: none;
-                    border-radius: 5px;
-                    padding: 0.1em 0.5em;
-                }
-            }
-
-            @media screen and (min-width: 576px) {
-                #crudTable_wrapper .col-sm-6.col-md-4 {
-                    padding-left: 0;
-                    padding-right: 0;
-                    max-width: 50%;
-                    min-width: 50%;
-                }
-
-                #crudTable_wrapper .col-sm-6.col-md-4 #crudTable_length {
-                    float: left;
-                    margin-left: 2%;
-                }
-
-                #crudTable_wrapper .col-sm-2.col-md-4.text-center{
-                    display:none;
-                }
-
-                .pagination {
-                    flex-flow: row;
-                    justify-content: flex-end;
-                    align-items: center;
-                }
-
-                .pagination li {
-                    display: inline;
-                    margin: 0 0.5em;
-                    text-align: center;
-                }
-
-                #crudTable_wrapper .col-sm-6.col-md-4.hidden-print .dataTables_paginate .active a{
-                    z-index: 3;
-                    color: #fff;
-                    cursor: default;
-                    background-color: #337ab7;
-                    border: none;
-                    border-radius: 5px;
-                    padding: 0.1em 0.5em;
-                }
-            }
-        }
-
-        @media screen and (min-width: 1000px) {
-            .content-header .text-capitalize {
-                font-size: 85%;
-            }
-
-            #datatable_info_stack {
-                display: inline-block;
-                padding-left: 2.5%;
-                margin-top: 1%;
-                width: 50%;
-            }
-
-            .dataTables_info {
-                font-size: 55%;
-            }
-
-            .content .row .col-xs-6 .hidden-print.with-border {
-                margin-left: 2.5%;
-            }
-
-            .content .row .col-xs-6 #datatable_search_stack {
-                margin-right: 2.5%;
-            }
-
-            #crudTable_wrapper .row .col-sm-12 {
-                padding: 0 !important;
-            }
-
-            #crudTable_wrapper .row {
-                width: 100%;
-                margin: 0 !important;
-            }
-
-            #crudTable_wrapper .col-sm-6.col-md-4 {
-                padding-left: 0;
-                width: 50%;
-                max-width: 50%;
-                min-width: 50%;
-            }
-
-            #crudTable_wrapper .col-sm-6.col-md-4 #crudTable_length {
-                float: left;
-                margin-left: 2%;
-            }
-
-            #crudTable_wrapper .col-sm-6.col-md-4 {
-                padding-left: 0;
-                padding-right: 0;
-            }
-
-            #crudTable_wrapper .col-sm-6.col-md-4 #crudTable_length {
-                float: left;
-                margin-left: 2%;
-            }
-
-            @if (!$crud->exportButtons())
-            #crudTable_wrapper .col-sm-2.col-md-4.text-center{
-                display:none;
-            }
-            @endif
-
-            .pagination {
-                flex-flow: row;
-                justify-content: flex-end;
-                align-items: center;
-            }
-
-            .pagination li {
-                display: inline;
-                margin: 0 0.5em;
-                text-align: center;
-            }
-
-            #crudTable_wrapper .col-sm-6.col-md-4.hidden-print .dataTables_paginate .active a{
-                z-index: 3;
-                color: #fff;
-                cursor: default;
-                background-color: #337ab7;
-                border: none;
-                border-radius: 5px;
-                padding: 0.1em 0.5em;
-            }
-        }
-    </style>
-@endsection
+  // if breadcrumbs aren't defined in the CrudController, use the default breadcrumbs
+  $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
+@endphp
 
 @section('header')
-	<section class="content-header">
-	  <h1>
-        <span class="text-capitalize">{!! $crud->getHeading() ?? $crud->entity_name_plural !!}</span>
-        <small id="datatable_info_stack">{!! $crud->getSubheading() ?? trans('backpack::crud.all').'<span>'.$crud->entity_name_plural.'</span> '.trans('backpack::crud.in_the_database') !!}.</small>
-	  </h1>
-	</section>
+  <div class="container-fluid">
+    <h2 class="text-light">
+      <span class="text-capitalize">{!! $crud->getHeading() ?? $crud->entity_name_plural !!}</span>
+      <small id="datatable_info_stack">{!! $crud->getSubheading() ?? '' !!}</small>
+    </h2>
+  </div>
 @endsection
 
 @section('content')
-<!-- Default box -->
+  <!-- Default box -->
   <div class="row">
-      <!-- THE ACTUAL CONTENT -->
-      <div class="{{ $crud->getListContentClass() }}">
-      <div class="">
 
-        <div class="row m-b-10">
-          <div class="col-xs-6">
-            @if ( $crud->buttons->where('stack', 'top')->count() ||  $crud->exportButtons())
-            <div class="hidden-print {{ $crud->hasAccess('create')?'with-border':'' }}">
+    <!-- THE ACTUAL CONTENT -->
+    <div class="{{ $crud->getListContentClass() }}">
 
-              @include('crud::inc.button_stack', ['stack' => 'top'])
+        <div class="row mb-0">
+          <div class="col-sm-6">
+            @if ( $crud->buttons()->where('stack', 'top')->count() ||  $crud->exportButtons())
+              <div class="d-print-none {{ $crud->hasAccess('create')?'with-border':'' }}">
 
-            </div>
+                @include('crud::inc.button_stack', ['stack' => 'top'])
+
+              </div>
             @endif
           </div>
-          <div class="col-xs-6">
-              <div id="datatable_search_stack" class="pull-right"></div>
+          <div class="col-sm-6">
+            <div id="datatable_search_stack" class="mt-sm-0 mt-2 d-print-none"></div>
           </div>
         </div>
 
@@ -265,76 +47,113 @@
           @include('crud::inc.filters_navbar')
         @endif
 
-        <div class="overflow-hidden">
-            <table id="crudTable" class="box table table-striped table-hover display responsive nowrap m-t-0" cellspacing="0">
-                <thead>
-                <tr>
+        <table id="crudTable" class="bg-white table table-striped table-hover nowrap rounded shadow-xs border-xs mt-2" cellspacing="0">
+            <thead>
+              <tr>
                 {{-- Table columns --}}
-                @foreach ($crud->columns as $column)
+                @foreach ($crud->columns() as $column)
                   <th
                     data-orderable="{{ var_export($column['orderable'], true) }}"
                     data-priority="{{ $column['priority'] }}"
-                    data-visible="{{ var_export($column['visibleInTable'] ?? true) }}"
-                    data-visible-in-modal="{{ var_export($column['visibleInModal'] ?? true) }}"
-                    data-visible-in-export="{{ var_export($column['visibleInExport'] ?? true) }}"
-                    >
+                     {{--
+
+                        data-visible-in-table => if developer forced field in table with 'visibleInTable => true'
+                        data-visible => regular visibility of the field
+                        data-can-be-visible-in-table => prevents the column to be loaded into the table (export-only)
+                        data-visible-in-modal => if column apears on responsive modal
+                        data-visible-in-export => if this field is exportable
+                        data-force-export => force export even if field are hidden
+
+                    --}}
+
+                    {{-- If it is an export field only, we are done. --}}
+                    @if(isset($column['exportOnlyField']) && $column['exportOnlyField'] === true)
+                      data-visible="false"
+                      data-visible-in-table="false"
+                      data-can-be-visible-in-table="false"
+                      data-visible-in-modal="false"
+                      data-visible-in-export="true"
+                      data-force-export="true"
+                    @else
+                      data-visible-in-table="{{var_export($column['visibleInTable'] ?? false)}}"
+                      data-visible="{{var_export($column['visibleInTable'] ?? true)}}"
+                      data-can-be-visible-in-table="true"
+                      data-visible-in-modal="{{var_export($column['visibleInModal'] ?? true)}}"
+                      @if(isset($column['visibleInExport']))
+                         @if($column['visibleInExport'] === false)
+                           data-visible-in-export="false"
+                           data-force-export="false"
+                         @else
+                           data-visible-in-export="true"
+                           data-force-export="true"
+                         @endif
+                       @else
+                         data-visible-in-export="true"
+                         data-force-export="false"
+                       @endif
+                    @endif
+                  >
                     {!! $column['label'] !!}
                   </th>
                 @endforeach
 
-                @if ( $crud->buttons->where('stack', 'line')->count() )
-                  <th data-orderable="false" data-priority="{{ $crud->getActionsColumnPriority() }}" data-visible-in-export="false">{{ trans('backpack::crud.actions') }}</th>
+                @if ( $crud->buttons()->where('stack', 'line')->count() )
+                  <th data-orderable="false"
+                      data-priority="{{ $crud->getActionsColumnPriority() }}"
+                      data-visible-in-export="false"
+                      >{{ trans('backpack::crud.actions') }}</th>
                 @endif
               </tr>
-                </thead>
-                <tbody></tbody>
-                <tfoot>
-                <tr>
+            </thead>
+            <tbody>
+            </tbody>
+            <tfoot>
+              <tr>
                 {{-- Table columns --}}
-                @foreach ($crud->columns as $column)
+                @foreach ($crud->columns() as $column)
                   <th>{!! $column['label'] !!}</th>
                 @endforeach
 
-                @if ( $crud->buttons->where('stack', 'line')->count() )
+                @if ( $crud->buttons()->where('stack', 'line')->count() )
                   <th>{{ trans('backpack::crud.actions') }}</th>
                 @endif
-                </tr>
-                </tfoot>
-            </table>
-            @if ($crud->buttons->where('stack', 'bottom')->count())
-                <div id="bottom_buttons" class="hidden-print">
-                @include('crud::inc.button_stack', ['stack' => 'bottom'])
+              </tr>
+            </tfoot>
+          </table>
 
-                <div id="datatable_button_stack" class="pull-right text-right hidden-xs"></div>
-              </div>
-            @endif
-        </div><!-- /.box-body -->
-      </div><!-- /.box -->
+          @if ( $crud->buttons()->where('stack', 'bottom')->count() )
+          <div id="bottom_buttons" class="d-print-none text-center text-sm-left">
+            @include('crud::inc.button_stack', ['stack' => 'bottom'])
+
+            <div id="datatable_button_stack" class="float-right text-right hidden-xs"></div>
+          </div>
+          @endif
+
     </div>
+
   </div>
 
 @endsection
 
 @section('after_styles')
   <!-- DATA TABLES -->
-  <link href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css" rel="stylesheet" type="text/css" />
-  <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.1.5/css/fixedHeader.dataTables.min.css">
-  <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.1/css/responsive.bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/fixedheader/3.1.7/css/fixedHeader.bootstrap4.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.6/css/responsive.bootstrap4.min.css">
 
-  <link rel="stylesheet" href="{{ asset('vendor/backpack/crud/css/crud.css') }}">
-  <link rel="stylesheet" href="{{ asset('vendor/backpack/crud/css/form.css') }}">
-  <link rel="stylesheet" href="{{ asset('vendor/backpack/crud/css/list.css') }}">
+  <link rel="stylesheet" href="{{ asset('packages/backpack/crud/css/crud.css') }}">
+  <link rel="stylesheet" href="{{ asset('packages/backpack/crud/css/form.css') }}">
+  <link rel="stylesheet" href="{{ asset('packages/backpack/crud/css/list.css') }}">
 
   <!-- CRUD LIST CONTENT - crud_list_styles stack -->
   @stack('crud_list_styles')
 @endsection
 
 @section('after_scripts')
-	@include('crud::inc.datatables_logic')
-
-  <script src="{{ asset('vendor/backpack/crud/js/crud.js') }}"></script>
-  <script src="{{ asset('vendor/backpack/crud/js/form.js') }}"></script>
-  <script src="{{ asset('vendor/backpack/crud/js/list.js') }}"></script>
+  @include('crud::inc.datatables_logic')
+  <script src="{{ asset('packages/backpack/crud/js/crud.js') }}"></script>
+  <script src="{{ asset('packages/backpack/crud/js/form.js') }}"></script>
+  <script src="{{ asset('packages/backpack/crud/js/list.js') }}"></script>
 
   <!-- CRUD LIST CONTENT - crud_list_scripts stack -->
   @stack('crud_list_scripts')

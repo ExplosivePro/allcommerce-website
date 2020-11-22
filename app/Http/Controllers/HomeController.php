@@ -1,144 +1,114 @@
 <?php
 
-namespace AllCommerce\Http\Controllers;
+namespace App\Http\Controllers;
 
+use App\Aggregates\Users\UserWalletAggregate;
+use App\Models\FormSubmission;
+use App\Models\Pharmacy;
+use App\Models\RaffleDrawing;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use CapeAndBay\AllCommerce\Facades\ServiceDesk;
-use AllCommerce\DepartmentStore\Facades\DepartmentStore;
+use Illuminate\Support\Facades\DB;
+use Silber\Bouncer\BouncerFacade as Bouncer;
 
 class HomeController extends Controller
 {
-    protected $request;
     /**
      * Create a new controller instance.
-     *
-     * @return void
      */
-    public function __construct(Request $request)
+    public function __construct()
     {
-        $this->request = $request;
+        $this->middleware(backpack_middleware());
     }
 
     /**
-     * Show the application dashboard.
+     * Show the admin dashboard.
      *
-     * @return \Illuminate\Contracts\Support\Renderable
+     *
      */
-    public function index()
+    public function dashboard()
     {
-        $args = [];
-        // @todo - Check the session for needed vars
-        // Call AllCommerce JWT/me to get new infos (it refreshes the token too)
-        $my_ac_acct_profile = ServiceDesk::get('account-profile');
-
-        if(is_null($my_ac_acct_profile->getUserID()))
+        if(Bouncer::is(backpack_user())->an('admin'))
         {
-            return redirect('/access/logout');
+            return $this->admin_dash_config();
+        }
+
+        $this->data['title'] = trans('backpack::base.dashboard'); // set the page title
+        $this->data['breadcrumbs'] = [
+            env('APP_NAME')     => backpack_url('dashboard'),
+        ];
+        if(Bouncer::is(backpack_user())->an('admin'))
+        {
+            $this->data['breadcrumbs']['Admin'] = false;
         }
         else
         {
-            // Check the session for a selected merchant, and resume
-            if(session()->has('active-merchant-uuid'))
+            if(backpack_user()->client()->first()->account_owner == backpack_user()->id)
             {
-                $blade = 'home';
+                $this->data['breadcrumbs'][backpack_user()->client()->first()->name] = '/access/clients/'.backpack_user()->client()->first()->id.'/edit';
             }
             else
             {
-                // Get the list of merchants.
-                if(count($my_ac_acct_profile->getMerchantArray()) > 1)
-                {
-                    // If there are more than one, send the user to the selection view.
-                    $blade = 'access.merchant-select';
-                    $args['merchant_select'] = $my_ac_acct_profile->getMerchantArray();
-                }
-                else
-                {
-                    // else, curate vars and send user to home.
-                    foreach($my_ac_acct_profile->getMerchantArray() as $merchant_uuid => $merchant_name)
-                    {
-                        session()->put('active-merchant-uuid', $merchant_uuid);
-                        break;
-                    }
-
-                    $blade = 'home';
-                }
+                $this->data['breadcrumbs'][backpack_user()->client()->first()->name] = false;
             }
 
-            // Curate an args array and pass it to the view.
-            $args['merchant_uuid'] = session()->get('active-merchant-uuid');
-            $args['user_name'] = $my_ac_acct_profile->getUserName();
-            $args['user_roles'] = $my_ac_acct_profile->getUserRoles();
-            $args['is_internal_user'] = $my_ac_acct_profile->isInternalUser();
-
-            // Will be null unless the user is a Cape & Bay user.
-            $args['internal_uuid'] = $my_ac_acct_profile->internal_uuid();
         }
 
-        return view($blade, $args);
+        $this->data['breadcrumbs'][trans('backpack::base.dashboard')] = false;
+
+
+        return view(backpack_view('dashboard'), $this->data);
     }
 
-    public function merchant_selected()
+    private function admin_dash_config()
     {
-        $data = $this->request->all();
-
-        if(array_key_exists('selected_val', $data))
+        // All Forms reported today
+        $this->data['title'] = trans('backpack::base.dashboard'); // set the page title
+        $this->data['breadcrumbs'] = [
+            env('APP_NAME')     => backpack_url('dashboard'),
+        ];
+        if(Bouncer::is(backpack_user())->an('admin'))
         {
-            session()->put('active-merchant-uuid', $data['selected_val']);
-            return redirect()->route('dashboard');
+            $this->data['breadcrumbs']['Admin'] = false;
         }
         else
         {
-            return redirect('/access/logout');
-        }
-    }
-
-    public function reset_merchant_selection()
-    {
-        session()->forget('active-merchant-uuid');
-
-        return redirect('/access/dashboard');
-    }
-
-    public function home()
-    {
-        $data = $this->request->all();
-
-        $validated = Validator::make($data, [
-            'hmac' => 'bail|required',
-            'shop' => 'bail|required',
-            'timestamp' => 'bail|required',
-        ]);
-
-        if ($validated->fails())
-        {
-            return view('welcome');
-        }
-
-        if(array_key_exists('session', $data))
-        {
-            return redirect('shopify/merchant/account?'.http_build_query($data));
-        }
-        else
-        {
-            $shop = $data['shop'];
-            $api_key = env('SHOPIFY_SALES_CHANNEL_API_KEY');
-            $scopes = 'read_content,write_content,read_themes,write_themes,read_orders,write_orders,read_customers,write_customers,read_products,write_products,read_product_listings,read_inventory,write_inventory,read_reports,write_reports,read_shopify_payments_payouts,read_checkouts,write_checkouts,read_draft_orders,write_draft_orders';
-            $redirect_uri = env('APP_URL').'/shopify/merchant/app/install';
-
-            $installer = DepartmentStore::get('installer', $data);
-            $nonce = $installer->getNonce();
-
-            if(!$nonce)
+            if(backpack_user()->client()->account_owner == backpack_user()->id)
             {
-                return view('errors.404');
+                $this->data['breadcrumbs'][backpack_user()->client()->first()->name] = '/access/clients/'.backpack_user()->client()->first()->id.'/edit';
+            }
+            else
+            {
+                $this->data['breadcrumbs'][backpack_user()->client()->first()->name] = false;
             }
 
-            $url = "https://{$shop}/admin/oauth/authorize?client_id={$api_key}&scope={$scopes}&redirect_uri={$redirect_uri}&state={$nonce}";
-
-            // @todo - do some logging and verification shit here.
-
-            return redirect($url);
         }
+
+        $this->data['breadcrumbs'][trans('backpack::base.dashboard')] = false;
+
+
+        if(backpack_user()->getRoles()[0] == 'admin')
+        {
+            $this->data['subscription'] = 'Power User!';
+
+        }
+        else
+        {
+            $this->data['subscription'] =  'User';
+        }
+
+
+        return view('admins.admin-dashboard', $this->data);
+    }
+
+    /**
+     * Redirect to the dashboard.
+     *
+     * @return \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse
+     */
+    public function redirect()
+    {
+        // The '/admin' route is not to be used as a page, because it breaks the menu's active state.
+        return redirect(backpack_url('dashboard'));
     }
 }

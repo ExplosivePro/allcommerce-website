@@ -1,83 +1,130 @@
 <?php
 
-namespace AllCommerce\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admin;
 
-use AllCommerce\Clients;
-use AllCommerce\Merchants;
-use AllCommerce\ShopTypes;
-use Backpack\CRUD\CrudPanel;
-use Silber\Bouncer\BouncerFacade as Bouncer;
-use AllCommerce\Jobs\OnBoarding\NewShopOnboarding;
+use App\Http\Requests\ShopsRequest;
+use App\Models\Merchant;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
-use AllCommerce\Http\Requests\StandardStoreRequest as StoreRequest;
-use AllCommerce\Http\Requests\StandardUpdateRequest as UpdateRequest;
+use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Backpack\ReviseOperation\ReviseOperation;
+use Silber\Bouncer\BouncerFacade as Bouncer;
 
 /**
  * Class ShopsCrudController
  * @package App\Http\Controllers\Admin
- * @property-read CrudPanel $crud
+ * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
 class ShopsCrudController extends CrudController
 {
+    use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+    use ReviseOperation;
+
+    /**
+     * Configure the CrudPanel object. Apply settings to all operations.
+     *
+     * @return void
+     */
     public function setup()
     {
-        $this->data['page'] = 'manage-shops';
+        CRUD::setModel(\App\Models\Shops\Shop::class);
+        CRUD::setRoute(config('backpack.base.route_prefix') . '/shops');
+        CRUD::setEntityNameStrings('shop', 'shops');
 
-        /*
-        |--------------------------------------------------------------------------
-        | CrudPanel Basic Information
-        |--------------------------------------------------------------------------
-        */
-        $this->crud->setModel('AllCommerce\Shops');
-        $this->crud->setRoute(config('backpack.base.route_prefix') . '/manage-shops');
-        $this->crud->setEntityNameStrings('Online Shop', 'Manage Shops');
-
-        $client_id = backpack_user()->client_id;
-        if(backpack_user()->isHostUser())
+        if(Bouncer::is(backpack_user())->an('admin'))
         {
-            if(session()->has('active_client'))
+            $this->crud->hasAccessOrFail('nope');
+        }
+    }
+
+    /**
+     * Define what happens when the List operation is loaded.
+     *
+     * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
+     * @return void
+     */
+    protected function setupListOperation()
+    {
+        CRUD::addClause('whereClientId', backpack_user()->client_id);
+        CRUD::column('name')->type('text');
+        CRUD::column('shop_url')->label('Shop Link')->type('closure')->function(function($entry) {
+            return '<a href="'.$entry->shop_url.'" target="_blank">Click Me</a>';
+        });
+        CRUD::column('shoptype.name')->type('text')->label('Shop Type');
+        CRUD::column('merchant.name')->type('text')->label('Merchant');
+
+        if(Bouncer::is(backpack_user())->an('admin'))
+        {
+            CRUD::column('merchant_id')->type('text')->entity('client')->attribute('name');
+        }
+
+        CRUD::column('active')->type('boolean');
+
+        /**
+         * Columns can be defined using the fluent syntax or array syntax:
+         * - CRUD::column('price')->type('number');
+         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']);
+         */
+        $this->crud->addFilter([
+            'name'  => 'merchant_id',
+            'type'  => 'select2',
+            'label' => 'Merchant'
+        ], function () {
+            $merchants = (Bouncer::is(backpack_user())->an('admin'))
+                ? Merchant::all()
+                : Merchant::whereClientId(backpack_user()->client_id)->get();
+
+            if(count($merchants) > 0)
             {
-                $this->crud->addClause('where', 'client_id', '=', session()->get('active_client'));
-                $client_id = session()->get('active_client');
+                $results = [];
+
+                foreach ($merchants as $merchant)
+                {
+                    $results[$merchant->id] = $merchant->name;
+                }
+
+                return $results;
             }
             else
             {
-                $this->crud->addClause('where', 'client_id', '=', backpack_user()->client_id);
+                return [];
             }
-        }
-        else
-        {
-            $this->crud->addClause('where', 'client_id', '=', backpack_user()->client_id);
-        }
 
-        $this->setMerchantClause($client_id);
+        }, function ($value) { // if the filter is active
+             $this->crud->addClause('where', 'client_id', $value);
+        });
+    }
 
-        $name = [
+    /**
+     * Define what happens when the Create operation is loaded.
+     *
+     * @see https://backpackforlaravel.com/docs/crud-operation-create
+     * @return void
+     */
+    protected function setupCreateOperation()
+    {
+        CRUD::setValidation(ShopsRequest::class);
+
+        CRUD::addField([
             'name' => 'name', // the db column name (attribute name)
             'label' => "Shop Name", // the human-readable label for it
             'type' => 'text', // the kind of column to show
             'attributes' => [
                 'placeholder' => 'My Shop',
-                'required' => 'required'
+                'required' => true
             ]
-        ];
+        ]);
 
-        $shop_type_text = [
-            'name' => 'shoptype.name', // the db column name (attribute name)
-            'label' => "Shop Type", // the human-readable label for it
-            'type' => 'text', // the kind of column to show
-            'attributes' => [
-                'required' => 'required'
-            ]
-        ];
-
-        $shop_type = [  // Select
+        CRUD::addField([  // Select
             'label' => "Shop Type",
             'type' => 'select2',
             'name' => 'shop_type', // the db column for the foreign key
-            'entity' => 'shop_type', // the method that defines the relationship in your Model
+            'entity' => 'shop_type_model', // the method that defines the relationship in your Model
             'attribute' => 'name', // foreign key attribute that is shown to user
-            'model' => "AllCommerce\ShopTypes",
+            'model' => "App\Models\Shops\ShopTypes",
 
             // optional
             'options'   => (function ($query) {
@@ -86,145 +133,99 @@ class ShopsCrudController extends CrudController
             'attributes' => [
                 'required' => 'required'
             ]
-        ];
+        ]);
 
-        $shop_url = [
+        CRUD::addField([
             'name' => 'shop_url', // the db column name (attribute name)
             'label' => "Shop Url", // the human-readable label for it
-            'type' => 'text', // the kind of column to show
+            'type' => 'url', // the kind of column to show
             'attributes' => [
                 'placeholder' => 'your-store.myshopify.com',
                 'required' => 'required'
-            ]
-        ];
-
-        $active = [
-            'name' => 'active', // the db column name (attribute name)
-            'label' => "Active?", // the human-readable label for it
-            'type' => 'boolean' // the kind of column to show
-        ];
-
-        $merchant = [  // Select
-            'label' => "Merchant",
-            'type' => 'select2',
-            'name' => 'merchant_id', // the db column for the foreign key
-            'entity' => 'merchant', // the method that defines the relationship in your Model
-            'attribute' => 'name', // foreign key attribute that is shown to user
-            'model' => "AllCommerce\Merchants",
-            'attributes' => [
-                'required' => 'required'
             ],
+            'hint' => 'We currently support Independently Managed eShops and Shopify Shops.'
+        ]);
 
-            // optional
-            'options'   => (function ($query) use ($client_id){
-                return $query->whereClientId($client_id)
-                    ->orderBy('name', 'ASC')->get();
-            }), // force the related options to be a custom query, instead of all(); you can use this to filter the results show in the select
-        ];
+        CRUD::addField([  // Select
+        'label' => "Merchant",
+        'type' => 'select2',
+        'name' => 'merchant_id', // the db column for the foreign key
+        'entity' => 'merchant', // the method that defines the relationship in your Model
+        'attribute' => 'name', // foreign key attribute that is shown to user
+        'model' => "App\Models\Merchant",
+        'attributes' => [
+            'required' => 'required'
+        ],
 
-        if(backpack_user()->isHostUser())
+        // optional
+        'options'   => (function ($query){
+            if(!Bouncer::is(backpack_user())->an('admin'))
+            {
+                $query = $query->whereClientId(backpack_user()->client_id);
+            }
+            return $query->orderBy('name', 'ASC')->get();
+        }), // force the related options to be a custom query, instead of all(); you can use this to filter the results show in the select
+    ]);
+
+        if(Bouncer::is(backpack_user())->an('admin'))
         {
-            $client  = [  // Select
+            CRUD::addField([  // Select
                 'label' => "Client",
                 'type' => 'select',
                 'name' => 'client_id', // the db column for the foreign key
                 'entity' => 'client', // the method that defines the relationship in your Model
                 'attribute' => 'name', // foreign key attribute that is shown to user
-                'model' => "AllCommerce\Clients",
+                'model' => "App\Models\Client",
                 // optional
-                'options'   => (function ($query) use ($client_id){
-                    return $query->whereId($client_id)
+                'options'   => (function ($query) {
+                    return $query
                         ->orderBy('name', 'ASC')->get();
                 }), // force the related options to be a custom query, instead of all(); you can use this to filter the results show in the select
                 'attributes' => [
                     'required' => 'required'
                 ]
-            ];
+            ]);
         }
         else
         {
-            $client  = [  // Select
-                'label' => "Client",
-                'type' => 'select2_from_array',
-                'options' => Clients::getAllClientsDropList(),
-                'default' => backpack_user()->client_id,
-                'name' => 'client.id', // the db column for the foreign key
+            CRUD::addField([  // Select
+                'label' => "Account",
+                'type' => 'select',
+                'name' => 'fake_client_id', // the db column for the foreign key
                 'entity' => 'client', // the method that defines the relationship in your Model
                 'attribute' => 'name', // foreign key attribute that is shown to user
-                'model' => "AllCommerce\Clients",
+                'model' => "App\Models\Client",
+                'default' => backpack_user()->client_id,
+                // optional
+                'options'   => (function ($query) {
+                    return $query->whereId(backpack_user()->client_id)
+                        ->orderBy('name', 'ASC')->get();
+                }), // force the related options to be a custom query, instead of all(); you can use this to filter the results show in the select
                 'attributes' => [
-                    'disabled' => 'disabled',
-                    'required' => 'required'
-                ],
-            ];
+                    'required' => true,
+                    'disabled' => true
+                ]
+            ]);
 
-            $client2 = [
-                'type' => 'hidden',
-                'name' => 'client_id',
-                'value' => backpack_user()->client_id
-            ];
+            CRUD::field('client_id')->type('hidden')->value(backpack_user()->client_id);
         }
 
-        $column_defs   = [$name, $shop_type_text, $shop_url, $active];
-        if(backpack_user()->isHostUser())
-        {
-            $add_edit_defs = [$name, $shop_url, $merchant, $client, $shop_type, $active];
-        }
-        else
-        {
-            $add_edit_defs = [$name, $shop_url, $merchant, $client, $client2, $shop_type, $active];
-        }
-
-        $this->crud->addColumns($column_defs);
-        $this->crud->addFields($add_edit_defs, 'both');
-
-        $this->crud->addButtonFromView('line', 'shopify', 'connect-to-shopify', 'last');
-        // add asterisk for fields that are required in RolesRequest
-        $this->crud->setRequiredFields(StoreRequest::class, 'create');
-        $this->crud->setRequiredFields(UpdateRequest::class, 'edit');
+        CRUD::field('active')->type('boolean');
+        /**
+         * Fields can be defined using the fluent syntax or array syntax:
+         * - CRUD::field('price')->type('number');
+         * - CRUD::addField(['name' => 'price', 'type' => 'number']));
+         */
     }
 
-    private function setMerchantClause($client_id)
+    /**
+     * Define what happens when the Update operation is loaded.
+     *
+     * @see https://backpackforlaravel.com/docs/crud-operation-update
+     * @return void
+     */
+    protected function setupUpdateOperation()
     {
-        if(session()->has('active_merchant'))
-        {
-            $this->crud->addClause('where', 'merchant_id', '=', session()->get('active_merchant'));
-        }
-        else
-        {
-            if(count($merchants = Merchants::clientMerchants($client_id)) > 0)
-            {
-                $merchant = $merchants->first();
-                $this->crud->addClause('where', 'merchant_id', '=', $merchant->id);
-            }
-            else
-            {
-                $this->crud->hasAccessOrFail('');
-            }
-        }
-    }
-
-    public function store(StoreRequest $request)
-    {
-        $redirect_location = parent::storeCrud($request);
-
-        $entry = $this->crud->entry;
-
-        if(!is_null($entry))
-        {
-            // execute the on-boarding job
-            NewShopOnboarding::dispatch($entry)->onQueue('allcommerce-'.env('APP_ENV').'-events');
-        }
-
-        return $redirect_location;
-    }
-
-    public function update(UpdateRequest $request)
-    {
-        // your additional operations before save here
-        $redirect_location = parent::updateCrud($request);
-        // your additional operations after save here
-        // use $this->data['entry'] or $this->crud->entry
-        return $redirect_location;
+        $this->setupCreateOperation();
     }
 }

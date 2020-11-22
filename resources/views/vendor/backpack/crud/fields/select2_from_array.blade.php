@@ -1,12 +1,13 @@
 <!-- select2 from array -->
-<div @include('crud::inc.field_wrapper_attributes') >
+@include('crud::fields.inc.wrapper_start')
     <label>{!! $field['label'] !!}</label>
     <select
         name="{{ $field['name'] }}@if (isset($field['allows_multiple']) && $field['allows_multiple']==true)[]@endif"
         style="width: 100%"
-        @include('crud::inc.field_attributes', ['default_class' =>  'form-control select2_from_array'])
+        data-init-function="bpFieldInitSelect2FromArrayElement"
+        @include('crud::fields.inc.attributes', ['default_class' =>  'form-control select2_from_array'])
         @if (isset($field['allows_multiple']) && $field['allows_multiple']==true)multiple @endif
-    >
+        >
 
         @if (isset($field['allows_null']) && $field['allows_null']==true)
             <option value="">-</option>
@@ -25,7 +26,7 @@
                                                 in_array($key, $field['value'])
                                                 )
                                         )) ||
-                                (isset($field['default']) &&
+                                (!isset($field['value']) && isset($field['default']) &&
                                 ($key == $field['default'] || (
                                                 is_array($field['default']) &&
                                                 in_array($key, $field['default'])
@@ -41,43 +42,55 @@
         @endif
     </select>
 
+    @if(array_key_exists('attributes', $field) && array_key_exists('disabled', $field['attributes']))
+        <input type="hidden" name="{{ $field['name'] }}" class="disabled-hidden" value="{{ array_key_exists('default', $field) ? $field['default'] : '' }}"/>
+    @endif
+
     {{-- HINT --}}
     @if (isset($field['hint']))
         <p class="help-block">{!! $field['hint'] !!}</p>
     @endif
-</div>
+@include('crud::fields.inc.wrapper_end')
 
 {{-- ########################################## --}}
 {{-- Extra CSS and JS for this particular field --}}
 {{-- If a field type is shown multiple times on a form, the CSS and JS will only be loaded once --}}
-@if ($crud->checkIfFieldIsFirstOfItsType($field))
+@if ($crud->fieldTypeNotLoaded($field))
+    @php
+        $crud->markFieldTypeAsLoaded($field);
+    @endphp
 
     {{-- FIELD CSS - will be loaded in the after_styles section --}}
     @push('crud_fields_styles')
-        <!-- include select2 css-->
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css" rel="stylesheet" type="text/css" />
+        <style>
+            @media screen {
+                .select2-container .select2-selection--single {
+                    height: 40px !important;
+                }
+            }
+        </style>
     @endpush
 
     {{-- FIELD JS - will be loaded in the after_scripts section --}}
     @push('crud_fields_scripts')
-        <!-- include select2 js-->
-        <script>
-            jQuery(document).ready(function($) {
-                // trigger select2 for each untriggered select2 box
-                $('.select2_from_array').each(function (i, obj) {
-                    if (!$(obj).hasClass("select2-hidden-accessible"))
-                    {
-                        $(obj).select2({
-                            theme: "bootstrap"
-                        }).on('select2:unselect', function(e) {
-                            if ($(this).attr('multiple') && $(this).val().length == 0) {
-                                $(this).val(null).trigger('change');
-                            }
-                        });
-                    }
-                });
-            });
-        </script>
+    <script>
+        function bpFieldInitSelect2FromArrayElement(element) {
+            if (!element.hasClass("select2-hidden-accessible"))
+                {
+                    element.select2({
+                        theme: "bootstrap"
+                    }).on("select2:select", (e) => {
+                        @if(array_key_exists('attributes', $field) && array_key_exists('disabled', $field['attributes']))
+                            $('.disabled-hidden').val(e.target.value);
+                        @endif
+                    }).on('select2:unselect', function(e) {
+                        if ($(this).attr('multiple') && $(this).val().length == 0) {
+                            $(this).val(null).trigger('change');
+                        }
+                    });
+                }
+        }
+    </script>
     @endpush
 
 @endif

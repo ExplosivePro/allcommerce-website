@@ -1,8 +1,8 @@
 <?php
 
-namespace AllCommerce\Models\SMS;
+namespace App\Models\SMS;
 
-use Backpack\CRUD\CrudTrait;
+use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -20,11 +20,11 @@ class SmsProviders extends Model
     public $incrementing = false;
 
     protected $casts = [
-        'id' => 'uuid',
+
     ];
 
     public function provider_attributes()
     {
-        return $this->hasMany('AllCommerce\Models\SMS\SmsProviderAttributes', 'provider_id', 'id');
+        return $this->hasMany('App\Models\SMS\SmsProviderAttributes', 'provider_id', 'id');
     }
 }

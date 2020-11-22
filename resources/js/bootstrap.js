@@ -1,23 +1,25 @@
 window._ = require('lodash');
 
 /**
- * We'll load jQuery and the Bootstrap jQuery plugin which provides support
- * for JavaScript based Bootstrap features such as modals and tabs. This
- * code may be modified to fit the specific needs of your application.
- */
-
-try {
-    window.Popper = require('popper.js').default;
-    window.$ = window.jQuery = require('jquery');
-
-    require('bootstrap');
-} catch (e) {}
-
-/**
  * We'll load the axios HTTP library which allows us to easily issue requests
  * to our Laravel back-end. This library automatically handles sending the
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
+try {
+    window.Popper = require('@popperjs/core').default;
+    window.$ = window.jQuery = require('jquery');
+    window.Noty = require('noty');
+
+    require('bootstrap');
+    require('bootstrap-iconpicker/bootstrap-iconpicker/js/bootstrap-iconpicker');
+
+    $.DataTable = require( 'datatables.net' )( window, $ );
+    require( 'datatables.net-bs4' )( window, $ );
+    require( 'datatables.net-responsive' )( window, $ );
+    require( 'datatables.net-responsive-bs4' )( window, $ );
+    require( 'datatables.net-fixedheader' )( window,$ );
+    require( 'datatables.net-fixedheader-bs4' )( window, $ );
+} catch (e) {}
 
 window.axios = require('axios');
 
@@ -28,36 +30,17 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
  * for events that are broadcast by Laravel. Echo and event broadcasting
  * allows your team to easily build robust real-time web applications.
  */
-
-/* @todo - very sad doing this. undo this ASAP!!!!
- import Echo from 'laravel-echo';
- window.Pusher = require('pusher-js');
-
- console.log('Process env - ', process.env);
-
- window.Echo = new Echo({
-     broadcaster: 'pusher',
-     key: process.env.MIX_PUSHER_APP_KEY,
-     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
-     encrypted: true
- });
-*/
 window.select2 = require ('select2');
-window.MobileDetect = require('mobile-detect');
-window.libphonenumber = require('libphonenumber-js/min');
-window.postalCodes = require('postal-codes-js');
+window.noty = require('noty');
+window.Vapor = require('laravel-vapor');
+// import Echo from 'laravel-echo';
 
-/*
-For something cool.
-window.addEventListener("pagehide", function(evt){
-    alert('OMG')
-}, false);
+// window.Pusher = require('pusher-js');
 
-window.addEventListener("unload", function(evt){
-    alert('Oh no, what did you do?')
-}, false);
+// window.Echo = new Echo({
+//     broadcaster: 'pusher',
+//     key: process.env.MIX_PUSHER_APP_KEY,
+//     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
+//     forceTLS: true
+// });
 
-window.addEventListener("visibilitychange", function(evt){
-    alert('Oh no, man, did you do something?')
-}, false);
-*/

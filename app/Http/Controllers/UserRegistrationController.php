@@ -1,11 +1,12 @@
 <?php
 
-namespace AllCommerce\Http\Controllers;
+namespace App\Http\Controllers;
 
-use AllCommerce\Roles;
-use AllCommerce\User;
+use App\Aggregates\Users\UserProfileAggregate;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Silber\Bouncer\BouncerFacade as Bouncer;
 
 class UserRegistrationController extends Controller
 {
@@ -13,7 +14,6 @@ class UserRegistrationController extends Controller
 
     public function __construct(Request $request)
     {
-        parent::__construct();
         $this->request = $request;
     }
 
@@ -25,14 +25,13 @@ class UserRegistrationController extends Controller
         {
             $new_user = $users->find($data['session']);
 
-            if(!is_null($new_user))
+            if(!is_null($new_user) && (is_null($new_user->email_verified_at)))
             {
                 auth()->logout();
                 auth()->login($new_user);
 
                 $role_slug = $new_user->getRoles()[0];
-                $role = Roles::whereName($role_slug)
-                    ->whereClientId($new_user->client_id)->first()['title'];
+                $role = Bouncer::role()->whereName($role_slug)->first()['title'];
 
                 if(is_null($role)) { $role = ''; }
 
@@ -41,7 +40,7 @@ class UserRegistrationController extends Controller
                     'role' => $role
                 ];
 
-                return view('anchor-cms.users.complete-registration', $args);
+                return view('users.complete-registration', $args);
             }
             else
             {
@@ -67,9 +66,7 @@ class UserRegistrationController extends Controller
 
         $validated = Validator::make($data, [
             'session_token' => 'bail|required|exists:users,id',
-            'username' => 'bail|required',
-            'first_name' => 'bail|required',
-            'last_name' => 'bail|required',
+            'name' => 'bail|required',
             'email' => 'bail|required|email:rfc,dns',
             'password' => 'bail|required',
             'password_confirmation' => 'bail|required'
@@ -90,20 +87,18 @@ class UserRegistrationController extends Controller
         {
             if($data['password'] == $data['password_confirmation'])
             {
-                $user = $user->find($data['session_token']);
-                $user->password = bcrypt($data['password']);
-                $user->email_verified_at = date('Y-m-d h:i:s');
+                $aggy = UserProfileAggregate::retrieve($data['session_token'])
+                    ->updatePassword(bcrypt($data['password']))
+                    ->setUserVerified()
+                    ->updateUsername($data['name'])
+                    ->updateEmail($data['email']);
 
-                if($user->username != $data['username']) {$user->username = $data['username'];}
-                if($user->first_name != $data['first_name']) {$user->first_name = $data['first_name'];}
-                if($user->last_name != $data['last_name']) {$user->last_name = $data['last_name'];}
-                if($user->email != $data['email']) {$user->email = $data['email'];}
-
-                if($user->save())
+                if($aggy->persist())
                 {
                     auth()->logout();
                     session()->put('status', 'Registration Success! Login to Continue.');
-                    return redirect('login');
+                    \Alert::success('Registration Success! Login to Continue.')->flash();
+                    return redirect('access');
                 }
                 else
                 {

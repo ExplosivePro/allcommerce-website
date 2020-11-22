@@ -1,31 +1,18 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
-import dashboard from './dashboard';
-import shopDash from './shop-dashboard';
-import kpi from './kpi';
-import asidebar from "./asidebar/asidebar";
-import smsManager from "./managerModules/smsManager";
-import paymentGatewaysManager from "./managerModules/paymentGatewaysManager";
-import checkoutFunnelsManager from "./managerModules/checkoutFunnelsManager";
-
 Vue.use(Vuex);
+
+import membershipPurchase from "./memberships/membershipPurchase";
 
 export default new Vuex.Store({
     modules: {
-        asidebar,
-        dashboard,
-        kpi,
-        shopDash,
-        smsManager,
-        paymentGatewaysManager,
-        checkoutFunnelsManager
+        membershipPurchase
     },
     state() {
         return {
             screenHeight: window.innerHeight,
-            screenWidth: window.innerWidth,
-        };
+            screenWidth: window.innerWidth,        };
     },
     mutations: {
         screenHeight(state, height) {

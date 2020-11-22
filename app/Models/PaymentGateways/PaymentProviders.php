@@ -1,15 +1,16 @@
 <?php
 
-namespace AllCommerce\Models\PaymentGateways;
+namespace App\Models\PaymentGateways;
 
-use Backpack\CRUD\CrudTrait;
+use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Venturecraft\Revisionable\RevisionableTrait;
 
 class PaymentProviders extends Model
 {
-    use CrudTrait, SoftDeletes, Uuid;
+    use CrudTrait, RevisionableTrait, SoftDeletes, Uuid;
 
     protected $primaryKey  = 'id';
 
@@ -27,6 +28,7 @@ class PaymentProviders extends Model
      */
     public $incrementing = false;
 
+
     /**
      * The attributes that are mass assignable.
      *
@@ -35,18 +37,21 @@ class PaymentProviders extends Model
     protected $guarded = [];
 
     protected $casts = [
-        'id' => 'uuid',
-        'provider_type' => 'uuid',
+
     ];
 
     public function payment_type()
     {
-        return $this->hasOne('AllCommerce\Models\PaymentGateways\PaymentProviderTypes', 'id', 'provider_type');
+        return $this->hasOne('App\Models\PaymentGateways\PaymentProviderTypes', 'id', 'provider_type');
     }
 
     public function gateway_attributes()
     {
-        return $this->hasMany('AllCommerce\Models\PaymentGateways\PaymentProviderAttributes', 'provider_id', 'id');
+        return $this->hasMany('App\Models\PaymentGateways\PaymentProviderAttributes', 'provider_id', 'id');
     }
 
+    public function getSystemUserId()
+    {
+        return is_null(backpack_user()) ? 'System' : backpack_user()->id;
+    }
 }

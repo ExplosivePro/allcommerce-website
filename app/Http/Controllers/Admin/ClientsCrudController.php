@@ -1,114 +1,293 @@
 <?php
 
-namespace AllCommerce\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admin;
 
-use AllCommerce\Jobs\OnBoarding\NewClientOnboarding;
-use AllCommerce\Jobs\OnBoarding\UpdateClientOnboarding;
-use Backpack\CRUD\CrudPanel;
-use Prologue\Alerts\Facades\Alert;
+use App\Http\Requests\ClientsRequest;
 use Silber\Bouncer\BouncerFacade as Bouncer;
+use Backpack\ReviseOperation\ReviseOperation;
+use App\Aggregates\Clients\ClientAccountAggregate;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
-use AllCommerce\Http\Requests\RolesRequest as StoreRequest;
-use AllCommerce\Http\Requests\RolesRequest as UpdateRequest;
+use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
- * Class RolesCrudController
+ * Class ClientsCrudController
  * @package App\Http\Controllers\Admin
- * @property-read CrudPanel $crud
+ * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
 class ClientsCrudController extends CrudController
 {
+    use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation { create as traitStore; }
+    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation { update as traitUpdate; }
+    use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+    use ReviseOperation;
+
+    /**
+     * Configure the CrudPanel object. Apply settings to all operations.
+     *
+     * @return void
+     */
     public function setup()
     {
-        $this->data['page'] = 'crud-clients';
-        /*
-        |--------------------------------------------------------------------------
-        | CrudPanel Basic Information
-        |--------------------------------------------------------------------------
-        */
-        $this->crud->setModel('AllCommerce\Clients');
-        $this->crud->setRoute(config('backpack.base.route_prefix') . '/crud-clients');
-        $this->crud->setEntityNameStrings('Client', 'Clients');
+        CRUD::setModel(\App\Models\Client::class);
+        CRUD::setRoute(config('backpack.base.route_prefix') . '/clients');
+        CRUD::setEntityNameStrings('Client', 'Clients');
 
-        if(backpack_user()->isHostUser())
-        {
-            $name = [
-                'name' => 'name', // the db column name (attribute name)
-                'label' => "Client Name", // the human-readable label for it
-                'type' => 'text' // the kind of column to show
-            ];
+        $this->crud->allowAccess('revise');
+    }
 
-            $active = [
-                'name' => 'active', // the db column name (attribute name)
-                'label' => "Active", // the human-readable label for it
-                'type' => 'boolean' // the kind of column to show
-            ];
+    /**
+     * Define what happens when the List operation is loaded.
+     *
+     * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
+     * @return void
+     */
+    protected function setupListOperation()
+    {
+        CRUD::column('')->type('closure')->function(function ($entry) {
+            $icon = $entry->assigned_icon()->first();
+            return '<i class="'.$icon->icon.'" title="'.$entry->name.'"></i>';
+        });
+        CRUD::column('name')->type('text');
+        CRUD::column('active')->type('boolean');
+        CRUD::column('logo')->type('image');
+        CRUD::column('account_owner')->type('closure')->function(function($entry) {
+            $results = 'No One';
 
-            $active_edit = [
-                'name' => 'active', // the db column name (attribute name)
-                'label' => "Active", // the human-readable label for it
-                'type' => 'checkbox' // the kind of column to show
-            ];
+            if(!is_null($owner = $entry->account_owner_user()->first()))
+            {
+                $results = $owner->name;
+            }
 
-            $column_defs = [$name, $active];
-            $this->crud->addColumns($column_defs);
+            return $results;
+        });
 
-            $edit_create_defs = [$name, $active_edit];
-            $this->crud->addFields($edit_create_defs, 'both');
-
-            $this->crud->setRequiredFields(StoreRequest::class, 'create');
-            $this->crud->setRequiredFields(UpdateRequest::class, 'edit');
-        }
-        else
+        if(!Bouncer::is(backpack_user())->an('admin'))
         {
             $this->crud->hasAccessOrFail('nope');
         }
 
     }
 
-    public function store(StoreRequest $request)
+    /**
+     * Define what happens when the Create operation is loaded.
+     *
+     * @see https://backpackforlaravel.com/docs/crud-operation-create
+     * @return void
+     */
+    protected function setupCreateOperation()
     {
-        // your additional operations before save here
-        $redirect_location = parent::storeCrud($request);
-
-        // your additional operations after save here
-        // use $this->data['entry'] or $this->crud->entry
-        // show a success message
-        if($this->crud->entry->id == '0')
+        if(!Bouncer::is(backpack_user())->an('admin'))
         {
-            //Re-retrieve the new entry or skip (blah)
-            $entry = $this->crud->entry->whereName($this->crud->entry->name)
-                ->whereActive($this->crud->entry->active)
-                ->whereCreatedAt($this->crud->entry->created_at)
-                ->first();
+            $this->crud->hasAccessOrFail('nope');
         }
         else
         {
-            $entry = $this->crud->entry;
-        }
+            CRUD::setValidation(ClientsRequest::class);
 
-        if(!is_null($entry))
-        {
-            NewClientOnboarding::dispatch($entry)->onQueue('allcommerce-'.env('APP_ENV').'-events');
-        }
+            CRUD::field('name')->type('text');
+            //CRUD::field('icon')->type('text');
+            CRUD::field('icon')->type('select2-icons')->label('Side Bar Icon')
+                ->entity('assigned_icon')->model('App\Models\Utility\IconsSet')->attribute('icon')
+                //->options(function ($query) {
+                //    return $query->orderBy('name', 'ASC')->get();
+                //})
+                ->hint('Choose from any Icons from <a href="https://fontawesome.com/icons" target="_blank">Font-Awesome</a> (w/ Pro) or <a href="https://icons8.com/line-awesome" target="_blank">Line Awesome</a>');
 
-        return $redirect_location;//redirect('/crud-clients');
+            CRUD::field('active')->type('boolean');
+
+            CRUD::addField([
+                'type' => "relationship",
+                'name' => 'iconsset', // the method on your model that defines the relationship
+                'ajax' => true,
+                'wrapper' => ['class' => 'inline-icons'],
+                'inline_create' => [
+                    'create_route' =>  route('iconsset-inline-create')
+                ], // assumes the URL will be "/admin/category/inline/create"
+            ]);
+        }
     }
 
-    public function update(UpdateRequest $request)
+    /**
+     * Define what happens when the Update operation is loaded.
+     *
+     * @see https://backpackforlaravel.com/docs/crud-operation-update
+     * @return void
+     */
+    protected function setupUpdateOperation()
     {
-        // your additional operations before save here
-        $redirect_location = parent::updateCrud($request);
-
-        $entry = $this->crud->entry;
-
-        if(!is_null($entry))
+        if(!Bouncer::is(backpack_user())->an('admin'))
         {
-            UpdateClientOnboarding::dispatch($entry)->onQueue('allcommerce-'.env('APP_ENV').'-events');
+            if($this->crud->getCurrentEntryId() != backpack_user()->client_id)
+            {
+                $this->crud->hasAccessOrFail('nope');
+            }
+
         }
 
-        // your additional operations after save here
-        // use $this->data['entry'] or $this->crud->entry
-        return $redirect_location;//redirect('/crud-clients');
+        $entry = $this->crud->getModel()->find($this->crud->getCurrentEntryId());
+
+        CRUD::setValidation(ClientsRequest::class);
+        $entry = $this->crud->getModel()->find($this->crud->getCurrentEntryId());
+        CRUD::field('name')->type('text');
+
+        if(Bouncer::is(backpack_user())->an('admin'))
+        {
+            CRUD::field('icon')->type('select2-icons')->label('Side Bar Icon')
+                ->entity('assigned_icon')->model('App\Models\Utility\IconsSet')->attribute('icon')
+                ->options(function ($query) {
+                    return $query->orderBy('name', 'ASC')->get();
+                })->default($entry->icon)
+                ->hint('Choose from any Icons from <a href="https://fontawesome.com/icons" target="_blank">Font-Awesome</a> (w/ Pro) or <a href="https://icons8.com/line-awesome" target="_blank">Line Awesome</a>');
+
+            CRUD::addField([
+                'type' => "relationship",
+                'name' => 'iconsset', // the method on your model that defines the relationship
+                'ajax' => true,
+                'wrapper' => ['class' => 'inline-icons'],
+                'inline_create' => [
+                    'create_route' =>  route('iconsset-inline-create')
+                ], // assumes the URL will be "/admin/category/inline/create"
+            ]);
+        }
+
+        CRUD::field('logo')->type('text')->hint('Paste the URL of the Image You Want To Use.');
+
+        CRUD::field('account_owner')->type('select2')->label('Account Owner')
+            ->entity('account_owner_user')->model('App\Models\User')->attribute('name')
+            ->options(function ($query) use ($entry){
+                return $query->whereClientId($entry->id)
+                    ->orderBy('name', 'ASC')->get();
+            })->default($entry->client_id)
+            ->hint('This person is the \'Admin\' for this client.');
+
+        CRUD::field('active')->type('boolean');
+
+        $is_owner = $entry->account_owner == backpack_user()->id;
+        if($is_owner)
+        {
+            $this->crud->denyAccess('list');
+            $this->crud->setHeading($entry->name);
+            $this->crud->setSubheading('Update Company Info');
+
+            $aggy = ClientAccountAggregate::retrieve($entry->id);
+
+            if(!$aggy->getReadyStatus())
+            {
+                $this->data['widgets']['before_content'][] = [
+                    'type'        => 'alert',
+                    'class' => 'alert alert-warning col-sm-6 col-md-8 text-dark' ,
+                    'heading'     => 'Just One More thing, '.backpack_user()->first_name->first()->value.'!',
+                    'content'     => 'Verify your company information below! Upload a logo, update your business\'s location info and you will be all set!',
+                    'close_button' => false,
+                ];
+            }
+
+            $company_name = $entry->company_name()->first();
+            CRUD::addField([
+                'name' => 'details[company_name]',
+                'label' => 'Official Company Name',
+                'type'  => 'text',
+                'value' => (is_null($company_name)) ? '' : $company_name->value,
+                'tab' => 'Company Details',
+            ]);
+
+            $address1 = $entry->address1()->first();
+            CRUD::addField([
+                'name' => 'details[address1]',
+                'label' => 'Company Address',
+                'type'  => 'text',
+                'value' => (is_null($address1)) ? '' : $address1->value,
+                'tab' => 'Company Details',
+            ]);
+
+            $address2 = $entry->address2()->first();
+            CRUD::addField([
+                'name' => 'details[address2]',
+                'label' => 'Company Address 2',
+                'type'  => 'text',
+                'value' => (is_null($address2)) ? '' : $address2->value,
+                'tab' => 'Company Details',
+            ]);
+
+            $city = $entry->city()->first();
+            CRUD::addField([
+                'name' => 'details[city]',
+                'label' => 'Company City',
+                'type'  => 'text',
+                'value' => (is_null($city)) ? '' : $city->value,
+                'tab' => 'Company Details',
+            ]);
+
+            $state = $entry->state()->first();
+            CRUD::addField([
+                'name' => 'details[state]',
+                'label' => 'Company State',
+                'type'  => 'select2_from_array',
+                'options' => \App\Services\USStatesArray::arrayStates(),
+                'default' => (is_null($state)) ? '' : $state->value,
+                'tab' => 'Company Details',
+            ]);
+
+            $zip = $entry->zip()->first();
+            CRUD::addField([
+                'name' => 'details[zip]',
+                'label' => 'Company Zip Code',
+                'type'  => 'text',
+                'value' => (is_null($zip)) ? '' : $zip->value,
+                'tab' => 'Company Details',
+            ]);
+
+            $phone = $entry->phone()->first();
+            CRUD::addField([
+                'name' => 'details[phone]',
+                'label' => 'Company Phone #',
+                'type'  => 'text',
+                'value' => (is_null($phone)) ? '' : $phone->value,
+                'tab' => 'Misc Details',
+            ]);
+            $website = $entry->website()->first();
+            CRUD::addField([
+                'name' => 'details[website]',
+                'label' => 'Company Website',
+                'type'  => 'text',
+                'value' => (is_null($website)) ? '' : $website->value,
+                'tab' => 'Misc Details',
+            ]);
+            $email = $entry->email()->first();
+            CRUD::addField([
+                'name' => 'details[email]',
+                'label' => 'Company Email',
+                'type'  => 'text',
+                'value' => (is_null($email)) ? '' : $email->value,
+                'tab' => 'Misc Details',
+            ]);
+        }
+
+    }
+
+    public function update($id)
+    {
+        $data = $this->crud->getRequest()->request->all();
+
+        $response = $this->traitUpdate();
+
+        if(array_key_exists('details', $data))
+        {
+            $aggy = ClientAccountAggregate::retrieve($id);
+
+            $was_ready = $aggy->getReadyStatus();
+
+            $aggy->updateAccountDetails($data['details'])
+                ->persist();
+
+            if(!$was_ready)
+            {
+                return redirect('/access/dashboard');
+            }
+        }
+
+        return $response;
     }
 }

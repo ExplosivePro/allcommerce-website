@@ -1,161 +1,118 @@
 <?php
 
-namespace AllCommerce\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admin;
 
-use AllCommerce\Aggregates\Merchants\MerchantConfigAggregate;
-use AllCommerce\Clients;
-use AllCommerce\Jobs\OnBoarding\NewMerchantOnboarding;
-use AllCommerce\Jobs\OnBoarding\UpdateClientOnboarding;
-use AllCommerce\Jobs\OnBoarding\UpdateMerchantOnboarding;
-use Backpack\CRUD\CrudPanel;
+use App\Aggregates\Clients\ClientAccountAggregate;
+use App\Http\Requests\MerchantsRequest;
 use Silber\Bouncer\BouncerFacade as Bouncer;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
-use AllCommerce\Http\Requests\StandardStoreRequest as StoreRequest;
-use AllCommerce\Http\Requests\StandardUpdateRequest as UpdateRequest;
+use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
  * Class MerchantsCrudController
  * @package App\Http\Controllers\Admin
- * @property-read CrudPanel $crud
+ * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
 class MerchantsCrudController extends CrudController
 {
+    use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+
+    /**
+     * Configure the CrudPanel object. Apply settings to all operations.
+     *
+     * @return void
+     */
     public function setup()
     {
-        $this->data['page'] = 'manage-merchants';
+        CRUD::setModel(\App\Models\Merchant::class);
+        CRUD::setRoute(config('backpack.base.route_prefix') . '/merchants');
+        CRUD::setEntityNameStrings('merchants', 'merchants');
 
-        /*
-        |--------------------------------------------------------------------------
-        | CrudPanel Basic Information
-        |--------------------------------------------------------------------------
-        */
-        $this->crud->setModel('AllCommerce\Merchants');
-        $this->crud->setRoute(config('backpack.base.route_prefix') . '/manage-merchants');
-        $this->crud->setEntityNameStrings('Merchant', 'Manage Merchants');
-
-        if(backpack_user()->isHostUser())
+        if(Bouncer::is(backpack_user())->an('admin'))
         {
-            if(session()->has('active_client'))
-            {
-                $this->crud->addClause('where', 'client_id', '=', session()->get('active_client'));
-            }
+            $this->crud->hasAccessOrFail('nope');
         }
-        else
+    }
+
+    /**
+     * Define what happens when the List operation is loaded.
+     *
+     * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
+     * @return void
+     */
+    protected function setupListOperation()
+    {
+        CRUD::addClause('whereClientId', backpack_user()->client_id);
+        CRUD::setFromDb(); // columns
+
+        /**
+         * Columns can be defined using the fluent syntax or array syntax:
+         * - CRUD::column('price')->type('number');
+         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']);
+         */
+    }
+
+    /**
+     * Define what happens when the Create operation is loaded.
+     *
+     * @see https://backpackforlaravel.com/docs/crud-operation-create
+     * @return void
+     */
+    protected function setupCreateOperation()
+    {
+        $aggy = ClientAccountAggregate::retrieve(backpack_user()->client_id);
+
+        if($aggy->merchantCount() == 0)
         {
-            $this->crud->addClause('where', 'client_id', '=', backpack_user()->client_id);
-        }
-
-        $name = [
-            'name' => 'name', // the db column name (attribute name)
-            'label' => "Merchant Name", // the human-readable label for it
-            'type' => 'text', // the kind of column to show
-            'attributes' => [
-                'required' => 'required',
-            ]
-        ];
-
-        $active = [
-            'name' => 'active', // the db column name (attribute name)
-            'label' => "Active?", // the human-readable label for it
-            'type' => 'boolean' // the kind of column to show
-        ];
-
-        $client = [
-            'name' => 'client.name',
-            'label' => 'Client',
-            'type' => 'text'
-        ];
-
-        $add_role_client_select = [
-            'name' => (!backpack_user()->isHostUser()) ? 'client.id' : 'client_id',
-            'label' => 'Assign a Client',
-            'type' => 'select2_from_array',
-            'options' => Clients::getAllClientsDropList(),
-            'default' => backpack_user()->client_id,
-            'attributes' => [
-                'required' => 'required',
-            ]
-        ];
-
-        if(!backpack_user()->isHostUser())
-        {
-            $add_role_client_select['attributes']['disabled'] = 'disabled';
-
-            $hidden_client = [
-                'name' => 'client_id',
-                'type' => 'hidden',
-                'value' => backpack_user()->client_id
+            $this->data['widgets']['before_content'][] = [
+                'type'         => 'alert',
+                'class'        => 'alert alert-success mb-2 col-md-8',
+                'heading'      => 'Let\'s Get Started!',
+                'content'      => 'We are now all registered and ready to go! Lets start things off by creating a new Merchant now! After that, you will be free to explore every where!',
+                'close_button' => false, // show close button or not
             ];
         }
+        CRUD::setValidation(MerchantsRequest::class);
 
-        $route = \Route::current()->uri();
-        $mode = 'edit';
-        if(strpos($route, 'create') !== false)
+        CRUD::field('name')->type('text')
+            ->attributes(['required' => true]); // fields
+
+        $client_id_def = [
+            'name' => 'client_id',
+            'label' => 'Client',
+            'type' => 'select2',
+            'entity' => 'client',
+            'attribute' => 'name',
+            'attributes' => [
+                'required' => true
+            ],
+        ];
+
+        if(!is_null(backpack_user()->client_id))
         {
-            $mode = 'create';
+            $client_id_def['name'] = 'fake_client_id';
+            $client_id_def['attributes']['disabled'] = true;
+            $client_id_def['default'] = backpack_user()->client_id;
+
+            CRUD::field('client_id')->type('hidden')->value(backpack_user()->client_id);
         }
+        CRUD::addField($client_id_def);
 
-        if($mode == 'edit')
-        {
-            $add_role_client_select['attributes'] = [];
-            $add_role_client_select['attributes']['disabled'] = 'disabled';
-        }
-
-        $column_defs = [$name, $client, $active];
-        $add_edit_defs = [$name, $add_role_client_select,$active];
-
-        if(!backpack_user()->isHostUser())
-        {
-            $add_edit_defs[] = $hidden_client;
-        }
-
-        $this->crud->addColumns($column_defs);
-        $this->crud->addFields($add_edit_defs, 'both');
-        // add asterisk for fields that are required in RolesRequest
-        $this->crud->setRequiredFields(StoreRequest::class, 'create');
-        $this->crud->setRequiredFields(UpdateRequest::class, 'edit');
+        CRUD::field('active')->type('boolean');
     }
 
-    public function store(StoreRequest $request)
+    /**
+     * Define what happens when the Update operation is loaded.
+     *
+     * @see https://backpackforlaravel.com/docs/crud-operation-update
+     * @return void
+     */
+    protected function setupUpdateOperation()
     {
-        $redirect_location = parent::storeCrud($request);
-
-        $entry = $this->crud->entry;
-
-        if(!is_null($entry))
-        {
-            // execute the on-boarding job
-            NewMerchantOnboarding::dispatch($entry)->onQueue('allcommerce-'.env('APP_ENV').'-events');
-        }
-
-        return $redirect_location;
-    }
-
-    public function update(UpdateRequest $request)
-    {
-        // your additional operations before save here
-        $redirect_location = parent::updateCrud($request);
-
-        $entry = $this->crud->entry;
-
-        if(!is_null($entry))
-        {
-            UpdateMerchantOnboarding::dispatch($entry)->onQueue('allcommerce-'.env('APP_ENV').'-events');
-        }
-
-        // your additional operations after save here
-        // use $this->data['entry'] or $this->crud->entry
-        return $redirect_location;
-    }
-
-    public function destroy($id)
-    {
-        $results = parent::destroy($id);
-
-        MerchantConfigAggregate::retrieve($id)
-            ->deleteMerchant($id)
-            ->persist();
-
-        return $results;
+        $this->setupCreateOperation();
     }
 }

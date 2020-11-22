@@ -1,0 +1,18 @@
+<?php
+
+namespace DummyNamespace;
+
+class DummyClass
+{
+    protected $args;
+
+    public function __construct($args = null)
+    {
+        $this->args = $args;
+    }
+
+    public function doSomething()
+    {
+        return $this->args;
+    }
+}

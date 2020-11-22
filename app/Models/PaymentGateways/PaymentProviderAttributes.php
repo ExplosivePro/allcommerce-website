@@ -1,8 +1,8 @@
 <?php
 
-namespace AllCommerce\Models\PaymentGateways;
+namespace App\Models\PaymentGateways;
 
-use Backpack\CRUD\CrudTrait;
+use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -35,8 +35,6 @@ class PaymentProviderAttributes extends Model
     protected $guarded = [];
 
     protected $casts = [
-        'id' => 'uuid',
-        'provider_id' => 'uuid',
         'misc' => 'array'
     ];
 }

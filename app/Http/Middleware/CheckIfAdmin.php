@@ -1,8 +1,7 @@
 <?php
 
-namespace AllCommerce\Http\Middleware;
+namespace App\Http\Middleware;
 
-use AllCommerce\UserActiveClients;
 use Closure;
 
 class CheckIfAdmin
@@ -13,9 +12,15 @@ class CheckIfAdmin
      * --------------
      * VERY IMPORTANT
      * --------------
-     * If you have both regular users and admins inside the same table,
-     * change the contents of this method to check that the logged in user
+     * If you have both regular users and admins inside the same table, change
+     * the contents of this method to check that the logged in user
      * is an admin, and not a regular user.
+     *
+     * Additionally, in Laravel 7+, you should change app/Providers/RouteServiceProvider::HOME
+     * which defines the route where a logged in user (but not admin) gets redirected
+     * when trying to access an admin route. By default it's '/home' but Backpack
+     * does not have a '/home' route, use something you've built for your users
+     * (again - users, not admins).
      *
      * @param [type] $user [description]
      *
@@ -24,20 +29,6 @@ class CheckIfAdmin
     private function checkIfUserIsAdmin($user)
     {
         // return ($user->is_admin == 1);
-        if(!$user->isHostUser())
-        {
-            session()->put('active_client', $user->client_id);
-        }
-        else
-        {
-            $sesh = UserActiveClients::whereUserId(backpack_user()->id)->first();
-
-            if(!is_null($sesh))
-            {
-                session()->put('active_client', $sesh->client_id);
-            }
-        }
-
         return true;
     }
 
@@ -71,7 +62,7 @@ class CheckIfAdmin
             return $this->respondToUnauthorizedRequest($request);
         }
 
-        if (!$this->checkIfUserIsAdmin(backpack_user())) {
+        if (! $this->checkIfUserIsAdmin(backpack_user())) {
             return $this->respondToUnauthorizedRequest($request);
         }
 

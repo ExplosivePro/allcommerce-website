@@ -7,70 +7,46 @@
 // Routes you generate using Backpack\Generators will be placed here.
 Route::group([
     'prefix'     => config('backpack.base.route_prefix', 'admin'),
-    'middleware' => ['web'],
-    'namespace'  => 'AllCommerce\Http\Controllers',
+    'middleware' => ['web', 'admin'],
+    'namespace'  => 'App\Http\Controllers',
 ], function () { // custom admin routes
-    Route::get('/login', 'Auth\LoginController@showLoginForm')->name('backpack.auth.login');
-    //Route::get('/registration', 'Auth\LoginController@render_complete_registration');
+    Route::crud('clients', 'Admin\ClientsCrudController');
+    Route::crud('merchants', 'Admin\MerchantsCrudController');
 });
 
 Route::group([
     'prefix'     => config('backpack.base.route_prefix', 'admin'),
-    'middleware' => ['web', config('backpack.base.middleware_key', 'admin')],
-    'namespace'  => 'AllCommerce\Http\Controllers',
+    'middleware' => ['web', 'admin'],
+    'namespace'  => 'App\Actions',
+], function () { // custom admin action routes
+    Route::post('user/details', 'Users\UpdatePersonalInfo');
+    Route::post('user/image', 'Users\UpdateProfileImage');
+    Route::post('user/image/upload', 'Users\UploadProfileImage');
+    Route::get('payment-gateways/{uuid}/manage', 'PaymentGateways\ManageClientEnabledGateway');
+    Route::post('payment-gateways/{uuid}/manage/assign', 'PaymentGateways\AssignClientEnabledGatewayToShops');
+    Route::post('payment-gateways/{uuid}/manage/enable', 'PaymentGateways\EnableClientGateway');
+});
+
+Route::group([
+    'prefix'     => config('backpack.base.route_prefix', 'admin'),
+    'middleware' => ['web', 'admin', 'membership'],
+    'namespace'  => 'App\Http\Controllers',
 ], function () { // custom admin routes
+    Route::get('dashboard', 'HomeController@dashboard');
+    Route::get('shop-dashboard/{shop_id}', 'Dashboards\ShopDashboard@index');
+    Route::get('merchant-dashboard/{merchant_id}', 'Dashboards\MerchantDashboard@index');
+});
 
-    Route::group(['prefix' => 'dashboard'], function () {
-        Route::get('/', 'Admin\DashboardController@index');
-        Route::get('/widgets', 'API\Widgets\Reporting\ReportingWidgetsAPIController@get_dashboard_widgets');
-    });
+Route::group([
+    'prefix'     => config('backpack.base.route_prefix', 'admin'),
+    'middleware' => ['web', 'admin', 'membership'],
+    'namespace'  => 'App\Http\Controllers\Admin',
+], function () { // custom admin routes
+    Route::get('user/resend-email/{userId}', 'CSVImportController@resend_email');
+    Route::crud('user', 'UserCrudController');
 
-    Route::group(['prefix' => 'shop'], function () {
-        Route::group(['prefix' => 'dashboard'], function () {
-            Route::get('/', 'Admin\DashboardController@shop_index');
-        });
+    Route::crud('iconsset', 'IconsSetCrudController');
+    Route::crud('shops', 'ShopsCrudController');
 
-        CRUD::resource('/checkout-funnels', 'Admin\Manager\CheckoutFunnelCrudController');
-        Route::get('products', 'Admin\InternalAdminJSONController@shop_products_as_select');
-
-        Route::group(['prefix' => 'shopify'], function () {
-            Route::post('/install-status', 'Admin\DashboardController@shopify_install_status');
-        });
-    });
-
-    Route::group(['prefix' => 'reporting'], function () {
-
-    });
-
-    Route::group(['prefix' => 'abilities'], function () {
-        Route::get('/', 'Admin\InternalAdminJSONController@abilities');
-        Route::get('/{role}', 'Admin\InternalAdminJSONController@role_abilities');
-    });
-
-    Route::group(['prefix' => 'roles'], function () {
-        Route::get('/{client_id}', 'Admin\InternalAdminJSONController@client_roles');
-    });
-
-    Route::group(['prefix' => 'sms-manager'], function () {
-        Route::get('/', 'Admin\SMS\SMSManagementController@index');
-        Route::post('/tabbed-links', 'Admin\Manager\TabbedLinkController@index');
-    });
-
-    Route::group(['prefix' => 'payment-gateways'], function () {
-        Route::get('/', 'Admin\PaymentGateways\PaymentGatewaysManagerController@index');
-        Route::post('/tabbed-links', 'Admin\Manager\TabbedLinkController@index');
-        Route::post('/{shop_uuid}/assign', 'Admin\PaymentGateways\PaymentGatewaysManagerController@assign_gateway_to_shop');
-        Route::delete('/{shop_uuid}/unassign', 'Admin\PaymentGateways\PaymentGatewaysManagerController@unassign_gateway_to_shop');
-    });
-
-    CRUD::resource('manage-merchants', 'Admin\MerchantsCrudController');
-    CRUD::resource('manage-shops', 'Admin\ShopsCrudController');
-
-    CRUD::resource('crud-users', 'Admin\UsersCrudController');
-    CRUD::resource('crud-roles', 'Admin\RolesCrudController');
-    CRUD::resource('crud-abilities', 'Admin\AbilitiesCrudController');
-    CRUD::resource('crud-clients', 'Admin\ClientsCrudController');
-    CRUD::resource('crud-mobile-apps', 'Admin\MobileAppCrudController');
-    CRUD::resource('crud-ad-markets', 'Admin\AdMarketsCrudController');
-    CRUD::resource('crud-ad-budgets', 'Admin\AdBudgetsCrudController');
+    Route::crud('payment-gateways', 'Features\GatewayProvidersCrudController');
 }); // this should be the absolute last line of this file

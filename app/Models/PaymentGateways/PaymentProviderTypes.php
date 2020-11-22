@@ -1,11 +1,11 @@
 <?php
 
-namespace AllCommerce\Models\PaymentGateways;
+namespace App\Models\PaymentGateways;
 
-use Backpack\CRUD\CrudTrait;
-use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
+use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 
 class PaymentProviderTypes extends Model
 {
@@ -35,13 +35,12 @@ class PaymentProviderTypes extends Model
     protected $guarded = [];
 
     protected $casts = [
-        'id' => 'uuid',
         'misc' => 'array'
     ];
 
     public function payment_gateways()
     {
-        return $this->hasMany('AllCommerce\Models\PaymentGateways\PaymentProviders', 'provider_type', 'id')
+        return $this->hasMany('App\Models\PaymentGateways\PaymentProviders', 'provider_type', 'id')
             ->with('gateway_attributes');
     }
 

@@ -16,6 +16,7 @@ class CreateFeaturesTable extends Migration
         Schema::create('features', function (Blueprint $table) {
             $table->uuid('id')->unique()->primary();
             $table->uuid('client_id');
+            $table->string('type');
             $table->string('name');
 
             $table->text('allowed_roles')->nullable();

@@ -1,69 +1,22 @@
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
-
 require('./bootstrap');
-
 const Vue = require('vue');
 import Vuex from 'vuex';
-window.Vuetify = require('vuetify');
-
-Vue.use(Vuetify);
 Vue.use(Vuex);
 
-const opts = {
-    icons: {
-        iconfont: 'fa', // 'mdi' || 'mdiSvg' || 'md' || 'fa' || 'fa4'
-    },
-};
+import SweetModal from 'sweet-modal-vue/src/plugin.js'
+Vue.use(SweetModal)
 
-export default new Vuetify(opts);
+Vue.component('credit-token-purchase', require('./components/memberships/CreditTokenPurchase.vue').default);
+Vue.component('membership-purchase', require('./components/memberships/MembershipPurchase.vue').default);
+Vue.component('token-membership-toggle', require('./components/memberships/TokenMembershipToggle.vue').default);
 
-/**
- * The following block of code may be used to automatically register your
- * Vue components. It will recursively scan this directory for the Vue
- * components and automatically register them with their "basename".
- *
- * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
- */
+Vue.component('dashboard-raffles', require('./components/dashboard/RaffleListings.vue').default);
+Vue.component('dashboard-search', require('./components/dashboard/DashboardSearchBar.vue').default);
+Vue.component('image-upload', require('./components/image-upload/ImageUploadTextComponent.vue').default);
 
-// const files = require.context('./', true, /\.vue$/i)
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
+Vue.component('icons-field', require('./screens/icons/iconsField.vue').default);
 
-Vue.component('role-ability-assign', require('./components/containers/RoleAbilitySelectContainer.vue').default);
-Vue.component('user-client-role-ability-assign', require('./components/containers/UserClientRoleAbilitySelectContainer.vue').default);
-Vue.component('main-dashboard', require('./components/containers/dashboards/DefaultDashboardContainer.vue').default);
-Vue.component('shop-dashboard', require('./components/containers/dashboards/ShopDashboardContainer.vue').default);
-
-Vue.component('aside-bar', require('./components/containers/asidebar/AsideBarContainer.vue').default);
-Vue.component('aside-context-tab', require('./components/containers/asidebar/ContextTabContainer.vue').default);
-Vue.component('aside-sms-manager-context-tab', require('./components/containers/managers/asideBarModules/contextTab/SmsManagerContextTabContainer.vue').default);
-Vue.component('aside-pg-manager-context-tab', require('./components/containers/managers/asideBarModules/contextTab/PgManagerContextTabContainer.vue').default);
-
-
-Vue.component('mega-button-card', require('./components/containers/widgets/mega-button/MegaButtonContainer.vue').default);
-Vue.component('default-left-widget', require('./components/containers/widgets/default/defaultLeftContainer.vue').default);
-Vue.component('default-right-widget', require('./components/containers/widgets/default/defaultRightContainer.vue').default);
-Vue.component('default-top-widget', require('./components/containers/widgets/default/defaultTopContainer.vue').default);
-
-Vue.component('sms-manager', require('./components/containers/managers/sms/SMSManagerContainer.vue').default);
-Vue.component('payment-gateway-manager', require('./components/containers/managers/paymentGateways/PGManagerContainer.vue').default);
-Vue.component('manager-tabbed-links', require('./components/containers/managers/tabbedLinks/ManagerTabbledLinksContainer.vue').default);
-Vue.component('hidden-shop-select', require('./components/containers/managers/checkoutFunnels/FunnelShopSelect2Hidden.vue').default);
-Vue.component('funnel-shop-products', require('./components/containers/managers/checkoutFunnels/FunnelShopProductsSelect2.vue').default);
-
-
-
-
-//Vue.component('checkbox-grid', require('./components/presenters/CheckboxGridComponent.vue').default);
-
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
+import { createPopper } from '@popperjs/core';
 
 import VuexStore from './vuex-store/store';
 window.store = VuexStore;
@@ -97,11 +50,11 @@ new Vue({
     },
     data() {
         return {
-            themeColor: '',
             windowHeight: window.innerHeight,
             windowWidth: window.innerWidth
-        };
+        }
     },
+    computed: {},
     methods: {
         ...mapActions({
             setScreenSize: 'setScreenSize'
@@ -109,16 +62,72 @@ new Vue({
         onResize() {
             this.windowHeight = window.innerHeight;
             this.windowWidth = window.innerWidth;
+        },
+        init() {
+            // console.log('Setting tool tips')
+            $('[data-toggle="tooltip"]').tooltip();
+        },
+        dropToggle(elem) {
+
         }
     },
     mounted() {
+        console.log('Welcome to the drawing!')
+
         this.setScreenSize({
             height: this.windowHeight,
             width: this.windowWidth
         });
         this.$nextTick(() => {
+            // this.init();
             window.addEventListener('resize', this.onResize);
         });
+
+        $('button[data-toggle=sidebar-lg-show]').click(function(elem) {
+            let curClass = $('body').attr('class')
+            console.log(curClass);
+
+            if(curClass.includes('sidebar-lg-show')) {
+                curClass = curClass.replace('sidebar-lg-show', '');
+            }
+            else {
+                curClass = curClass + ' sidebar-lg-show'
+            }
+
+            $('body').attr('class', curClass)
+        });
+
+        $('button[data-toggle=sidebar-show]').click(function(elem) {
+            let curClass = $('body').attr('class')
+            console.log(curClass);
+
+            if(curClass.includes('sidebar-show')) {
+                curClass = curClass.replace('sidebar-show', '');
+            }
+            else {
+                curClass = curClass + ' sidebar-show'
+            }
+
+            $('body').attr('class', curClass)
+        });
+
+        $('.nav-item.nav-dropdown').click(function (elem) {
+            let c = $(elem.currentTarget);
+            if(c.attr('class').includes('open'))
+            {
+                c.attr('class', 'nav-item nav-dropdown');
+            }
+            else
+            {
+                c.attr('class', 'nav-item nav-dropdown open');
+            }
+
+        })
+        /*
+        $('.nav-dropdown').click(function () {
+            $('.nav-dropdown').attr('class', 'nav-item nav-dropdown open');
+        })
+         */
     },
     beforeDestroy() {
         window.removeEventListener('resize', this.onResize);

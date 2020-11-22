@@ -1,6 +1,6 @@
 <?php
 
-namespace AllCommerce\Models\PaymentGateways;
+namespace App\Models\PaymentGateways;
 
 use Illuminate\Database\Eloquent\Model;
 
