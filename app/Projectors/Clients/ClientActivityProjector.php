@@ -80,7 +80,7 @@ class ClientActivityProjector extends Projector
         }
 
         // Client Enabled SMS Provider set to House Twilio
-        $house_twilio = SmsProviders::whereName('Twilio - House')->first();
+        $house_twilio = SmsProviders::whereName('AllCommerce SMS')->first();
 
         if(!is_null($house_twilio))
         {

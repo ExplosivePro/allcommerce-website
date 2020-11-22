@@ -46,4 +46,9 @@ class ShopAssignedSmsProviders extends Model
     {
         return $this->belongsTo('App\Models\SMS\SmsProviders', 'provider_uuid', 'id');
     }
+
+    public function client()
+    {
+        return $this->belongsTo('App\Models\Client', 'client_uuid', 'id');
+    }
 }
