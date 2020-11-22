@@ -93,7 +93,13 @@ class ClientActivityProjector extends Projector
 
             if(!is_null($record))
             {
-                $record->misc = [];
+                $record->misc = [
+                    "accountSid" => "AC6bad234db52cb4f7a8c466c92a8e8a50",
+                    "authToken"  => "1531e87775390625d404a50bc0c15052",
+                    "frequency"  => 1,
+                    "number"     => "+16032881307",
+                    "type"       => "phone"
+                ];
                 $record->active = 1;
                 $record->save();
             }

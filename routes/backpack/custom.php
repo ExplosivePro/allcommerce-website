@@ -25,6 +25,10 @@ Route::group([
     Route::get('payment-gateways/{uuid}/manage', 'PaymentGateways\ManageClientEnabledGateway');
     Route::post('payment-gateways/{uuid}/manage/assign', 'PaymentGateways\AssignClientEnabledGatewayToShops');
     Route::post('payment-gateways/{uuid}/manage/enable', 'PaymentGateways\EnableClientGateway');
+
+    Route::get('sms-providers/{uuid}/manage', 'SMSProviders\ManageClientEnabledSMS');
+    Route::post('sms-providers/{uuid}/manage/assign', 'SMSProviders\AssignClientEnabledSMSToShops');
+    Route::post('sms-providers/{uuid}/manage/enable', 'SMSProviders\EnableClientSMS');
 });
 
 Route::group([
@@ -49,4 +53,5 @@ Route::group([
     Route::crud('shops', 'ShopsCrudController');
 
     Route::crud('payment-gateways', 'Features\GatewayProvidersCrudController');
+    Route::crud('sms-providers', 'Features\SMSProvidersCrudController');
 }); // this should be the absolute last line of this file

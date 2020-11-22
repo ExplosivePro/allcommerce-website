@@ -1,15 +1,16 @@
 <?php
 
-namespace App\Actions\PaymentGateways;
+namespace App\Actions\SMSProviders;
 
-use Lorisleiva\Actions\Action;
-use App\Aggregates\Shops\ShopConfigAggregate;
-use App\Models\PaymentGateways\PaymentProviders;
-use App\Exceptions\Shops\CouldNotAssignGatewayToShop;
 use App\Models\PaymentGateways\ShopAssignedPaymentProviders;
-use App\Models\PaymentGateways\ClientEnabledPaymentProviders;
+use Lorisleiva\Actions\Action;
+use App\Models\SMS\SmsProviders;
+use App\Models\SMS\ShopAssignedSmsProviders;
+use App\Models\SMS\ClientEnabledSmsProviders;
+use App\Aggregates\Shops\ShopConfigAggregate;
+use App\Exceptions\Shops\CouldNotAssignGatewayToShop;
 
-class AssignClientEnabledGatewayToShops extends Action
+class AssignClientEnabledSMSToShops extends Action
 {
     /**
      * Determine if the user is authorized to make this action.
@@ -34,17 +35,17 @@ class AssignClientEnabledGatewayToShops extends Action
     /**
      * Execute the action and return a result.
      * @param $uuid
-     * @param PaymentProviders $providers
+     * @param SmsProviders $providers
      * @return mixed
      */
-    public function handle($uuid, PaymentProviders $providers)
+    public function handle($uuid, SmsProviders $providers)
     {
         // Execute the action.
         return $providers->find($uuid);
     }
 
     /**
-     * Assign a Gateway to an Array of Shops
+     * Assign an SMS Provider to an Array of Shops
      * @param $result
      * @param $request
      * @return \Illuminate\Http\RedirectResponse
@@ -53,8 +54,8 @@ class AssignClientEnabledGatewayToShops extends Action
     {
         $data = $request->all();
         $client = backpack_user()->client()->first();
-        $payment_type = $result->payment_type()->first()->slug;
-        $client_enabled = ClientEnabledPaymentProviders::whereClientId($client->id)
+
+        $client_enabled = ClientEnabledSmsProviders::whereClientId($client->id)
             ->whereProviderId($result->id)->whereActive(1)
             ->first();
 
@@ -70,9 +71,8 @@ class AssignClientEnabledGatewayToShops extends Action
                 {
                     $map[] = $shop_id;
                     $aggy = ShopConfigAggregate::retrieve($shop_id);
-
-                    // insert a record into shop_assigned_payment_providers
-                    $ass = ShopAssignedPaymentProviders::firstOrCreate([
+                    // insert a record into shop_assigned_sms_providers
+                    $assy = ShopAssignedSmsProviders::firstOrCreate([
                         'shop_uuid' => $shop_id,
                         'client_enabled_uuid' => $client_enabled->id,
                         'provider_uuid' => $result->id,
@@ -80,18 +80,18 @@ class AssignClientEnabledGatewayToShops extends Action
                         'client_uuid' => $client->id
                     ]);
 
-                    $ass->active = 1;
-                    $ass->save();
+                    $assy->active = 1;
+                    $assy->save();
 
-                    // Tell the Shop Aggregate
                     try {
-                        $aggy->createOrUpdateAssignedGateway($result->toArray(), $payment_type, $ass->id)
+                        $aggy->createOrUpdateAssignedSMSProvider($result->toArray(), $assy->id)
                             ->persist();
+
                         \Alert::success('Assigned '.$aggy->getShopName().' to '.$result->name)->flash();
                     }
                     catch(CouldNotAssignGatewayToShop $e)
                     {
-                        $ass->forceDelete();
+                        $assy->forceDelete();
                         \Alert::warning($e->getMessage().' to '.$aggy->getShopName().'. ')->flash();
                     }
                 }
@@ -111,7 +111,8 @@ class AssignClientEnabledGatewayToShops extends Action
                         $doomed_assignment->save();
 
                         $aggy = ShopConfigAggregate::retrieve($shop_id)
-                            ->removeAssignedGateway($result->toArray(), $payment_type, $doomed_assignment->id);
+                            ->removeAssignedSMSProvider($result->toArray(), $doomed_assignment->id);
+
                         $doomed_assignment->delete();
 
                         \Alert::info('Un-assigned '.$aggy->getShopName().' from '.$result->name)->flash();
@@ -123,7 +124,7 @@ class AssignClientEnabledGatewayToShops extends Action
             {
                 // Check for all records in the shop_assigned_payment_providers for
                 //   provider_id and client_enabled_id.
-                $doomed_assignments = ShopAssignedPaymentProviders::whereProviderUuid($result->id)
+                $doomed_assignments = ShopAssignedSmsProviders::whereProviderUuid($result->id)
                     ->whereClientUuid($client->id)
                     ->whereActive(1)
                     ->get();
@@ -138,13 +139,15 @@ class AssignClientEnabledGatewayToShops extends Action
                         $doomed_assignment->save();
 
                         $aggy = ShopConfigAggregate::retrieve($doomed_assignment->shop_uuid)
-                            ->removeAssignedGateway($result->toArray(), $payment_type, $doomed_assignment->id);
+                            ->removeAssignedSMSProvider($result->toArray(), $doomed_assignment->id);
+
                         $doomed_assignment->delete();
 
                         \Alert::info('Un-assigned '.$aggy->getShopName().' from '.$result->name)->flash();
 
                         $aggy->persist();
                     }
+
                 }
                 else
                 {
@@ -160,5 +163,4 @@ class AssignClientEnabledGatewayToShops extends Action
         // Return to the referral URL
         return redirect()->back();
     }
-
 }

@@ -143,6 +143,11 @@ class Client extends Model
         return $this->hasMany('App\Models\PaymentGateways\ClientEnabledPaymentProviders', 'client_id', 'id');
     }
 
+    public function enabled_sms()
+    {
+        return $this->hasMany('App\Models\SMS\ClientEnabledSmsProviders', 'client_id', 'id');
+    }
+
     public function shops()
     {
         return $this->hasMany('App\Models\Shops\Shop', 'client_id', 'id');

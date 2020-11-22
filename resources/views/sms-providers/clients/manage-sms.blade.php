@@ -20,13 +20,13 @@
 @endsection
 
 @section('content')
-    {{-- GATEWAY CONFIG FIELDS --}}
     <div class="row" style="padding-top: 5%;">
         <div class="col-lg-12">
             <div class="form col-md-12">
                 <div class="row space-between">
-                    <form class="col-md-6" action="/access/payment-gateways/{!! $entry->id !!}/manage/enable" method="post">
+                    <form class="col-md-6" action="/access/sms-providers/{!! $entry->id !!}/manage/enable" method="post">
                         {!! csrf_field() !!}
+
                         <div class="card padding-10 col-md-12">
                             <div class="card-header">
                                 Configuration
@@ -37,6 +37,7 @@
                                     <div class="col-md-12 form-group">
                                         <label>Status</label><span> - {!! $gate_status->value !!}</span>
                                     </div>
+
                                     <div class="col-md-12 form-group">
                                         @php
                                             $assignable = 'No';
@@ -53,11 +54,13 @@
                                         @endphp
                                         <label>Can Be Assigned to Your Shops?</label><span> - {!! $assignable !!}</span>
                                     </div>
+
                                     <div class="col-md-12 form-group">
                                         <label>Commission</label><span> - {!! $commission->misc['percent'] * 100 !!}% per transaction</span>
                                     </div>
                                 </div>
-                                @foreach($form_fields as $field)
+                                @if($is_savable)
+                                    @foreach($form_fields as $field)
                                     <div class="row">
                                         <div class="col-md-12 form-group">
                                             <div class="card" style="border: transparent">
@@ -77,7 +80,8 @@
                                             {{-- <input required class="form-control" type="text" name="" value="{{ old($field) ? old($field) : $user->$field }}"> --}}
                                         </div>
                                     </div>
-                                @endforeach
+                                    @endforeach
+                                @endif
                             </div>
 
                             @if($is_savable)
@@ -89,7 +93,7 @@
                     </form>
 
                     <div class="row col-md-6 col-sm-6 col-sm-auto">
-                        <form class="col-md-11 col-sm-6" action="/access/payment-gateways/{!! $entry->id !!}/manage/assign" method="post">
+                        <form class="col-md-11 col-sm-6" action="/access/sms-providers/{!! $entry->id !!}/manage/assign" method="post">
                             {!! csrf_field() !!}
                             <div class="card padding-10 col-md-12 col-sm-12">
                                 <div class="card-header">
@@ -100,7 +104,7 @@
                                     <div class="row">
                                         @foreach ($client->shops()->get() as $shop)
                                             @php
-                                                $assigned_provider = $shop->shop_assigned_payment_providers()
+                                                $assigned_provider = $shop->shop_assigned_sms_provider()
                                                                             ->whereProviderUuid($entry->id)
                                                                             ->whereActive(1)
                                                                             ->first();

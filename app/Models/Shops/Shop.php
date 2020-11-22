@@ -101,6 +101,11 @@ class Shop extends Model
             ->with('payment_provider');
     }
 
+    public function shop_assigned_sms_provider()
+    {
+        return $this->hasOne('App\Models\SMS\ShopAssignedSmsProviders', 'shop_uuid', 'id');
+    }
+
     public function getSystemUserId()
     {
         return is_null(backpack_user()) ? 'System' : backpack_user()->id;

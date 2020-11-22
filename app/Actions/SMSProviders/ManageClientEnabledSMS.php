@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Actions\PaymentGateways;
+namespace App\Actions\SMSProviders;
 
-use App\Models\PaymentGateways\ClientEnabledPaymentProviders;
-use App\Models\PaymentGateways\PaymentProviders;
+use App\Models\SMS\ClientEnabledSmsProviders;
+use App\Models\SMS\SmsProviders;
 use Lorisleiva\Actions\Action;
 
-class ManageClientEnabledGateway extends Action
+class ManageClientEnabledSMS extends Action
 {
     /**
      * Determine if the user is authorized to make this action.
@@ -31,10 +31,10 @@ class ManageClientEnabledGateway extends Action
     /**
      * Execute the action and return a result.
      * @param $uuid
-     * @param PaymentProviders $providers
+     * @param SmsProviders $providers
      * @return mixed
      */
-    public function handle($uuid, PaymentProviders $providers)
+    public function handle($uuid, SmsProviders $providers)
     {
         // Execute the action.
         return $providers->find($uuid);
@@ -43,6 +43,7 @@ class ManageClientEnabledGateway extends Action
     public function response($result, $request)
     {
         $client = backpack_user()->client()->first();
+
         $data = [];
         $data['entry'] = $result;
         $data['client'] = $client;
@@ -61,12 +62,12 @@ class ManageClientEnabledGateway extends Action
             $data['breadcrumbs'][$client->name] = false;
         }
 
-        $data['breadcrumbs']['Payment Gateways'] = '/access/payment-gateways';
+        $data['breadcrumbs']['SMS Providers'] = '/access/sms-providers';
         $data['breadcrumbs']['Manage '.$result->name] = false;
 
         $data['gateway_name'] = $result->name;
 
-        $gate_attrs = $result->gateway_attributes()->get();
+        $gate_attrs = $result->provider_attributes()->get();
         $provider_desc = $gate_attrs->where('name', '=', 'Description')->first();
         $data['form_fields'] = $gate_attrs->where('name', '=', 'config');
         $data['gate_status'] = $gate_attrs->where('name', '=', 'Status')->first();
@@ -81,7 +82,7 @@ class ManageClientEnabledGateway extends Action
         ];
 
         $data['enabled'] = [];
-        $enabled = ClientEnabledPaymentProviders::whereClientId($client->id)
+        $enabled = ClientEnabledSmsProviders::whereClientId($client->id)
             ->whereProviderId($result->id)->whereActive(1)->first();
 
         if(!is_null($enabled))
@@ -89,6 +90,6 @@ class ManageClientEnabledGateway extends Action
             $data['enabled'] = $enabled->toArray();
         }
 
-        return view('payment-gateways.clients.manage-gateway', $data);
+        return view('sms-providers.clients.manage-sms', $data);
     }
 }

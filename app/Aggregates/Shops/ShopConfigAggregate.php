@@ -11,6 +11,9 @@ use App\StorableEvents\Shops\CreditGatewayLimitReached;
 use App\StorableEvents\Shops\CreditGatewayRemoved;
 use App\StorableEvents\Shops\ShopApiTokenCreated;
 use App\StorableEvents\Shops\ShopCreated;
+use App\StorableEvents\Shops\SMSProviderAssigned;
+use App\StorableEvents\Shops\SMSProviderLimitReached;
+use App\StorableEvents\Shops\SMSProviderRemoved;
 use Spatie\EventSourcing\AggregateRoots\AggregateRoot;
 
 class ShopConfigAggregate extends AggregateRoot
@@ -64,10 +67,25 @@ class ShopConfigAggregate extends AggregateRoot
         $this->activated_checklist['gateway_assigned'] = true;
     }
 
+    public function applySMSProviderAssigned(SMSProviderAssigned $event)
+    {
+        $this->assigned_sms_provider[$event->getProvider()] = [
+            'name' => $event->getName(),
+            'shop_assigned_sms_providers_id' => $event->getAssigned()
+        ];
+
+        $this->activated_checklist['gateway_assigned'] = true;
+    }
+
     public function applyCreditGatewayRemoved(CreditGatewayRemoved $event)
     {
         $this->assigned_gateways['credit'] = [];
         $this->activated_checklist['gateway_assigned'] = false;
+    }
+
+    public function applySMSProviderRemoved(SMSProviderRemoved $event)
+    {
+        $this->assigned_sms_provider = [];
     }
 
     /* ACTIONS */
@@ -137,6 +155,32 @@ class ShopConfigAggregate extends AggregateRoot
     public function removeAssignedGateway(array $provider, $type, $assigned_id)
     {
         $this->recordThat(new CreditGatewayRemoved($assigned_id, $provider['id'], $provider['name']));
+        return $this;
+    }
+
+    public function createOrUpdateAssignedSMSProvider(array $provider, $assigned_id)
+    {
+        if($this->hasSMSProviderAssigned())
+        {
+            if(array_key_exists($provider['id'], $this->assigned_sms_provider))
+            {
+                return $this;
+            }
+
+            $this->recordThat(new SMSProviderLimitReached());
+            $this->persist();
+
+            throw CouldNotAssignGatewayToShop::shopSmsLimitReached($provider['name']);
+        }
+
+        $this->recordThat(new SMSProviderAssigned($assigned_id, $provider['id'], $provider['name']));
+
+        return $this;
+    }
+
+    public function removeAssignedSMSProvider(array $provider, $assigned_id)
+    {
+        $this->recordThat(new SMSProviderRemoved($assigned_id, $provider['id'], $provider['name']));
         return $this;
     }
 
@@ -285,5 +329,10 @@ class ShopConfigAggregate extends AggregateRoot
     public function hasCreditGatewayAssigned()
     {
         return (count($this->assigned_gateways['credit']) > 0);
+    }
+
+    public function hasSMSProviderAssigned()
+    {
+        return (count($this->assigned_sms_provider) > 0);
     }
 }

@@ -2,22 +2,23 @@
 
 namespace App\Models\SMS;
 
-use Backpack\CRUD\app\Models\Traits\CrudTrait;
-use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use Venturecraft\Revisionable\RevisionableTrait;
+use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 
 class SmsProviders extends Model
 {
-    use CrudTrait, Uuid, SoftDeletes;
+    use CrudTrait, RevisionableTrait, SoftDeletes, Uuid;
 
     protected $primaryKey = 'id';
 
     protected $keyType = 'string';
 
-    protected $fillable = ['name', 'active'];
-
     public $incrementing = false;
+
+    protected $fillable = ['name', 'active'];
 
     protected $casts = [
 

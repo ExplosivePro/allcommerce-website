@@ -4,17 +4,16 @@ namespace App\Http\Controllers\Admin\Features;
 
 use Silber\Bouncer\BouncerFacade as Bouncer;
 use Backpack\ReviseOperation\ReviseOperation;
-use App\Models\PaymentGateways\PaymentProviderTypes;
+use App\Http\Requests\Features\SMSProvidersRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
-use App\Http\Requests\Features\GatewayProvidersRequest;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
- * Class GatewayProvidersCrudController
+ * Class SMSProvidersCrudController
  * @package App\Http\Controllers\Admin
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
-class GatewayProvidersCrudController extends CrudController
+class SMSProvidersCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
@@ -30,9 +29,9 @@ class GatewayProvidersCrudController extends CrudController
      */
     public function setup()
     {
-        CRUD::setModel(\App\Models\PaymentGateways\PaymentProviders::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/payment-gateways');
-        CRUD::setEntityNameStrings('Payment Gateway', 'Payment Gateways');
+        CRUD::setModel(\App\Models\SMS\SmsProviders::class);
+        CRUD::setRoute(config('backpack.base.route_prefix') . '/sms-providers');
+        CRUD::setEntityNameStrings('SMS Provider', 'SMS Providers');
     }
 
     /**
@@ -47,28 +46,17 @@ class GatewayProvidersCrudController extends CrudController
             'type' => 'alert',
             'class' => 'alert alert-danger mb-2',
             'heading' => '',
-            'content' => '<small><i>Payment Gateway Providers are a fundamental component of eCommerce and allows you to collect payments from the customer for purchasing your products! We have payment integrations to cover several ways to pay - Credit Card, Express Pay and Installment Pay! With a wide range of providers and adding more regularly, you can find and utilize a suite of payment providers that suite your shop(s)\' needs!</i></small>'
+            'content' => '<small><i>Using an SMS Provider allows you to use amazing features, like the 1-Click Checkout for Returning and Abandoned Customers! There\'s no cost to enable SMS save for a small fee per message fired/received on selected providers (free for the rest! + their usage fee. Not partnered with a provider? No problem, get started right away with AllCommerce\'s built-in provider, powered by Twilio, for just $0.01/per message!</i></small>'
         ];
 
         CRUD::column('name')->type('text');
-        CRUD::column('payment_type.provider_type')->type('text')->label('Type');
 
-        $this->crud->addFilter([
-            'name' => 'provider_type',
-            'type' => 'dropdown',
-            'label'=> 'Gateway Type'
-        ],
-        function () {
-            $type = PaymentProviderTypes::whereActive(1)->get();
-            $results = [];
-            foreach($type as $t)
-            {
-                $results[$t->id] = $t->provider_type;
-            }
 
-            return $results;
-        });
-
+        /**
+         * Columns can be defined using the fluent syntax or array syntax:
+         * - CRUD::column('price')->type('number');
+         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']);
+         */
         if(Bouncer::is(backpack_user())->an('admin'))
         {
             CRUD::column('active')->type('boolean');
@@ -91,7 +79,7 @@ class GatewayProvidersCrudController extends CrudController
                     $results = 'Can Be Enabled';
 
 
-                    $gateway = $client->enabled_gateways()
+                    $gateway = $client->enabled_sms()
                         ->whereProviderId($entry->id)
                         ->first();
 
@@ -103,13 +91,14 @@ class GatewayProvidersCrudController extends CrudController
 
                 return $results;
             });
+
             $this->crud->denyAccess('show');
             $this->crud->denyAccess('update');
             $this->crud->denyAccess('create');
             $this->crud->denyAccess('delete');
             $this->crud->denyAccess('revise');
 
-            CRUD::addButtonFromView('line', 'Manage', 'manage-client-gateway', 'beginning');
+            CRUD::addButtonFromView('line', 'Manage', 'manage-client-sms', 'beginning');
         }
     }
 
@@ -121,7 +110,7 @@ class GatewayProvidersCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
-        CRUD::setValidation(GatewayProvidersRequest::class);
+        CRUD::setValidation(SMSProvidersRequest::class);
 
         CRUD::setFromDb(); // fields
 

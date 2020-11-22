@@ -10,4 +10,9 @@ class CouldNotAssignGatewayToShop extends DomainException
     {
         return new static("Could not assign {$name}");
     }
+
+    public static function shopSmsLimitReached(string $name)
+    {
+        return new static("Could not assign {$name}");
+    }
 }
