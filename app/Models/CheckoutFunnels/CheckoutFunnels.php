@@ -98,6 +98,11 @@ class CheckoutFunnels extends Model
         return $this->hasMany('App\Models\CheckoutFunnels\CheckoutFunnelAttributes', 'funnel_uuid', 'id');
     }
 
+    public function product_item(int $num)
+    {
+        return $this->funnel_attributes()->whereFunnelAttribute('item-'.$num);
+    }
+
     public function assigned_theme()
     {
         return $this->hasOne('App\Models\CheckoutFunnels\CheckoutFunnelAttributes', 'funnel_uuid', 'id')

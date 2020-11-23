@@ -118,6 +118,11 @@ class Shop extends Model
         return $this->hasOne('App\Models\SMS\ShopAssignedSmsProviders', 'shop_uuid', 'id');
     }
 
+    public function shopify_install()
+    {
+        return $this->hasOne('App\Models\Shopify\ShopifyInstalls', 'shop_uuid', 'id');
+    }
+
     public function getSystemUserId()
     {
         return is_null(backpack_user()) ? 'System' : backpack_user()->id;

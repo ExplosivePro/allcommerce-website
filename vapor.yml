@@ -1,18 +1,18 @@
-id: 15490
-name: raffle-app
+id: 6285
+name: allcommerce
 separate-vendor: true
 environments:
   production:
-    domain: theraffles.app
+    domain: allcommerce.site
     memory: 2048
     cli-memory: 1024
-    database: RaffleApp
-    database-user: raffle
+    database: allcommerce
+    database-user: acuser
     queue-timeout: 600
     timeout: 120
     runtime: php-7.4
     queues:
-      - raffle-production-events
+      - aco-production-events
     build:
       - 'composer install --no-dev --classmap-authoritative'
       - 'php artisan event:cache'
@@ -20,19 +20,38 @@ environments:
     deploy:
       - 'php artisan migrate --force'
   staging:
-    domain: staging.theraffles.app
+    domain: demo.allcommerce.site
     memory: 1024
     cli-memory: 512
-    database: RaffleApp
-    database-user: raffle
+    database: allcommerce
+    database-user: acuser
     queue-timeout: 600
     timeout: 120
     runtime: php-7.4
     queues:
-      - raffle-staging-events
+      - aco-staging-events
     build:
       - 'composer install --no-dev --no-interaction'
       - 'php artisan event:cache'
       - 'npm install && npm run dev && rm -rf node_modules'
     deploy:
       - 'php artisan migrate --force'
+ develop:
+    domain: dev.allcommerce.site
+    memory: 1024
+    cli-memory: 512
+    database: allcommerce
+    database-user: acuser
+    runtime: php-7.4
+    queue-concurrency: 1
+    queues:
+      - allcommerce-develop-emails
+      - allcommerce-develop-events
+    build:
+        - 'composer install'
+        - 'php artisan event:cache'
+        - 'curl -sL https://deb.nodesource.com/setup_10.x | bash -'
+        - 'apt-get install -y nodejs'
+        - 'npm install && npm run dev && rm -rf node_modules'
+    deploy:
+        - 'php artisan migrate --force'

@@ -11,6 +11,7 @@ use App\StorableEvents\Shopify\ShopifyInstallCompleted;
 use App\StorableEvents\Shops\CreditGatewayAssigned;
 use App\StorableEvents\Shops\CreditGatewayLimitReached;
 use App\StorableEvents\Shops\CreditGatewayRemoved;
+use App\StorableEvents\Shops\InventoryPublished;
 use App\StorableEvents\Shops\ShopApiTokenCreated;
 use App\StorableEvents\Shops\ShopCreated;
 use App\StorableEvents\Shops\Shopify\InstallRecordCreated;
@@ -131,6 +132,11 @@ class ShopConfigAggregate extends AggregateRoot
         $this->shopify_config['scopes'] = $event->getInstall()['scopes'];
 
         $this->activated_checklist['platform_installed'] = true;
+    }
+
+    public function applyInventoryPublished(InventoryPublished $event)
+    {
+        $this->activated_checklist['inventory_published'] = true;
     }
 
     /* ACTIONS */
@@ -257,6 +263,12 @@ class ShopConfigAggregate extends AggregateRoot
     public function completeShopifyInstall(ShopifyInstalls $install)
     {
         $this->recordThat(new ShopifyInstallCompleted($install->toArray()));
+        return $this;
+    }
+
+    public function setInventoryPublished()
+    {
+        $this->recordThat(new InventoryPublished($this->shop_id));
         return $this;
     }
 

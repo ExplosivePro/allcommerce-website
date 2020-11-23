@@ -57,7 +57,6 @@ class ImportShopifyListings extends Action
             if(count($response['products']) > 0)
             {
                 $results['listings'] = $response['products'];
-
             }
         }
 

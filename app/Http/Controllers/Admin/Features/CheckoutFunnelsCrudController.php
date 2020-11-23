@@ -60,7 +60,30 @@ class CheckoutFunnelsCrudController extends CrudController
     {
         CRUD::setValidation(CheckoutFunnelsRequest::class);
 
-        CRUD::setFromDb(); // fields
+        $this->crud->addField([
+            'name' => 'shop_id',
+            'type' => 'select2',
+            'label' => 'Select a Shop',
+            'entity' => 'shop',
+            'attribute' => 'name',
+            'tab' => 'Funnel Info'
+        ]);
+
+        CRUD::field('funnel_name')->type('text')->attributes(['required' => 'required'])
+            ->tab('Funnel Info');
+
+        CRUD::field('default')->type('boolean')->label('Make this Funnel the Primary Funnel you See on dashboards and various places?')
+            ->tab('Funnel Info');
+
+        CRUD::field('active')->type('boolean')->tab('Funnel Info');
+
+        // Will return products (or nothing) depending on the shop selected
+        CRUD::field('attributes[product_items]')->type('view')->view('shops.inventory-select')
+            ->label('Select Product(s)')->tab('Configuration');
+
+        // Will Return Shopify or Web Themes Available to the Client Depending on the Shop Selected
+        CRUD::field('attributes[blade_template]')->type('view')->view('shops.inventory-select')
+            ->label('Select Checkout Experience')->tab('Configuration');
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:

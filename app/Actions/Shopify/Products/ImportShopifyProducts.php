@@ -2,6 +2,9 @@
 
 namespace App\Actions\Shopify\Products;
 
+use App\Aggregates\Shops\ShopConfigAggregate;
+use App\Jobs\Shops\ImportShopifyInventory;
+use App\Models\Inventory\MerchantInventory;
 use App\Models\Shops\Shop;
 use Lorisleiva\Actions\Action;
 
@@ -35,8 +38,24 @@ class ImportShopifyProducts extends Action
      */
     public function handle($uuid, Shop $shops)
     {
+        $results = ['success' => false, 'reason' => 'Could not Import New Products From Shopify'];
         // Execute the action.
-        return $shops->find($uuid);
+        $shop = $shops->find($uuid);
+        $install = $shop->shopify_install()->first();
+
+        $action = new ImportShopifyListings(['install' => $install]);
+        $new_products = $action->run();
+        if($new_products && array_key_exists('listings', $new_products))
+        {
+            ImportShopifyInventory::dispatch($new_products['listings'], $install)->onQueue('aco-'.env('APP_ENV').'-events');
+            $results = ['success' => true, 'reason' => 'Import Started! You will Be notified When it is completed'];
+        }
+        else
+        {
+            $results['reason'] = 'No new products to import!';
+        }
+
+        return $results;
     }
 
     /**
@@ -47,13 +66,14 @@ class ImportShopifyProducts extends Action
      */
     public function response($result, $request)
     {
-        /**
-         * STEPS
-         * 1. See if the shop is a shopify shop for fail w/ error alert
-         * 2. Migrate and dispatch the job from the oauth API onboarding
-         * 3. Send back success alert that shit will be ready soon
-         * @todo - see if pusher will fire an pnotify
-         */
+        if($result['success'])
+        {
+            \Alert::success($result['reason'])->flash();
+        }
+        else
+        {
+            \Alert::error($result['reason'])->flash();
+        }
         // Return to the referral URL
         return redirect()->back();
     }
