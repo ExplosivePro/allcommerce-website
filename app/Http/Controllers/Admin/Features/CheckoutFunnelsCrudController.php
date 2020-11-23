@@ -66,7 +66,8 @@ class CheckoutFunnelsCrudController extends CrudController
             'label' => 'Select a Shop',
             'entity' => 'shop',
             'attribute' => 'name',
-            'tab' => 'Funnel Info'
+            'tab' => 'Funnel Info',
+            'allows_null'     => true,
         ]);
 
         CRUD::field('funnel_name')->type('text')->attributes(['required' => 'required'])
@@ -82,8 +83,8 @@ class CheckoutFunnelsCrudController extends CrudController
             ->label('Select Product(s)')->tab('Configuration');
 
         // Will Return Shopify or Web Themes Available to the Client Depending on the Shop Selected
-        CRUD::field('attributes[blade_template]')->type('view')->view('shops.inventory-select')
-            ->label('Select Checkout Experience')->tab('Configuration');
+        //CRUD::field('attributes[blade_template]')->type('view')->view('shops.inventory-select')
+        //    ->label('Select Checkout Experience')->tab('Configuration');
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:

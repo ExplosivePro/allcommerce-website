@@ -13,6 +13,9 @@ Vue.component('token-membership-toggle', require('./components/memberships/Token
 Vue.component('dashboard-raffles', require('./components/dashboard/RaffleListings.vue').default);
 Vue.component('dashboard-search', require('./components/dashboard/DashboardSearchBar.vue').default);
 Vue.component('image-upload', require('./components/image-upload/ImageUploadTextComponent.vue').default);
+Vue.component('shop-product-select', require('./components/checkout-funnels/ShopProductSelectComponent.vue').default);
+
+
 
 Vue.component('icons-field', require('./screens/icons/iconsField.vue').default);
 Vue.component('toggle-sms', require('./screens/sms/ToggleSMSButton.vue').default);

@@ -4,9 +4,11 @@ import Vuex from 'vuex';
 Vue.use(Vuex);
 
 import membershipPurchase from "./memberships/membershipPurchase";
+import checkoutFunnels from "./checkout-funnels/checkoutFunnels";
 
 export default new Vuex.Store({
     modules: {
+        checkoutFunnels,
         membershipPurchase
     },
     state() {
