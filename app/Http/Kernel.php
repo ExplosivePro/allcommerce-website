@@ -6,6 +6,7 @@ use App\Http\Middleware\CheckClientStatus;
 use App\Http\Middleware\CheckMemberStatus;
 use App\Http\Middleware\LocateMerchantsOrCreate;
 use App\Http\Middleware\SetAuthIfAuthed;
+use App\Http\Middleware\Shopify\VerifyShopifyHMAC;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -72,5 +73,6 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'shopify.hmac' => VerifyShopifyHMAC::class
     ];
 }

@@ -22,6 +22,7 @@
         "vue-template-compiler": "^2.6.12"
     },
     "dependencies": {
+        "@eastsideco/polaris-vue": "^0.1.19",
         "@popperjs/core": "^2.5.4",
         "animate.css": "^4.1.1",
         "bootstrap-colorpicker": "^3.2.0",

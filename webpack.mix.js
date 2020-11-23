@@ -12,4 +12,6 @@ const mix = require('laravel-mix');
  */
 
 mix.js('resources/js/app.js', 'public/js')
-    .sass('resources/css/app.scss', 'public/css');
+    .js('resources/js/shopify-app.js', 'public/js')
+    .sass('resources/css/app.scss', 'public/css')
+    .sass('resources/css/shopify-app.scss', 'public/css');

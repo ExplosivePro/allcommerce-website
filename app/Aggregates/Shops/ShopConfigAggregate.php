@@ -5,12 +5,16 @@ namespace App\Aggregates\Shops;
 use App\Aggregates\Clients\ClientAccountAggregate;
 use App\Aggregates\Merchants\MerchantAggregate;
 use App\Exceptions\Shops\CouldNotAssignGatewayToShop;
+use App\Models\Shopify\ShopifyInstalls;
 use App\Models\Shops\ShopTypes;
+use App\StorableEvents\Shopify\ShopifyInstallCompleted;
 use App\StorableEvents\Shops\CreditGatewayAssigned;
 use App\StorableEvents\Shops\CreditGatewayLimitReached;
 use App\StorableEvents\Shops\CreditGatewayRemoved;
 use App\StorableEvents\Shops\ShopApiTokenCreated;
 use App\StorableEvents\Shops\ShopCreated;
+use App\StorableEvents\Shops\Shopify\InstallRecordCreated;
+use App\StorableEvents\Shops\Shopify\NonceCreated;
 use App\StorableEvents\Shops\SMSConfigured;
 use App\StorableEvents\Shops\SMSProviderAssigned;
 use App\StorableEvents\Shops\SMSProviderLimitReached;
@@ -39,6 +43,14 @@ class ShopConfigAggregate extends AggregateRoot
         'platform_installed'  => false,
         'inventory_published' => false,
         'process_complete'    => false,
+    ];
+
+    protected $shopify_config = [
+        'shop_install_id' => false,
+        'nonce' => false,
+        'auth_code' => false,
+        'access_token' => false,
+        'scopes' => false,
     ];
 
     /* MUTATORS */
@@ -98,6 +110,25 @@ class ShopConfigAggregate extends AggregateRoot
     public function applySMSUnconfigured(SMSUnconfigured $event)
     {
         $this->activated_checklist['sms_configured'] = false;
+    }
+
+    public function applyNonceCreated(NonceCreated $event)
+    {
+        $this->shopify_config['nonce'] = $event->getNonce();
+    }
+
+    public function applyInstallRecordCreated(InstallRecordCreated $event)
+    {
+        $this->shopify_config['shop_install_id'] = $event->getInstall()['id'];
+    }
+
+    public function applyShopifyInstallCompleted(ShopifyInstallCompleted $event)
+    {
+        $this->shopify_config['auth_code'] = $event->getInstall()['auth_code'];
+        $this->shopify_config['access_token'] = $event->getInstall()['access_token'];
+        $this->shopify_config['scopes'] = $event->getInstall()['scopes'];
+
+        $this->activated_checklist['platform_installed'] = true;
     }
 
     /* ACTIONS */
@@ -208,15 +239,44 @@ class ShopConfigAggregate extends AggregateRoot
         return $this;
     }
 
+    public function installShopifyOnShop(string $nonce)
+    {
+        $this->recordThat(new NonceCreated($this->shop_id, $nonce));
+
+        return $this;
+    }
+
+    public function continueShopifyInstall(ShopifyInstalls $install)
+    {
+        $this->recordThat(new InstallRecordCreated($install->toArray()));
+        return $this;
+    }
+
+    public function completeShopifyInstall(ShopifyInstalls $install)
+    {
+        $this->recordThat(new ShopifyInstallCompleted($install->toArray()));
+        return $this;
+    }
+
     /* GETTERS */
     public function getShopName()
     {
         return $this->shop_name;
     }
 
+    public function getShopUrl()
+    {
+        return $this->shop_url;
+    }
+
     public function getMerchantName()
     {
         return $this->merchant_name;
+    }
+
+    public function getClientId()
+    {
+        return $this->client_id;
     }
 
     public function getClientName()
@@ -358,5 +418,17 @@ class ShopConfigAggregate extends AggregateRoot
     public function hasSMSProviderAssigned()
     {
         return (count($this->assigned_sms_provider) > 0);
+    }
+
+    public function getShopInstallRecord()
+    {
+        $results = false;
+
+        if($this->shopify_config['shop_install_id'])
+        {
+            $results = $this->shopify_config;
+        }
+
+        return $results;
     }
 }
