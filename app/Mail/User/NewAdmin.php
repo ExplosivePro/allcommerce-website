@@ -32,8 +32,8 @@ class NewAdmin extends Mailable
     public function build()
     {
         return $this->from(
-            env('MAILGUN_DEFAULT_EMAIL','developers@capeandbay.com'),
-            env('MAILGUN_DEFAULT_NAME', 'RaffleApp SupportBot')
+            env('MAIL_FROM_ADDRESS','developers@capeandbay.com'),
+            env('MAIL_FROM_NAME', 'RaffleApp SupportBot')
         )
             ->subject('You have been invited to join AllCommerce as an Admin!')
             ->view('emails.user.new-admin-email', ['new_user' => $this->user]);

@@ -14,11 +14,11 @@ environments:
     queues:
       - aco-production-events
     build:
-      - 'composer install --no-dev --classmap-authoritative'
-      - 'php artisan event:cache'
-      - 'npm install && npm run prod && rm -rf node_modules'
+        - 'composer install --no-dev --no-interaction'
+        - 'php artisan event:cache'
+        - 'npm install && npm run prod && rm -rf node_modules'
     deploy:
-      - 'php artisan migrate --force'
+        - 'php artisan migrate --force'
   staging:
     domain: demo.allcommerce.site
     memory: 1024
@@ -31,12 +31,12 @@ environments:
     queues:
       - aco-staging-events
     build:
-      - 'composer install --no-dev --no-interaction'
-      - 'php artisan event:cache'
-      - 'npm install && npm run dev && rm -rf node_modules'
+        - 'composer install --no-dev --no-interaction --classmap-authoritative'
+        - 'php artisan event:cache'
+        - 'npm install && npm run dev && rm -rf node_modules'
     deploy:
-      - 'php artisan migrate --force'
- develop:
+        - 'php artisan migrate --force'
+  develop:
     domain: dev.allcommerce.site
     memory: 1024
     cli-memory: 512
@@ -45,13 +45,10 @@ environments:
     runtime: php-7.4
     queue-concurrency: 1
     queues:
-      - allcommerce-develop-emails
-      - allcommerce-develop-events
+      - aco-develop-events
     build:
         - 'composer install'
         - 'php artisan event:cache'
-        - 'curl -sL https://deb.nodesource.com/setup_10.x | bash -'
-        - 'apt-get install -y nodejs'
         - 'npm install && npm run dev && rm -rf node_modules'
     deploy:
         - 'php artisan migrate --force'

@@ -32,8 +32,8 @@ class NewUser extends Mailable
     public function build()
     {
         return $this->from(
-            env('MAILGUN_DEFAULT_EMAIL','developers@capeandbay.com'),
-            env('MAILGUN_DEFAULT_NAME', 'RaffleApp SupportBot')
+            env('MAIL_FROM_ADDRESS','developers@capeandbay.com'),
+            env('MAIL_FROM_NAME', 'RaffleApp SupportBot')
         )
             ->subject('Congrats! Complete your registration to access AllCommerce!')
             ->view('emails.user.new-user-email', ['new_user' => $this->user]);
