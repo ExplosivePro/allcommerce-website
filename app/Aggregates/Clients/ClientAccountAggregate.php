@@ -10,6 +10,7 @@ use App\StorableEvents\Clients\ClientCreated;
 use App\StorableEvents\Clients\ClientDefaultPaymentGatewayEnabled;
 use App\StorableEvents\Clients\ClientDefaultSMSGatewayEnabled;
 use App\StorableEvents\Clients\ClientIconSaved;
+use App\StorableEvents\Clients\ClientIconUpdated;
 use App\StorableEvents\Clients\ClientUpdated;
 use App\StorableEvents\Clients\MerchantAssigned;
 use App\StorableEvents\Clients\ShopOnBoarded;
@@ -133,9 +134,18 @@ class ClientAccountAggregate extends AggregateRoot
         return $this;
     }
 
+    public function updateMenuOption($icon)
+    {
+        $this->recordThat(new ClientIconUpdated($this->client_id, $icon));
+        return $this;
+    }
+
     public function setAccountOwner($user_id)
     {
-        $this->recordThat(new AccountUserAssigned($user_id));
+        if(!is_null($user_id))
+        {
+            $this->recordThat(new AccountUserAssigned($user_id));
+        }
 
         return $this;
     }

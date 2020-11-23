@@ -45,10 +45,22 @@ class Shop extends Model
     protected static function booted()
     {
         static::created(function ($shop) {
-            ShopConfigAggregate::retrieve($shop->id)
+            $s_aggy = ShopConfigAggregate::retrieve($shop->id)
                 ->createShop($shop->toArray())
-                ->setNewShopApiToken($shop->id, $shop->client_id)
-                ->persist();
+                ->setNewShopApiToken($shop->id, $shop->client_id);
+
+            $client = $shop->client()->first();
+            $sms_enabled = $client->enabled_sms()->first();
+
+            if(!is_null($sms_enabled))
+            {
+                if($sms_enabled->active == 1)
+                {
+                    $s_aggy->setSMSConfigured();
+                }
+            }
+            $s_aggy->persist();
+
 
             MerchantAggregate::retrieve($shop->merchant_id)
                 ->addShop($shop->toArray())

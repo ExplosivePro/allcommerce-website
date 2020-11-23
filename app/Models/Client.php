@@ -60,6 +60,7 @@ class Client extends Model
             ClientAccountAggregate::retrieve($client->id)
                 ->updateClient($client->toArray())
                 ->setAccountOwner($client->account_owner)
+                ->updateMenuOption($client->icon)
                 ->persist();
         });
     }

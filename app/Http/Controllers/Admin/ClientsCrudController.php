@@ -17,7 +17,7 @@ use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 class ClientsCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation { create as traitStore; }
+    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation { create as traitCreate; }
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation { update as traitUpdate; }
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
@@ -90,9 +90,9 @@ class ClientsCrudController extends CrudController
             //CRUD::field('icon')->type('text');
             CRUD::field('icon')->type('select2-icons')->label('Side Bar Icon')
                 ->entity('assigned_icon')->model('App\Models\Utility\IconsSet')->attribute('icon')
-                //->options(function ($query) {
-                //    return $query->orderBy('name', 'ASC')->get();
-                //})
+                ->options(function ($query) {
+                    return $query->orderBy('name', 'ASC')->get();
+                })
                 ->hint('Choose from any Icons from <a href="https://fontawesome.com/icons" target="_blank">Font-Awesome</a> (w/ Pro) or <a href="https://icons8.com/line-awesome" target="_blank">Line Awesome</a>');
 
             CRUD::field('active')->type('boolean');
@@ -270,7 +270,6 @@ class ClientsCrudController extends CrudController
     public function update($id)
     {
         $data = $this->crud->getRequest()->request->all();
-
         $response = $this->traitUpdate();
 
         if(array_key_exists('details', $data))

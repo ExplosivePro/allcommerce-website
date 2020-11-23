@@ -31,6 +31,13 @@ Route::group([
     Route::get('sms-providers/{uuid}/manage', 'SMSProviders\ManageClientEnabledSMS');
     Route::post('sms-providers/{uuid}/manage/assign', 'SMSProviders\AssignClientEnabledSMSToShops');
     Route::post('sms-providers/{uuid}/manage/enable', 'SMSProviders\EnableClientSMS');
+
+    Route::get('checkout-themes', 'ComingSoon');
+    Route::get('checkout-plugin', 'ComingSoon');
+    Route::get('sales-reports', 'ComingSoon');
+    Route::get('product-catalog', 'ComingSoon');
+    Route::get('customers', 'ComingSoon');
+    Route::get('orders', 'ComingSoon');
 });
 
 Route::group([
@@ -56,4 +63,5 @@ Route::group([
 
     Route::crud('payment-gateways', 'Features\GatewayProvidersCrudController');
     Route::crud('sms-providers', 'Features\SMSProvidersCrudController');
+    Route::crud('checkout-funnels', 'Features\CheckoutFunnelsCrudController');
 }); // this should be the absolute last line of this file

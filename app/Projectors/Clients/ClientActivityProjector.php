@@ -5,6 +5,7 @@ namespace App\Projectors\Clients;
 use App\Models\Client;
 use App\Models\ClientDetails;
 use App\Models\Features\Features;
+use App\Models\Utility\IconsSet;
 use App\Models\Utility\SidebarOptions;
 use App\Models\SMS\ClientEnabledSmsProviders;
 use App\Models\SMS\SmsProviders;
@@ -12,6 +13,7 @@ use App\StorableEvents\Clients\ClientDetailsUpdated;
 use App\StorableEvents\Clients\ClientDefaultSMSGatewayEnabled;
 use App\StorableEvents\Clients\ClientIconSaved;
 use App\Models\PaymentGateways\PaymentProviders;
+use App\StorableEvents\Clients\ClientIconUpdated;
 use Spatie\EventSourcing\EventHandlers\Projectors\Projector;
 use App\Models\PaymentGateways\ClientEnabledPaymentProviders;
 use App\StorableEvents\Clients\ClientDefaultPaymentGatewayEnabled;
@@ -31,8 +33,21 @@ class ClientActivityProjector extends Projector
             'active' => 1
         ]);
 
-        $model->icon = $event->getIcon().' nav-icon';
+        $icon = IconsSet::find($event->getIcon());
+
+        $model->icon = $icon->icon.' nav-icon';
         $model->order = 1;
+        $model->save();
+    }
+
+    public function onClientIconUpdated(ClientIconUpdated $event)
+    {
+        $client = Client::find($event->getClient());
+        $model = SidebarOptions::whereRoute('/access/clients/'.$client->id.'/edit')->first();
+
+        $icon = IconsSet::find($event->getIcon());
+
+        $model->icon = $icon->icon.' nav-icon';
         $model->save();
     }
 
