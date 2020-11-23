@@ -53,6 +53,8 @@ class ShopConfigAggregate extends AggregateRoot
         'scopes' => false,
     ];
 
+    protected $shop_inventory = [];
+
     /* MUTATORS */
     public function applyShopCreated(ShopCreated $event)
     {
@@ -382,7 +384,7 @@ class ShopConfigAggregate extends AggregateRoot
                             ? 'Once you\'ve linked your Shopify Shop, AllCommerce will automatically track your product catalog and prompt you to publish any new items to AllCommerce. 
                                Once they are uploaded into AllCommerce, you can allow them to be used with your checkout funnels! It\'s that easy. 
                                 <br /><br />
-                                <button type="button" class="btn '.$button_color.'" onclick="window.location.href= \'/access/product-catalog\'"><i class="fad fa-person-dolly"></i> Publish My Stuff!</button>'
+                                <button type="button" class="btn '.$button_color.'" onclick="window.location.href= \'/access/product-catalog/'.$this->shop_id.'/shopify/import\'"><i class="fad fa-person-dolly"></i> Publish My Stuff!</button>'
                             : 'Manually Import your products to start using them with your shop! Alternatively, you can upload a CSV of product to save some time.
                                  <br /><br />
                                 <button type="button" class="btn '.$button_color.'" onclick="window.location.href= \'/access/product-catalog\'"><i class="fad fa-person-dolly"></i> Publish My Stuff!</button>
@@ -431,4 +433,10 @@ class ShopConfigAggregate extends AggregateRoot
 
         return $results;
     }
+
+    public function getShopInventory()
+    {
+        return $this->shop_inventory;
+    }
+
 }

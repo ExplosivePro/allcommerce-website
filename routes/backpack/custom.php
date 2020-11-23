@@ -32,6 +32,8 @@ Route::group([
     Route::post('sms-providers/{uuid}/manage/assign', 'SMSProviders\AssignClientEnabledSMSToShops');
     Route::post('sms-providers/{uuid}/manage/enable', 'SMSProviders\EnableClientSMS');
 
+    Route::get('product-catalog/{uuid}/shopify/import', 'Shopify\Products\ImportShopifyProducts');
+
     Route::get('checkout-themes', 'ComingSoon');
     Route::get('checkout-plugin', 'ComingSoon');
     Route::get('sales-reports', 'ComingSoon');

@@ -19,5 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::group(['middleware' => ['shopify.hmac']], function () {
-
+    Route::group(['prefix' => 'shopify'], function () {
+        Route::post('/inventory', 'App\Http\Controllers\API\Shopify\ShopifyAccessAPIController@inventory');
+    });
 });

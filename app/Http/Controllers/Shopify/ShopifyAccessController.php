@@ -105,6 +105,7 @@ class ShopifyAccessController extends Controller
                             // $inventory = $ac_service_desk->get('shopify-inventory');
 
                             // $args['inventory'] = $inventory->getAllProductListings($data['shop']);
+                            $args['inventory'] = [];
 
                             $shop_data = $shop['shop_data'];
                             $args['funnel'] = [];
