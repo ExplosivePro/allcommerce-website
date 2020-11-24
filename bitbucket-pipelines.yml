@@ -3,7 +3,7 @@
 # Only use spaces to indent your .yml configuration.
 # -----
 # You can specify a custom docker image from Docker Hub as your build environment.
-image: php:7.4.1-fpm
+image: lorisleiva/laravel-docker
 
 pipelines:
   branches:
@@ -67,12 +67,12 @@ pipelines:
           deployment: staging
           trigger: manual
           script:
-            - curl -sL https://deb.nodesource.com/setup_14.x | bash -
-            - apt-get update && apt-get install -y libzip-dev zip nodejs
-            - docker-php-ext-install zip
-            - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+            #- curl -sL https://deb.nodesource.com/setup_14.x | bash -
+            #- apt-get update && apt-get install -y libzip-dev zip nodejs
+            #- docker-php-ext-install zip
+            #- curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
             - composer install --no-interaction --prefer-dist  --optimize-autoloader
-            - composer require laravel/vapor-cli
+            #- composer require laravel/vapor-cli
             - npm install && npm run dev
             - ln -f -s .env.pipelines .env
             - vendor/bin/vapor deploy staging
@@ -84,16 +84,16 @@ pipelines:
             - node
           deployment: test
           script:
-            - curl -sL https://deb.nodesource.com/setup_14.x | bash -
-            - apt-get update && apt-get install -y libzip-dev zip nodejs
-            - docker-php-ext-install zip
-            - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+            #- curl -sL https://deb.nodesource.com/setup_14.x | bash -
+            #- apt-get update && apt-get install -y libzip-dev zip nodejs
+            #- docker-php-ext-install zip
+            #- curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
             - composer install --no-interaction --prefer-dist  --optimize-autoloader
-            - composer require laravel/vapor-cli
+            #- composer require laravel/vapor-cli
             - ln -f -s .env.pipelines .env
             - npm install && npm run dev
-            - php artisan serve &
-            - sleep 5
+            #- php artisan serve &
+            #- sleep 5
             - php artisan config:clear
-            - vendor/bin/vapor env:pull develop
+            #- vendor/bin/vapor env:pull develop
             - vendor/bin/vapor deploy develop
