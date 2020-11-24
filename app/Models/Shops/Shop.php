@@ -52,6 +52,7 @@ class Shop extends Model
             $client = $shop->client()->first();
             $sms_enabled = $client->enabled_sms()->first();
 
+            /*
             if(!is_null($sms_enabled))
             {
                 if($sms_enabled->active == 1)
@@ -59,6 +60,8 @@ class Shop extends Model
                     $s_aggy->setSMSConfigured();
                 }
             }
+            */
+
             $s_aggy->persist();
 
 

@@ -11,7 +11,7 @@
 @section('content')
     <div class="" id="app">
         <div class="col-md-12 col-md-offset-12">
-            <h3 class="text-center m-b-20">Hi, {!! $user->name !!} {!! $user->last_name !!}!</h3>
+            <h3 class="text-center m-b-20">Hi, {!! $user->name !!}!</h3>
             <div class="text-center m-b-20 intro-bar">
                 <p class="text-center instructions-text">Verify the Details of Your New <b>{!! $role !!}</b> Account Below:</p>
             </div>

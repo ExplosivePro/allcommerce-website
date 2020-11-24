@@ -2,8 +2,12 @@
 
 namespace App\Actions\Shopify;
 
+use App\Actions\Shopify\Products\ImportShopifyListings;
 use App\Aggregates\Shops\ShopConfigAggregate;
+use App\Jobs\CheckoutFunnels\GenerateFirstCheckoutFunnel;
+use App\Jobs\Shops\ImportShopifyInventory;
 use App\Models\Shopify\ShopifyInstalls;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Log;
 use Ixudra\Curl\Facades\Curl;
 use Lorisleiva\Actions\Action;
@@ -78,7 +82,12 @@ class ConfirmShopInstall extends Action
                 ->persist();
 
             // queue the inventory import job
-            // ImportProductListings::dispatch($install_model)->onQueue('aco-'.env('APP_ENV').'-shopify');
+            $action = new ImportShopifyListings(['install' => $install_model]);
+            $listings = $action->run();
+
+            ImportShopifyInventory::dispatch($listings['listings'], $install_model)->chain([
+                  new GenerateFirstCheckoutFunnel($install_model)
+            ])->onQueue('aco-'.env('APP_ENV').'-events');
 
             $results = ['success' => true, 'stats' => $stats];
         }
