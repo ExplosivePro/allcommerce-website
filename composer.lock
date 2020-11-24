@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "99d4eb15e2596aa311dd851872e930f6",
+    "content-hash": "d53c2ea6ee84a887fc9c51522c04114f",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -64,16 +64,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.161.1",
+            "version": "3.163.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "4c1852e9efaef18e15f2a6c914d8dc41fda2a052"
+                "reference": "f6cd8fe1334b19e1dc0d841fa1b2da7cd30a1e8a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/4c1852e9efaef18e15f2a6c914d8dc41fda2a052",
-                "reference": "4c1852e9efaef18e15f2a6c914d8dc41fda2a052",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/f6cd8fe1334b19e1dc0d841fa1b2da7cd30a1e8a",
+                "reference": "f6cd8fe1334b19e1dc0d841fa1b2da7cd30a1e8a",
                 "shasum": ""
             },
             "require": {
@@ -148,9 +148,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.161.1"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.163.3"
             },
-            "time": "2020-11-13T19:17:55+00:00"
+            "time": "2020-11-23T20:34:30+00:00"
         },
         {
             "name": "backpack/crud",
@@ -747,16 +747,16 @@
         },
         {
             "name": "doctrine/dbal",
-            "version": "2.12.0",
+            "version": "2.12.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "c6d37b4c42aaa3c3ee175f05eca68056f4185646"
+                "reference": "adce7a954a1c2f14f85e94aed90c8489af204086"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/c6d37b4c42aaa3c3ee175f05eca68056f4185646",
-                "reference": "c6d37b4c42aaa3c3ee175f05eca68056f4185646",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/adce7a954a1c2f14f85e94aed90c8489af204086",
+                "reference": "adce7a954a1c2f14f85e94aed90c8489af204086",
                 "shasum": ""
             },
             "require": {
@@ -838,7 +838,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/dbal/issues",
-                "source": "https://github.com/doctrine/dbal/tree/2.12.0"
+                "source": "https://github.com/doctrine/dbal/tree/2.12.1"
             },
             "funding": [
                 {
@@ -854,7 +854,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-10-22T17:26:24+00:00"
+            "time": "2020-11-14T20:26:58+00:00"
         },
         {
             "name": "doctrine/event-manager",
@@ -1747,16 +1747,16 @@
         },
         {
             "name": "hollodotme/fast-cgi-client",
-            "version": "v3.1.3",
+            "version": "v3.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hollodotme/fast-cgi-client.git",
-                "reference": "8eb9d5c3b2685d9e16904c1229d455b42f0b9377"
+                "reference": "b7bdfa2c3e871c90eaaa5283d72f0857986d40cf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hollodotme/fast-cgi-client/zipball/8eb9d5c3b2685d9e16904c1229d455b42f0b9377",
-                "reference": "8eb9d5c3b2685d9e16904c1229d455b42f0b9377",
+                "url": "https://api.github.com/repos/hollodotme/fast-cgi-client/zipball/b7bdfa2c3e871c90eaaa5283d72f0857986d40cf",
+                "reference": "b7bdfa2c3e871c90eaaa5283d72f0857986d40cf",
                 "shasum": ""
             },
             "require": {
@@ -1764,7 +1764,8 @@
                 "php": ">=7.1"
             },
             "require-dev": {
-                "tm/tooly-composer-script": "^1.0"
+                "ext-xdebug": ">=2.6.0",
+                "tm/tooly-composer-script": "^1.4.1"
             },
             "type": "library",
             "extra": {
@@ -1810,9 +1811,9 @@
             ],
             "support": {
                 "issues": "https://github.com/hollodotme/fast-cgi-client/issues",
-                "source": "https://github.com/hollodotme/fast-cgi-client/tree/v3.1.3"
+                "source": "https://github.com/hollodotme/fast-cgi-client/tree/v3.1.4"
             },
-            "time": "2020-08-13T09:09:20+00:00"
+            "time": "2020-11-23T11:37:41+00:00"
         },
         {
             "name": "ixudra/curl",
@@ -1874,16 +1875,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v8.14.0",
+            "version": "v8.15.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "b60139c9d3b475d5b5dc261c5dcafe8ca49b4a13"
+                "reference": "22e4182fa0885dea3772106c3b6df705b7c7363e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/b60139c9d3b475d5b5dc261c5dcafe8ca49b4a13",
-                "reference": "b60139c9d3b475d5b5dc261c5dcafe8ca49b4a13",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/22e4182fa0885dea3772106c3b6df705b7c7363e",
+                "reference": "22e4182fa0885dea3772106c3b6df705b7c7363e",
                 "shasum": ""
             },
             "require": {
@@ -1957,7 +1958,7 @@
             },
             "require-dev": {
                 "aws/aws-sdk-php": "^3.0",
-                "doctrine/dbal": "^2.6",
+                "doctrine/dbal": "^2.6|^3.0",
                 "filp/whoops": "^2.8",
                 "guzzlehttp/guzzle": "^6.5.5|^7.0.1",
                 "league/flysystem-cached-adapter": "^1.0",
@@ -1970,7 +1971,7 @@
             },
             "suggest": {
                 "aws/aws-sdk-php": "Required to use the SQS queue driver, DynamoDb failed job storage and SES mail driver (^3.0).",
-                "doctrine/dbal": "Required to rename columns and drop SQLite columns (^2.6).",
+                "doctrine/dbal": "Required to rename columns and drop SQLite columns (^2.6|^3.0).",
                 "ext-ftp": "Required to use the Flysystem FTP driver.",
                 "ext-gd": "Required to use Illuminate\\Http\\Testing\\FileFactory::image().",
                 "ext-memcached": "Required to use the memcache cache driver.",
@@ -2037,7 +2038,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2020-11-10T14:47:10+00:00"
+            "time": "2020-11-17T14:53:20+00:00"
         },
         {
             "name": "laravel/tinker",
@@ -2109,16 +2110,16 @@
         },
         {
             "name": "laravel/vapor-cli",
-            "version": "v1.10.4",
+            "version": "v1.10.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/vapor-cli.git",
-                "reference": "a2608446e37cdca263b036203ddeac5b29073fa9"
+                "reference": "a161499c477c3bcd9e2036c491937b2a4f70fbb2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/vapor-cli/zipball/a2608446e37cdca263b036203ddeac5b29073fa9",
-                "reference": "a2608446e37cdca263b036203ddeac5b29073fa9",
+                "url": "https://api.github.com/repos/laravel/vapor-cli/zipball/a161499c477c3bcd9e2036c491937b2a4f70fbb2",
+                "reference": "a161499c477c3bcd9e2036c491937b2a4f70fbb2",
                 "shasum": ""
             },
             "require": {
@@ -2171,22 +2172,22 @@
                 "vapor"
             ],
             "support": {
-                "source": "https://github.com/laravel/vapor-cli/tree/v1.10.4"
+                "source": "https://github.com/laravel/vapor-cli/tree/v1.10.6"
             },
-            "time": "2020-11-02T09:17:29+00:00"
+            "time": "2020-11-19T16:27:02+00:00"
         },
         {
             "name": "laravel/vapor-core",
-            "version": "v2.9.9",
+            "version": "v2.9.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/vapor-core.git",
-                "reference": "968fe9442dbd2e1e889183120f661d37ede97d01"
+                "reference": "5b03dd3994128684053c0c56a6c78c941fcc98f4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/vapor-core/zipball/968fe9442dbd2e1e889183120f661d37ede97d01",
-                "reference": "968fe9442dbd2e1e889183120f661d37ede97d01",
+                "url": "https://api.github.com/repos/laravel/vapor-core/zipball/5b03dd3994128684053c0c56a6c78c941fcc98f4",
+                "reference": "5b03dd3994128684053c0c56a6c78c941fcc98f4",
                 "shasum": ""
             },
             "require": {
@@ -2242,9 +2243,9 @@
                 "vapor"
             ],
             "support": {
-                "source": "https://github.com/laravel/vapor-core/tree/v2.9.9"
+                "source": "https://github.com/laravel/vapor-core/tree/v2.9.11"
             },
-            "time": "2020-10-29T18:50:08+00:00"
+            "time": "2020-11-20T15:01:58+00:00"
         },
         {
             "name": "league/commonmark",
@@ -2550,16 +2551,16 @@
         },
         {
             "name": "lorisleiva/laravel-actions",
-            "version": "v1.1.8",
+            "version": "v1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lorisleiva/laravel-actions.git",
-                "reference": "cfcfc3d38d18399edbaaf7a873f759cd318d8f74"
+                "reference": "d2d65f1c2371619a7b9006f44b4af24d16c4f931"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lorisleiva/laravel-actions/zipball/cfcfc3d38d18399edbaaf7a873f759cd318d8f74",
-                "reference": "cfcfc3d38d18399edbaaf7a873f759cd318d8f74",
+                "url": "https://api.github.com/repos/lorisleiva/laravel-actions/zipball/d2d65f1c2371619a7b9006f44b4af24d16c4f931",
+                "reference": "d2d65f1c2371619a7b9006f44b4af24d16c4f931",
                 "shasum": ""
             },
             "require": {
@@ -2606,9 +2607,15 @@
             ],
             "support": {
                 "issues": "https://github.com/lorisleiva/laravel-actions/issues",
-                "source": "https://github.com/lorisleiva/laravel-actions/tree/v1.1.8"
+                "source": "https://github.com/lorisleiva/laravel-actions/tree/v1.2.0"
             },
-            "time": "2020-11-07T18:58:07+00:00"
+            "funding": [
+                {
+                    "url": "https://github.com/lorisleiva",
+                    "type": "github"
+                }
+            ],
+            "time": "2020-11-20T16:39:29+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -4121,16 +4128,16 @@
         },
         {
             "name": "spatie/laravel-event-sourcing",
-            "version": "4.6.0",
+            "version": "4.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-event-sourcing.git",
-                "reference": "115953084db3f7d1d3adc5f6999bb404c84a2b93"
+                "reference": "21e930c166adad6149488e84aceb27b51dd2b768"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-event-sourcing/zipball/115953084db3f7d1d3adc5f6999bb404c84a2b93",
-                "reference": "115953084db3f7d1d3adc5f6999bb404c84a2b93",
+                "url": "https://api.github.com/repos/spatie/laravel-event-sourcing/zipball/21e930c166adad6149488e84aceb27b51dd2b768",
+                "reference": "21e930c166adad6149488e84aceb27b51dd2b768",
                 "shasum": ""
             },
             "require": {
@@ -4194,7 +4201,7 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/laravel-event-sourcing/issues",
-                "source": "https://github.com/spatie/laravel-event-sourcing/tree/4.6.0"
+                "source": "https://github.com/spatie/laravel-event-sourcing/tree/4.6.1"
             },
             "funding": [
                 {
@@ -4202,7 +4209,7 @@
                     "type": "custom"
                 }
             ],
-            "time": "2020-10-21T06:38:04+00:00"
+            "time": "2020-11-23T08:07:54+00:00"
         },
         {
             "name": "spatie/laravel-schemaless-attributes",
@@ -7436,16 +7443,16 @@
         },
         {
             "name": "facade/ignition",
-            "version": "2.5.1",
+            "version": "2.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/facade/ignition.git",
-                "reference": "3b3403f18bbdc0aeadf1ffaddf11a1588b12ec7a"
+                "reference": "08668034beb185fa2ac6f09b1034eaa440952ace"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/facade/ignition/zipball/3b3403f18bbdc0aeadf1ffaddf11a1588b12ec7a",
-                "reference": "3b3403f18bbdc0aeadf1ffaddf11a1588b12ec7a",
+                "url": "https://api.github.com/repos/facade/ignition/zipball/08668034beb185fa2ac6f09b1034eaa440952ace",
+                "reference": "08668034beb185fa2ac6f09b1034eaa440952ace",
                 "shasum": ""
             },
             "require": {
@@ -7509,7 +7516,7 @@
                 "issues": "https://github.com/facade/ignition/issues",
                 "source": "https://github.com/facade/ignition"
             },
-            "time": "2020-11-13T13:36:24+00:00"
+            "time": "2020-11-17T09:18:51+00:00"
         },
         {
             "name": "facade/ignition-contracts",
@@ -7566,16 +7573,16 @@
         },
         {
             "name": "fakerphp/faker",
-            "version": "v1.10.1",
+            "version": "v1.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FakerPHP/Faker.git",
-                "reference": "f2713a5016faaf6ffc60e9d456dedb5ebf0efcae"
+                "reference": "9aa6c9e289860951e6b4d010c7a841802d015cd8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FakerPHP/Faker/zipball/f2713a5016faaf6ffc60e9d456dedb5ebf0efcae",
-                "reference": "f2713a5016faaf6ffc60e9d456dedb5ebf0efcae",
+                "url": "https://api.github.com/repos/FakerPHP/Faker/zipball/9aa6c9e289860951e6b4d010c7a841802d015cd8",
+                "reference": "9aa6c9e289860951e6b4d010c7a841802d015cd8",
                 "shasum": ""
             },
             "require": {
@@ -7585,6 +7592,7 @@
                 "fzaninotto/faker": "*"
             },
             "require-dev": {
+                "bamarni/composer-bin-plugin": "^1.4.1",
                 "ext-intl": "*",
                 "phpunit/phpunit": "^7.5.20 || ^8.5.8 || ^9.4.2"
             },
@@ -7611,9 +7619,9 @@
             ],
             "support": {
                 "issues": "https://github.com/FakerPHP/Faker/issues",
-                "source": "https://github.com/FakerPHP/Faker/tree/v1.10.1"
+                "source": "https://github.com/FakerPHP/Faker/tree/v1.12.0"
             },
-            "time": "2020-10-28T09:32:46+00:00"
+            "time": "2020-11-23T09:33:08+00:00"
         },
         {
             "name": "filp/whoops",
