@@ -21,6 +21,7 @@
         "laravel/tinker": "^2.5",
         "laravel/vapor-cli": "^1.10",
         "laravel/vapor-core": "^2.9",
+        "laravel/vapor-ui": "^1.0",
         "lorisleiva/laravel-actions": "^1.1",
         "silber/bouncer": "v1.0.0-rc.9",
         "spatie/laravel-activitylog": "^3.16",
@@ -32,6 +33,7 @@
         "facade/ignition": "^2.5",
         "fakerphp/faker": "^1.9.1",
         "laracasts/generators": "^2.0",
+        "laravel/telescope": "^4.3",
         "mockery/mockery": "^1.4.2",
         "nunomaduro/collision": "^5.0",
         "phpunit/phpunit": "^9.3.3"
@@ -43,7 +45,9 @@
     },
     "extra": {
         "laravel": {
-            "dont-discover": []
+            "dont-discover": [
+                "laravel/telescope"
+            ]
         }
     },
     "autoload": {

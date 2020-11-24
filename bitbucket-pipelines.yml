@@ -11,11 +11,11 @@ pipelines:
       - step:
           name: Perform Unit Testing Production
           caches:
-            - node
+            - composer
           script:
-            - curl -sL https://deb.nodesource.com/setup_14.x | bash -
-            - apt-get update && apt-get install -y libzip-dev zip nodejs
-            - docker-php-ext-install zip
+            #- curl -sL https://deb.nodesource.com/setup_14.x | bash -
+            #- apt-get update && apt-get install -y libzip-dev zip nodejs
+            #- docker-php-ext-install zip
             - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
             - composer install --no-interaction --prefer-dist  --optimize-autoloader
             - ln -f -s .env.pipelines .env
@@ -24,42 +24,42 @@ pipelines:
       - step:
           name: Execute Production Deployment
           caches:
-            - node
+            - composer
           deployment: production
           trigger: manual
           script:
-            - curl -sL https://deb.nodesource.com/setup_14.x | bash -
-            - apt-get update && apt-get install -y libzip-dev zip nodejs
-            - docker-php-ext-install zip
-            - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+            #- curl -sL https://deb.nodesource.com/setup_14.x | bash -
+            #- apt-get update && apt-get install -y libzip-dev zip nodejs
+            #- docker-php-ext-install zip
+            #- curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
             - composer install --no-interaction --prefer-dist  --optimize-autoloader
             - composer require laravel/vapor-cli
             - npm install && npm run prod
             - ln -f -s .env.pipelines .env
-            - php artisan serve &
-            - sleep 5
+            #- php artisan serve &
+            #- sleep 5
             - php artisan config:clear
             - vendor/bin/vapor deploy production
     staging:
       - step:
           name: Perform Unit Testing Staging
           caches:
-            - node
+            - composer
           script:
-            - curl -sL https://deb.nodesource.com/setup_14.x | bash -
-            - apt-get update && apt-get install -y libzip-dev zip nodejs
-            - docker-php-ext-install zip
-            - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+            #- curl -sL https://deb.nodesource.com/setup_14.x | bash -
+            #- apt-get update && apt-get install -y libzip-dev zip nodejs
+            #- docker-php-ext-install zip
+            #- curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
             - composer install --no-interaction --prefer-dist  --optimize-autoloader
             - ln -f -s .env.pipelines .env
             - npm install && npm run dev
-            - php artisan serve &
-            - sleep 5
+            #- php artisan serve &
+            #- sleep 5
             - php artisan config:clear
       - step:
           name: Execute Staging Deployment
           caches:
-            - node
+            - composer
           deployment: staging
           trigger: manual
           script:
@@ -76,7 +76,7 @@ pipelines:
       - step:
           name: Automated Test & Deploy to Develop
           caches:
-            - node
+            - composer
           deployment: test
           script:
             #- curl -sL https://deb.nodesource.com/setup_14.x | bash -
