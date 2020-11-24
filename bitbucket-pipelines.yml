@@ -11,7 +11,6 @@ pipelines:
       - step:
           name: Perform Unit Testing Production
           caches:
-            - composer
             - node
           script:
             - curl -sL https://deb.nodesource.com/setup_14.x | bash -
@@ -25,7 +24,6 @@ pipelines:
       - step:
           name: Execute Production Deployment
           caches:
-            - composer
             - node
           deployment: production
           trigger: manual
@@ -46,7 +44,6 @@ pipelines:
       - step:
           name: Perform Unit Testing Staging
           caches:
-            - composer
             - node
           script:
             - curl -sL https://deb.nodesource.com/setup_14.x | bash -
@@ -62,7 +59,6 @@ pipelines:
       - step:
           name: Execute Staging Deployment
           caches:
-            - composer
             - node
           deployment: staging
           trigger: manual
@@ -80,7 +76,6 @@ pipelines:
       - step:
           name: Automated Test & Deploy to Develop
           caches:
-            - composer
             - node
           deployment: test
           script:
