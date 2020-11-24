@@ -12,6 +12,7 @@ use App\StorableEvents\Shops\CreditGatewayAssigned;
 use App\StorableEvents\Shops\CreditGatewayLimitReached;
 use App\StorableEvents\Shops\CreditGatewayRemoved;
 use App\StorableEvents\Shops\InventoryPublished;
+use App\StorableEvents\Shops\ProcessComplete;
 use App\StorableEvents\Shops\ShopApiTokenCreated;
 use App\StorableEvents\Shops\ShopCreated;
 use App\StorableEvents\Shops\Shopify\InstallRecordCreated;
@@ -137,6 +138,11 @@ class ShopConfigAggregate extends AggregateRoot
     public function applyInventoryPublished(InventoryPublished $event)
     {
         $this->activated_checklist['inventory_published'] = true;
+    }
+
+    public function applyProcessComplete(ProcessComplete $event)
+    {
+        $this->activated_checklist['process_complete'] = true;
     }
 
     /* ACTIONS */
@@ -269,6 +275,12 @@ class ShopConfigAggregate extends AggregateRoot
     public function setInventoryPublished()
     {
         $this->recordThat(new InventoryPublished($this->shop_id));
+        return $this;
+    }
+
+    public function setChecklistComplete()
+    {
+        $this->recordThat(new ProcessComplete());
         return $this;
     }
 
